@@ -7,6 +7,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import UserForm from './UserForm';
 import Modules from './Modules';
 import logo from "../../assets/logo.png"
+import RevenuePlan from './RevenuePlan';
+
 const drawerWidth = 240;
 
 const Dashboard = () => {
@@ -26,7 +28,7 @@ const Dashboard = () => {
       case 'Revenue Plan':
         return (
           <Container>
-            {/* <RevenuePlan /> */}
+            <RevenuePlan />
           </Container>
         );
       case 'Modules':
