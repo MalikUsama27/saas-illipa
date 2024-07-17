@@ -25,19 +25,19 @@ const RevenuePlan = () => {
     // border={1} borderColor="grey.300" borderRadius={4}
     >
       <Grid container spacing={1}>
-        <Grid item xs={12} sm={2}>
-          <TextField label="Title" value={plan.title} fullWidth variant="outlined" disabled />
+        <Grid item xs={12} sm={6}>
+          <TextField label="Title" value={plan.title} fullWidth variant="outlined" size="small" disabled />
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <TextField label="Min Value" value={plan.minValue} fullWidth variant="outlined" disabled />
+        <Grid item xs={12} sm={5}>
+          <TextField label="Min Value" value={plan.minValue} fullWidth variant="outlined" size="small" disabled />
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <TextField label="Max Value" value={plan.maxValue} fullWidth variant="outlined" disabled />
+        <Grid item xs={12} sm={6}>
+          <TextField label="Max Value" value={plan.maxValue} fullWidth variant="outlined" size="small" disabled />
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <TextField label="Prize" value={plan.prize} fullWidth variant="outlined" disabled />
+        <Grid item xs={12} sm={5}>
+          <TextField label="Prize" value={plan.prize} fullWidth variant="outlined" size="small" disabled />
         </Grid>
-        <Grid item xs={12} sm={2} display="flex" justifyContent="center" alignItems="center">
+        <Grid item xs={12} sm={1} display="flex" justifyContent="center" alignItems="center">
           <IconButton color="secondary" onClick={() => handleDeletePlan(index)} size="small">
             <Delete />
           </IconButton>
@@ -50,7 +50,7 @@ const RevenuePlan = () => {
     <Box p={3} border={1} borderColor="grey.400" borderRadius={4} width={1}>
       <Typography variant="h6">Revenue Plan</Typography>
       <Grid container spacing={1} mt={2}>
-        <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={6}>
           <TextField
             label="Title"
             name="title"
@@ -61,7 +61,7 @@ const RevenuePlan = () => {
             size="small"
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={5}>
           <TextField
             label="Min Value"
             name="minValue"
@@ -72,7 +72,7 @@ const RevenuePlan = () => {
             size="small"
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={6}>
           <TextField
             label="Max Value"
             name="maxValue"
@@ -83,7 +83,7 @@ const RevenuePlan = () => {
             size="small"
           />
         </Grid>
-        <Grid item xs={12} sm={2}>
+        <Grid item xs={12} sm={5}>
           <TextField
             label="Prize"
             name="prize"
@@ -94,7 +94,7 @@ const RevenuePlan = () => {
             size="small"
           />
         </Grid>
-        <Grid item xs={12} sm={2} display="flex" justifyContent="center" alignItems="center">
+        <Grid item xs={12} sm={1} display="flex" justifyContent="center" alignItems="center">
           <IconButton color="primary" onClick={handleAddPlan} size="small">
             <Add />
           </IconButton>

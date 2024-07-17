@@ -16,11 +16,11 @@ const Dashboard = () => {
 
   const renderContent = () => {
     switch (currentView) {
-      case 'User':
+      case 'Customer':
         return (
           <>
-            <Typography variant="h2" component="div">
-              User
+            <Typography variant="h5" component="div">
+            {/* Customer */}
             </Typography>
             <UserForm handleClose={() => setCurrentView('Modules')} />
           </>
@@ -45,34 +45,34 @@ const Dashboard = () => {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#880F50', color: '#fff' },
+          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#44AEF5', color: 'black' },
         }}
       >
         <Toolbar />
         <Box sx={{  }}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
-              <img src={logo} alt="Logo" style={{ width: '80%', borderRadius: '50%' ,marginTop:'-26%' , }} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
+              <img src={logo} alt="Logo" style={{ width: '80%' ,marginTop:'-26%' , }} />
             </Box>
-          <List>
-            <ListItem button onClick={() => setCurrentView('Modules')}>
-              <ListItemIcon>
-                <DashboardIcon sx={{ color: '#fff' }} />
-              </ListItemIcon>
-              <ListItemText primary="Modules" />
-            </ListItem>
-            <ListItem button onClick={() => setCurrentView('User')}>
-              <ListItemIcon>
-                <AccountCircleIcon sx={{ color: '#fff' }} />
-              </ListItemIcon>
-              <ListItemText primary="User" />
-            </ListItem>
-            <ListItem button onClick={() => setCurrentView('Revenue Plan')}>
-              <ListItemIcon>
-                <NotificationsIcon sx={{ color: '#fff' }} />
-              </ListItemIcon>
-              <ListItemText primary="Revenue Plan" />
-            </ListItem>
-          </List>
+            <List>
+      <ListItem button onClick={() => setCurrentView('Modules')}>
+        <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+          <DashboardIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="Modules" />
+      </ListItem>
+      <ListItem button onClick={() => setCurrentView('Customer')}>
+        <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+          <AccountCircleIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="Customer" />
+      </ListItem>
+      <ListItem button onClick={() => setCurrentView('Revenue Plan')}>
+        <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+          <NotificationsIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="Revenue Plan" />
+      </ListItem>
+    </List>
         </Box>
       </Drawer>
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100vh', overflow: 'auto' }}>

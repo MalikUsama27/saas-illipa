@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Switch, Button, Paper } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import 'primeicons/primeicons.css';
 
 const initialModulesData = [
   { id: 545, name: 'Sale', description: 'Lorem Ipsum dolor sit amet', premium: false, monthlyPrice: 0, yearlyPrice: 0 },
@@ -9,7 +12,6 @@ const initialModulesData = [
 
 const Modules = () => {
   const [modules, setModules] = useState(initialModulesData);
-
 
   return (
     <TableContainer component={Paper}>
@@ -39,7 +41,7 @@ const Modules = () => {
               <TableCell>{module.monthlyPrice}</TableCell>
               <TableCell>{module.yearlyPrice}</TableCell>
               <TableCell>
-              <Button
+                <Button
                   variant="contained"
                   sx={{
                     backgroundColor: 'black',
@@ -50,7 +52,7 @@ const Modules = () => {
                     },
                   }}
                 >
-                  Edit
+                  <EditIcon />
                 </Button>
                 <Button
                   variant="contained"
@@ -62,9 +64,8 @@ const Modules = () => {
                     },
                   }}
                 >
-                  Delete
+                  <DeleteIcon />
                 </Button>
-
               </TableCell>
             </TableRow>
           ))}
