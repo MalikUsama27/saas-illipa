@@ -8,15 +8,19 @@ import UserForm from './UserForm';
 import Modules from './Modules';
 import logo from "../../assets/logo.png"
 import RevenuePlan from './RevenuePlan';
+import AddUser from './AddUser';
 
 const drawerWidth = 240;
 
 const Dashboard = () => {
   const [currentView, setCurrentView] = useState('Modules');
-
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
   const renderContent = () => {
     switch (currentView) {
-      case 'Customer':
+      case 'Customers':
         return (
           <>
             <Typography variant="h5" component="div">
@@ -29,6 +33,12 @@ const Dashboard = () => {
         return (
           <Container>
             <RevenuePlan />
+          </Container>
+        );
+        case 'Add User':
+        return (
+          <Container>
+            <AddUser/>
           </Container>
         );
       case 'Modules':
@@ -45,7 +55,7 @@ const Dashboard = () => {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#44AEF5', color: 'black' },
+          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#434191', color: '#fff' },
         }}
       >
         <Toolbar />
@@ -60,17 +70,23 @@ const Dashboard = () => {
         </ListItemIcon>
         <ListItemText primary="Modules" />
       </ListItem>
-      <ListItem button onClick={() => setCurrentView('Customer')}>
+      <ListItem button onClick={() => setCurrentView('Customers')}>
         <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
           <AccountCircleIcon sx={{ color: '#fff' }} />
         </ListItemIcon>
-        <ListItemText primary="Customer" />
+        <ListItemText primary="Customers" />
       </ListItem>
       <ListItem button onClick={() => setCurrentView('Revenue Plan')}>
         <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
           <NotificationsIcon sx={{ color: '#fff' }} />
         </ListItemIcon>
         <ListItemText primary="Revenue Plan" />
+      </ListItem>
+      <ListItem button onClick={() => setCurrentView('Add User')}>
+        <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+          <AccountCircleIcon sx={{ color: '#fff' }} />
+        </ListItemIcon>
+        <ListItemText primary="Users" />
       </ListItem>
     </List>
         </Box>
@@ -83,9 +99,9 @@ const Dashboard = () => {
             </Typography>
             <IconButton color="inherit">
               <LogoutIcon />
-              <Typography sx={{ marginLeft: 2 }}>
-                Logout
-              </Typography>
+              <Typography sx={{ marginLeft: 2 }} onClick={handleLogout} style={{ cursor: 'pointer' }}>
+        Logout
+      </Typography>
             </IconButton>
           </Toolbar>
         </AppBar>

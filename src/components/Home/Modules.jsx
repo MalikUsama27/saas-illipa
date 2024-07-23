@@ -1,77 +1,62 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Switch, Button, Paper } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import 'primeicons/primeicons.css';
+import DataTableComponent from '../reusable/DataTableComponent';
 
-const initialModulesData = [
-  { id: 545, name: 'Sale', description: 'Lorem Ipsum dolor sit amet', premium: false, monthlyPrice: 0, yearlyPrice: 0 },
-  { id: 546, name: 'CRM', description: 'Lorem Ipsum dolor sit amet', premium: false, monthlyPrice: 0, yearlyPrice: 0 },
-  { id: 547, name: 'Accounting', description: 'Lorem Ipsum dolor sit amet', premium: false, monthlyPrice: 0, yearlyPrice: 0 },
+const modulesData = [
+  {
+    id: 545,
+    name: 'Sale',
+    description: 'Lorem Ipsum dolor sit amet',
+    premium: false,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+  },
+  {
+    id: 546,
+    name: 'CRM',
+    description: 'Lorem Ipsum dolor sit amet',
+    premium: false,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+  },
+  {
+    id: 547,
+    name: 'Accounting',
+    description: 'Lorem Ipsum dolor sit amet',
+    premium: false,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+  }
 ];
 
 const Modules = () => {
-  const [modules, setModules] = useState(initialModulesData);
+  const [modules, setModules] = useState(modulesData);
+
+  const handlePremiumChange = (e, id) => {
+    const updatedModules = modules.map(module => 
+      module.id === id ? { ...module, premium: e.value } : module
+    );
+    setModules(updatedModules);
+  };
+
+  const columns = [
+    { field: 'id', header: 'ID' },
+    { field: 'name', header: 'Name' },
+    { field: 'description', header: 'Description' },
+    { field: 'monthlyPrice', header: 'Monthly Price' },
+    { field: 'yearlyPrice', header: 'Yearly Price' },
+    { field: 'premium', header: 'Premium' }
+  ];
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Premium</TableCell>
-            <TableCell>Monthly Price</TableCell>
-            <TableCell>Yearly Price</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {modules.map((module) => (
-            <TableRow key={module.id}>
-              <TableCell>{module.id}</TableCell>
-              <TableCell>{module.name}</TableCell>
-              <TableCell>{module.description}</TableCell>
-              <TableCell>
-                <Switch checked={module.premium}
-                //  onChange={() => handlePremiumChange(module.id)} 
-                 />
-              </TableCell>
-              <TableCell>{module.monthlyPrice}</TableCell>
-              <TableCell>{module.yearlyPrice}</TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: 'black',
-                    color: 'white',
-                    marginRight: '8px',
-                    '&:hover': {
-                      backgroundColor: 'black',
-                    },
-                  }}
-                >
-                  <EditIcon />
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: 'red',
-                    color: 'white',
-                    '&:hover': {
-                      backgroundColor: 'darkred',
-                    },
-                  }}
-                >
-                  <DeleteIcon />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div>
+      {/* <h2>Modules</h2> */}
+      <DataTableComponent 
+        columns={columns} 
+        data={modules} 
+        onPremiumChange={handlePremiumChange} 
+        showEdit={false}
+      />
+    </div>
   );
 };
 
