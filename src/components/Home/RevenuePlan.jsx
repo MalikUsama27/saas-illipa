@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import DataTableComponent from '../reusable/DataTableComponent';
 import { Button } from 'primereact/button';
-import AddRevenuePlan from './AddRevenuePlan';
+import { useNavigate } from 'react-router-dom';
+import DataTableComponent from '../reusable/DataTableComponent';
+import InputComponent from '../reusable/InputComponent';
 
 const initialData = [
   { id: 1, title: 'Plan A', minValue: 1000, maxValue: 5000, amount: 100, active: false },
@@ -10,8 +11,12 @@ const initialData = [
 ];
 
 const RevenuePlan = () => {
-  const [data, setData] = useState(initialData);
-  const [showAddRevenue, setShowAddRevenue] = useState(false);
+  const [data, setData] = useState(initialData); 
+  const navigate = useNavigate();
+
+  const handleAddRevenueClick = () => {
+    navigate('/dashboard/add-revenue');
+  };
 
   const handleSwitchChange = (e, id) => {
     const updatedData = data.map(item => 
@@ -28,32 +33,21 @@ const RevenuePlan = () => {
     { field: 'active', header: 'Active' }
   ];
 
-  const handleAddRevenueClick = () => {
-    setShowAddRevenue(true);
-  };
-
   return (
     <div>
-      {showAddRevenue ? (
-        <AddRevenuePlan />
-      ) : (
-        <>
-          {/* <h2>Revenue Plans</h2> */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
-            <Button 
-              label="Add Revenue Plan" 
-              style={{ margin: '5px', backgroundColor: '#434191' }} 
-              onClick={handleAddRevenueClick} 
-            />
-          </div>
-          <DataTableComponent 
-            columns={columns} 
-            data={data} 
-            onSwitchChange={handleSwitchChange} 
-            showEdit={false}
-          />
-        </>
-      )}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+        <Button
+          label="Add Revenue Plan"
+          style={{ margin: '5px', backgroundColor: '#434191' }}
+          onClick={handleAddRevenueClick}
+        />
+      </div>
+      <DataTableComponent
+        columns={columns}
+        data={data}
+        onSwitchChange={handleSwitchChange}
+        showEdit={false}
+      />
     </div>
   );
 };

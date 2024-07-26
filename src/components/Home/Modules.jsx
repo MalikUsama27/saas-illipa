@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import DataTableComponent from '../reusable/DataTableComponent';
+import { Outlet } from 'react-router-dom';
 
 const modulesData = [
   {
@@ -56,8 +57,10 @@ const Modules = () => {
         onPremiumChange={handlePremiumChange} 
         showEdit={false}
       />
+       <Outlet/>
     </div>
   );
 };
 
 export default Modules;
+

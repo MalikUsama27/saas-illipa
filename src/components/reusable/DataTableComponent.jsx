@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { InputSwitch } from 'primereact/inputswitch';
 import 'primeicons/primeicons.css';
 
-const DataTableComponent = ({ columns, data, onSwitchChange, onPremiumChange, showEdit }) => {
+const DataTableComponent = ({ columns, data, onSwitchChange, onPremiumChange, onEdit, onDelete, showEdit }) => {
 
   const switchTemplate = (rowData, field, onChange) => {
     return (
@@ -21,16 +21,16 @@ const DataTableComponent = ({ columns, data, onSwitchChange, onPremiumChange, sh
   const actionTemplate = (rowData) => {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-       
-         <Button
-            icon="pi pi-pencil"
-            className="p-button-primary p-button-sm"
-            style={{
-              marginRight: '8px',
-              color: '#fff',
-              textAlign: 'center'
-            }}
-          />
+        <Button
+          icon="pi pi-pencil"
+          className="p-button-primary p-button-sm"
+          style={{
+            marginRight: '8px',
+            color: '#fff',
+            textAlign: 'center'
+          }}
+          onClick={() => onEdit(rowData.id)}
+        />
         <Button
           icon="pi pi-trash"
           className="p-button-danger p-button-sm"
@@ -40,23 +40,24 @@ const DataTableComponent = ({ columns, data, onSwitchChange, onPremiumChange, sh
             color: '#fff',
             textAlign: 'center'
           }}
-        /> {showEdit && (
-            <Button
+          onClick={() => onDelete(rowData.id)}
+        />
+        {showEdit && (
+          <Button
             icon="pi pi-info-circle"
             className="p-button-success p-button-sm"
             style={{
-                marginRight: '8px',
-                backgroundColor: '#4CAF50',
-                // borderColor: '#4CAF50',
-                color: '#fff',
-                textAlign: 'center'
+              marginRight: '8px',
+              backgroundColor: '#4CAF50',
+              color: '#fff',
+              textAlign: 'center'
             }}
-        />
-         
+          />
         )}
       </div>
     );
   };
+
   return (
     <div className="datatable-responsive-demo">
       <DataTable value={data} className="p-datatable-responsive border rounded">

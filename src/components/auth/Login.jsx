@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import './Login.css'; 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 import loginImage from '../../assets/images/loginimg.PNG';
 import logo from '../../assets/logo.png';
 import { Button } from 'primereact/button';
@@ -30,13 +32,17 @@ const Login = () => {
 
         if (response.data.token) {
           localStorage.setItem('token', response.data.token); 
+        
+
         window.location.reload();     
+  toast.success('Login Successfully'); 
          } else {
          
-          console.log('Login failed: No token returned');
+          console.log('Login failed');
+        
         }
       } catch (error) {
-  
+    toast.error('Email and Password Incorrect'); 
         console.error('Login error:', error);
       }
     },
