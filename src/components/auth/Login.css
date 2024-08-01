@@ -60,11 +60,11 @@ body {
 }
 
 .login-form input {
-  padding: 15px;
+  padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #444;
-  border-radius: 5px;
-  font-size: 16px;
+  border-radius: 15px;
+  font-size: 12px; 
   background-color: #ffffff;
   color: var(--text-color);
 }
@@ -80,10 +80,10 @@ body {
 }
 
 .login-button {
-  padding: 15px;
+  padding: 10px;
   margin-top: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
   background-color: #434191;
   color: #fff;
@@ -96,10 +96,10 @@ body {
 }
 
 .forgot-password {
-  padding: 10px;
+  padding: 8px;
   margin-top: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 25px;
   cursor: pointer;
   background-color: #434191;
   color: #fff;

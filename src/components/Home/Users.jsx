@@ -13,7 +13,7 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchUsers = async () => {
     try {
@@ -21,10 +21,11 @@ const Users = () => {
       const formattedUsers = response.data.map(user => ({
         name: user.name,
         email: user.email,
-        mobile: user.user_fields.phone,
-        role: user.roles[0]?.name || 'N/A',
-        permissions: user.user_fields.permissions || 'N/A',
+        phone: user.user_fields?.phone || 'N/A',
+        role: user.roles?.[0]?.name || 'N/A',
+        permissions: user.user_fields?.permissions || 'N/A',
         id: user.id,
+        userData: user, 
       }));
       setUsers(formattedUsers);
     } catch (error) {
@@ -43,19 +44,20 @@ const Users = () => {
   };
 
   const handleEdit = (userId) => {
-    setSelectedUserId(userId);
+    const user = users.find(user => user.id === userId);
+    setSelectedUser(user);
     setEditDialogVisible(true);
   };
 
   const handleDelete = (userId) => {
-    setSelectedUserId(userId);
+    setSelectedUser({ id: userId });
     setDeleteDialogVisible(true);
   };
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://ilipaone.com/api/users/${selectedUserId}`);
-      setUsers(users.filter(user => user.id !== selectedUserId));
+      await axios.delete(`https://ilipaone.com/api/users/${selectedUser.id}`);
+      setUsers(users.filter(user => user.id !== selectedUser.id));
     } catch (error) {
       console.error('Error deleting user:', error);
     } finally {
@@ -65,15 +67,15 @@ const Users = () => {
 
   const handleSaveEdit = () => {
     setEditDialogVisible(false);
-    fetchUsers(); // Refresh the user list after editing
+    fetchUsers(); 
   };
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
         <Button
           label="Add User"
-          style={{ margin: '5px', backgroundColor: '#434191' }}
+          style={{ margin: '5px', backgroundColor: '#06163A',borderRadius:'10px' }}
           onClick={handleAddUser}
         />
       </div>
@@ -86,28 +88,33 @@ const Users = () => {
           columns={[
             { field: 'name', header: 'Name' },
             { field: 'email', header: 'Email' },
-            { field: 'mobile', header: 'Mobile' },
+            { field: 'phone', header: 'Phone' },
             { field: 'role', header: 'Role' },
             { field: 'permissions', header: 'Permissions' },
           ]}
+          header="User"
           data={users}
           onEdit={handleEdit}
           onDelete={handleDelete}
-          showEdit={true}
         />
       )}
-      <EditUser
-        visible={editDialogVisible}
-        onClose={() => setEditDialogVisible(false)}
-        userId={selectedUserId}
-        onSave={handleSaveEdit}
-      />
-      <DeleteUser
-        visible={deleteDialogVisible}
-        onClose={() => setDeleteDialogVisible(false)}
-        onConfirm={handleConfirmDelete}
-      />
+      {selectedUser && (
+        <EditUser
+          visible={editDialogVisible}
+          onClose={() => setEditDialogVisible(false)}
+          user={selectedUser.userData} 
+          onSave={handleSaveEdit}
+        />
+      )}
+      {selectedUser && (
+        <DeleteUser
+          visible={deleteDialogVisible}
+          onClose={() => setDeleteDialogVisible(false)}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 };
+
 export default Users;

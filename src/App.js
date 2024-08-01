@@ -10,6 +10,7 @@ import AddRevenuePlan from './components/Home/AddRevenuePlan';
 import Users from './components/Home/Users';
 import AddUser from './components/Home/AddUser';
 import AddCustomer from './components/Home/AddCustomer';
+import Receipt from './components/Home/Receipt';
 
 function App() {
     const navigate = useNavigate();
@@ -32,16 +33,17 @@ function App() {
 
     return (
         <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/dashboard" element={<Layout />}>
-                <Route path="modules" element={<Modules />} />
-                <Route path="customers" element={<Customer />} />
-                <Route path="revenue-plan" element={<RevenuePlan />} />
-                <Route path="add-revenue" element={<AddRevenuePlan />} />
-                <Route path="users" element={<Users />} />
-                <Route path="add-user" element={<AddUser />} />
-                <Route path="add-customer" element={<AddCustomer/>}/>
+            <Route exact  path="/" element={<Login />} />
+            <Route exact  path="/forgot-password" element={<ForgotPassword />} />
+            <Route exact  path="/dashboard" element={<Layout />}>
+                <Route exact  path="modules" element={<Modules />} />
+                <Route exact  path="customers" element={<Customer />} />
+                <Route exact  path="revenue-plan" element={<RevenuePlan />} />
+                <Route exact  path="add-revenue" element={<AddRevenuePlan />} />
+                <Route exact  path="users" element={<Users />} />
+                <Route exact  path="add-user" element={<AddUser />} />
+                <Route exact  path="add-customer" element={<AddCustomer/>}/>
+                <Route exact path='receipt' element={<Receipt/>}/>
             </Route>
         </Routes>
     );

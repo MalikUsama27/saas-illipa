@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, Grid, Box, Typography } from '@mui/material';
+import { Button, Grid, Box, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
+import axios from 'axios';
+import InputComponent from '../reusable/InputComponent';
+import CheckboxComponent from '../reusable/CheckboxComponent';
+import 'react-toastify/dist/ReactToastify.css';
 
+// Validation schema
 const validationSchema = Yup.object({
   name: Yup.string().required('Name is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
-  phone: Yup.string().required('Phone number is required'),
+  phone: Yup.string().required('Phone number is required').matches(/^\d+$/, 'Phone number must be numeric'),
   role: Yup.string().required('Role is required'),
   permissions: Yup.object({
     viewPayments: Yup.boolean(),
@@ -15,40 +20,53 @@ const validationSchema = Yup.object({
     makePremiumModules: Yup.boolean(),
   }),
   password: Yup.string().required('Password is required'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required'),
 });
 
 const AddUser = () => {
-  const handleSubmit = async (values, { setSubmitting }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    const phoneString = String(values.phone);
+
+    const permissionsString = Object.entries(values.permissions)
+      .filter(([_, value]) => value)
+      .map(([key]) => {
+        switch (key) {
+          case 'viewPayments':
+            return 'View Payments';
+          case 'addUsers':
+            return 'Add Users';
+          case 'makePremiumModules':
+            return 'Make Premium Modules';
+          default:
+            return '';
+        }
+      })
+      .join(', ');
+
     const payload = {
-      ...values,
-      permissions: Object.entries(values.permissions)
-        .filter(([_, value]) => value)
-        .map(([key]) => key.replace(/([A-Z])/g, ' $1').trim()),
+      name: values.name,
+      email: values.email,
+      phone: phoneString,
+      role: values.role.toLowerCase(),
+      permissions: permissionsString,
+      password: values.password,
     };
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('https://ilipaone.com/api/users', {
-        method: 'POST',
+      const response = await axios.post('https://ilipaone.com/api/users', payload, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`${errorText}`);
-      }
-
-      toast.success('User Added successfully');
+      toast.success('User added successfully');
+      resetForm();
     } catch (error) {
       console.error('Error adding user:', error);
-      toast.error(`Error adding user: ${error.message}`);
+      toast.error(`Error adding user: ${error.response ? error.response.data.message : error.message}`);
     } finally {
       setSubmitting(false);
     }
@@ -68,7 +86,6 @@ const AddUser = () => {
             makePremiumModules: false,
           },
           password: '',
-          confirmPassword: '',
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
@@ -77,103 +94,45 @@ const AddUser = () => {
           <Form>
             <Grid container spacing={2} mt={2}>
               <Grid item xs={12} sm={6}>
-                <Field
-                  name="name"
-                  as={TextField}
-                  label="Name"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                />
+                <InputComponent label="Name" name="name" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field
-                  name="email"
-                  as={TextField}
-                  label="Email"
-                  type="email"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                />
+                <InputComponent label="Email" name="email" type="email" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field
-                  name="phone"
-                  as={TextField}
-                  label="Phone"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                />
+                <InputComponent label="Phone" name="phone" type="text" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined" size="small">
+                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
                   <InputLabel>Role</InputLabel>
                   <Field
                     as={Select}
                     name="role"
                     label="Role"
-                    onChange={e => setFieldValue('role', e.target.value)}
+                    value={values.role}
+                    onChange={(e) => setFieldValue('role', e.target.value)}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '45px' }}
                   >
-                    <MenuItem value="Admin">Admin</MenuItem>
-                    <MenuItem value="Manager">Manager</MenuItem>
+                    {['Admin', 'Manager'].map((role) => (
+                      <MenuItem key={role} value={role}>{role}</MenuItem>
+                    ))}
                   </Field>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="subtitle1">Permissions</Typography>
-                <FormControlLabel
-                  control={
-                    <Field
-                      as={Checkbox}
-                      name="permissions.viewPayments"
-                      checked={values.permissions.viewPayments}
-                    />
-                  }
-                  label="View Payments"
-                />
-                <FormControlLabel
-                  control={
-                    <Field
-                      as={Checkbox}
-                      name="permissions.addUsers"
-                      checked={values.permissions.addUsers}
-                    />
-                  }
-                  label="Add Users"
-                />
-                <FormControlLabel
-                  control={
-                    <Field
-                      as={Checkbox}
-                      name="permissions.makePremiumModules"
-                      checked={values.permissions.makePremiumModules}
-                    />
-                  }
-                  label="Make Premium Modules"
-                />
+                <CheckboxComponent label="View Payments" name="permissions.viewPayments" />
+                <CheckboxComponent label="Add Users" name="permissions.addUsers" />
+                <CheckboxComponent label="Make Premium Modules" name="permissions.makePremiumModules" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <Field
-                  name="password"
-                  as={TextField}
+                <InputComponent
                   label="Password"
+                  name="password"
                   type="password"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Field
-                  name="confirmPassword"
-                  as={TextField}
-                  label="Confirm Password"
-                  type="password"
-                  fullWidth
-                  variant="outlined"
-                  size="small"
+                  isPassword
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -181,7 +140,12 @@ const AddUser = () => {
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
-                  sx={{ backgroundColor: '#434191', '&:hover': { backgroundColor: '#323b7a' } }}
+                  sx={{
+                    backgroundColor: '#06163A',
+                    '&:hover': { backgroundColor: '#06163A' },
+                    borderRadius: '25px',
+                    fontSize: '0.875rem',
+                  }}
                 >
                   Add User
                 </Button>

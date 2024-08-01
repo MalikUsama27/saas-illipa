@@ -52,6 +52,7 @@ const Modules = () => {
     <div>
       {/* <h2>Modules</h2> */}
       <DataTableComponent 
+      header="Modules"
         columns={columns} 
         data={modules} 
         onPremiumChange={handlePremiumChange} 

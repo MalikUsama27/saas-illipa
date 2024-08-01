@@ -1,37 +1,51 @@
-// import React from 'react';
-// import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, List, ListItem, ListItemIcon, ListItemText, Grid } from '@mui/material';
-// import { useNavigate } from 'react-router-dom';
-// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
-// import DashboardIcon from '@mui/icons-material/Dashboard';
-// import LogoutIcon from '@mui/icons-material/Logout';
-// import logo from "../../assets/logo.png";
-// import { Outlet } from 'react-router-dom';
+import React from 'react';
+import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Helmet } from 'react-helmet';
 
-// const drawerWidth = 240;
-// const Dashboard = () => {
-//   const [currentView, setCurrentView] = useState('Modules');
+const Dashboard = ({ handleNavigation }) => {
+  const [title, setTitle] = React.useState('Dashboard');
 
-//   const renderContent = () => {
-//     switch (currentView) {
-//       case 'Customers':
-//         return <UserForm handleClose={() => setCurrentView('Modules')} />;
-//       case 'Revenue Plan':
-//         return <RevenuePlan />;
-//       case 'Add User':
-//         return <Users />;
-//       case 'Modules':
-//       default:
-//         return <Modules />;
-//     }
-//   };
+  const handleClick = (view, title) => {
+    setTitle(title); 
+    handleNavigation(view);
+  };
 
-//   return (
-//     <div currentView={currentView} setCurrentView={setCurrentView}>
-//       {renderContent()}
-//     </div>
-//   );
-// };
+  return (
+    <div>
+      <Helmet>
+        <title>Ilipa - {title}</title>
+      </Helmet>
+      <List>
+        <ListItem button onClick={() => handleClick('modules', 'Modules')}>
+          <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+            <DashboardIcon sx={{ color: '#fff' }} />
+          </ListItemIcon>
+          <ListItemText primary="Modules" />
+        </ListItem>
+        <ListItem button onClick={() => handleClick('customers', 'Customers')}>
+          <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+            <AccountCircleIcon sx={{ color: '#fff' }} />
+          </ListItemIcon>
+          <ListItemText primary="Customers" />
+        </ListItem>
+        <ListItem button onClick={() => handleClick('revenue-plan', 'Revenue Plan')}>
+          <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+            <NotificationsIcon sx={{ color: '#fff' }} />
+          </ListItemIcon>
+          <ListItemText primary="Revenue Plan" />
+        </ListItem>
+        <ListItem button onClick={() => handleClick('users', 'Users')}>
+          <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+            <AccountCircleIcon sx={{ color: '#fff' }} />
+          </ListItemIcon>
+          <ListItemText primary="Users" />
+        </ListItem>
+      </List>
+    </div>
+  );
+};
 
-// export default Dashboard;
-
+export default Dashboard;

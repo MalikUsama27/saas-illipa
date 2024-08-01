@@ -9,14 +9,30 @@ const DeleteCustomer = ({ visible, onHide, onConfirm }) => {
       visible={visible}
       onHide={onHide}
       footer={
-        <div>
-          <Button label="Yes" icon="pi pi-check" onClick={onConfirm} />
-          <Button label="No" icon="pi pi-times" onClick={onHide} />
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', padding: '10px' }}>
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            className="p-button-success"
+            onClick={onConfirm}
+            style={{ width: '100px',  fontSize: '12px',background:'#06163A',borderRadius: '25px',  }}
+          />
+          <Button
+            label="No"
+            icon="pi pi-times"
+            className="p-button-danger"
+            onClick={onHide}
+            style={{ width: '100px', fontSize: '12px',borderRadius: '25px', }}
+          />
         </div>
       }
-      style={{ width: '50%' }} 
+      style={{ width: '400px', borderRadius: '10px' }} 
     >
-      <p>Are you sure you want to delete this user?</p>
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <p style={{ fontSize: '16px', marginBottom: '20px' }}>
+          Are you sure you want to delete this customer?
+        </p>
+      </div>
     </Dialog>
   );
 };

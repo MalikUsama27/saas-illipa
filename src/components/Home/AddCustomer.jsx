@@ -1,39 +1,39 @@
 import React, { useState } from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Button, Grid, Box, InputAdornment, IconButton, MenuItem } from '@mui/material';
+import { Button, Grid, Box, InputAdornment, IconButton, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import InputComponent from '../reusable/InputComponent';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-
+// Validation schema
 const validationSchema = Yup.object({
-  companyName: Yup.string().required('Company Name is required'),
+  company_name: Yup.string().required('Company Name is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
-  mobile: Yup.string().matches(/^[0-9]+$/, 'Mobile number must be digits only').required('Mobile number is required'),
-  username: Yup.string().required('Owner Name is required'),
+  phone: Yup.string().matches(/^[0-9]+$/, 'Phone number must be digits only').required('Phone number is required'),
   industry: Yup.string().required('Industry is required'),
   country: Yup.string().required('Country is required'),
-  companyAddress: Yup.string().required('Company Address is required'),
-  companySize: Yup.string().required('Company Size is required'),
+  company_address: Yup.string().required('Company Address is required'),
+  company_size: Yup.string().required('Company Size is required'),
   password: Yup.string().required('Password is required'),
 });
 
+// Initial values
 const initialValues = {
-  companyName: '',
+  company_name: '',
   email: '',
-  mobile: '',
-  username: '',
+  phone: '',
   industry: '',
   country: '',
-  companyAddress: '',
-  companySize: '',
+  company_address: '',
+  company_size: '',
   password: '',
 };
 
+// Dropdown options
 const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technology', 'Education'];
-const companySizes = ['>10', '11-25', '26-50', '50-100', '100+'];
+const company_sizes = ['>10', '11-25', '26-50', '50-100', '100+'];
 
 const AddCustomer = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +53,7 @@ const AddCustomer = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          // 'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(values),
       });
@@ -81,13 +81,13 @@ const AddCustomer = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue, values }) => (
           <Form>
             <Grid container spacing={2} mt={2}>
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Company Name"
-                  name="companyName"
+                  name="company_name"
                   required
                 />
               </Grid>
@@ -101,33 +101,14 @@ const AddCustomer = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <InputComponent
-                  label="Mobile"
-                  name="mobile"
+                  label="Phone"
+                  name="phone"
+                  type="text"
+                  required
                   inputProps={{ pattern: '[0-9]*' }}
-                  required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <InputComponent
-                  label="Owner Name"
-                  name="username"
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <InputComponent
-                  label="Industry"
-                  name="industry"
-                  select
-                  required
-                >
-                  {industries.map((industry) => (
-                    <MenuItem key={industry} value={industry}>
-                      {industry}
-                    </MenuItem>
-                  ))}
-                </InputComponent>
-              </Grid>
+             
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Country"
@@ -138,25 +119,10 @@ const AddCustomer = () => {
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Company Address"
-                  name="companyAddress"
+                  name="company_address"
                   required
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <InputComponent
-                  label="Company Size"
-                  name="companySize"
-                  select
-                  required
-                >
-                  {companySizes.map((size) => (
-                    <MenuItem key={size} value={size}>
-                      {size}
-                    </MenuItem>
-                  ))}
-                </InputComponent>
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Grid>  <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Password"
                   name="password"
@@ -176,13 +142,51 @@ const AddCustomer = () => {
                     ),
                   }}
                 />
+              </Grid><Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
+                  <InputLabel>Industry</InputLabel>
+                  <Field
+                    as={Select}
+                    name="industry"
+                    label="Industry"
+                    value={values.industry}
+                    onChange={(e) => setFieldValue('industry', e.target.value)}
+                    sx={{ borderRadius: '25px', fontSize: '14px' }}
+                  >
+                    {industries.map((industry) => (
+                      <MenuItem key={industry} value={industry}>
+                        {industry}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
+                  <InputLabel>Company Size</InputLabel>
+                  <Field
+                    as={Select}
+                    name="company_size"
+                    label="Company Size"
+                    value={values.company_size}
+                    onChange={(e) => setFieldValue('company_size', e.target.value)}
+                    sx={{ borderRadius: '25px', fontSize: '14px' }}
+                  >
+                    {company_sizes.map((size) => (
+                      <MenuItem key={size} value={size}>
+                        {size}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
+              </Grid>
+             
               <Grid item xs={12}>
                 <Button
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
-                  sx={{ backgroundColor: '#434191', '&:hover': { backgroundColor: '#323b7a' } }}
+                  sx={{ backgroundColor: '#06163A', borderRadius: '10px', '&:hover': { backgroundColor: '#06163A' } }}
                 >
                   Add Customer
                 </Button>
