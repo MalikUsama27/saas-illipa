@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Box } from '@mui/material';
 import { Button } from 'primereact/button'; 
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const EditPlan = ({ plan, onSave, onClose }) => {
   const [formData, setFormData] = useState(plan);
 
@@ -139,6 +140,12 @@ const EditPlan = ({ plan, onSave, onClose }) => {
           style={{ width: '100px',borderRadius: '25px', fontSize: '12px', }}
         />
       </Box>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        rtl={false}
+        style={{ zIndex: 1300, paddingTop:'55px'}} 
+      />
     </Box>
   );
 };

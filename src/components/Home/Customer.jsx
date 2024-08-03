@@ -5,20 +5,26 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import EditCustomer from '../Home/Customer/EditCustomer';
 import DeleteCustomer from '../Home/Customer/DeleteCustomer';
+import AddCustomer from '../Home/Customer/AddCustomer';
+import { Dialog } from 'primereact/dialog';
+import { RingLoader } from 'react-spinners';
 
 const Customer = () => {
   const navigate = useNavigate();
   const [customers, setCustomers] = useState([]);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [addDialogVisible, setAddDialogVisible] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customerIdToDelete, setCustomerIdToDelete] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const fetchData = async () => { 
+  const fetchData = async () => {
+    setLoading(true);
     try {
       const response = await axios.get('https://ilipaone.com/api/users?user=customers');
       const userData = response.data.map(user => ({
@@ -36,16 +42,20 @@ const Customer = () => {
       setCustomers(userData);
     } catch (error) {
       console.error('Error fetching customer data', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAddCustomer = () => {
-    navigate('/dashboard/add-customer');
+    setAddDialogVisible(true);
   };
+
   const handleSave = () => {
     setEditDialogVisible(false);
-    fetchData(); 
+    fetchData();
   };
+
   const handleEditCustomer = async (id) => {
     try {
       const response = await axios.get(`https://ilipaone.com/api/users/${id}`);
@@ -72,7 +82,9 @@ const Customer = () => {
       }
     }
   };
-
+const handleinfo=()=>{
+  navigate('/dashboard/revenue-projection');
+}
   const handleReceipt = () => {
     navigate('/dashboard/receipt');
   };
@@ -89,37 +101,55 @@ const Customer = () => {
   ];
 
   return (
-    <div style={{ height: 'auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+    <div style={{ height: 'auto', position: 'relative' }}>    
+    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
         <Button
           label="Add Customer"
           style={{ margin: '5px', backgroundColor: '#06163A', borderRadius: '10px' }}
           onClick={handleAddCustomer}
         />
       </div>
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+          <RingLoader color="#06163A" />
+        </div>
+      ):(
+  <>
       <DataTableComponent
         header="Customer List"
         columns={columns}
         data={customers}
         showEdit={true}
-        showreceipt={true}
+        showReceipt={true}
+        showdelete={true} showinfo={true}
+        showActions={true} 
         onEdit={handleEditCustomer}
         onDelete={handleDeleteCustomer}
-        onreceipt={handleReceipt}
-      />
+        onReceipt={handleReceipt}
+        oninfo={handleinfo}
+       
+      /></>)}
       {selectedCustomer && (
-       <EditCustomer
-       visible={editDialogVisible}
-       customer={selectedCustomer}
-       onHide={() => setEditDialogVisible(false)}
-       onSave={handleSave} 
-     />
+        <EditCustomer
+          visible={editDialogVisible}
+          customer={selectedCustomer}
+          onHide={() => setEditDialogVisible(false)}
+          onSave={handleSave}
+        />
       )}
       <DeleteCustomer
         visible={deleteDialogVisible}
         onHide={() => setDeleteDialogVisible(false)}
         onConfirm={handleConfirmDelete}
       />
+      <Dialog
+        header="Add New Customer"
+        visible={addDialogVisible}
+        onHide={() => setAddDialogVisible(false)}
+        style={{ width: '50vw' }}
+      >
+        <AddCustomer onSave={() => { setAddDialogVisible(false); fetchData(); }} />
+      </Dialog>
       <Outlet />
     </div>
   );

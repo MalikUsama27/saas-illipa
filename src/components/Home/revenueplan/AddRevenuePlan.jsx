@@ -55,7 +55,7 @@ const AddRevenuePlan = () => {
     if (Object.values(currentPlan).every(field => field.trim() !== '')) {
       setPlans([...plans, currentPlan]);
       setCurrentPlan({ title: '', min_value: '', max_value: '', amount: '' });
-      toast.success('Plan added successfully.');
+      // toast.success('Now you Can Upload Plan.');
     } else {
       toast.error('Please fill in all fields.');
     }
@@ -158,8 +158,8 @@ const AddRevenuePlan = () => {
         </Grid>
         <Grid item xs={12} sm={2}>
           <InputField
-            label="Amount" // Display label as 'Amount'
-            name="amount" // Use 'amount' in state
+            label="Amount" 
+            name="amount" 
             value={currentPlan.amount}
             onChange={handleChange}
           />
@@ -190,7 +190,12 @@ const AddRevenuePlan = () => {
       >
         Submit Plans
       </Button>
-      <ToastContainer /> 
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        rtl={false}
+        style={{ zIndex: 1300, paddingTop:'55px'}} 
+      />
     </Box>
   );
 };

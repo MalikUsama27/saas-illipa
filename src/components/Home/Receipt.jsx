@@ -1,6 +1,6 @@
 // Receipt.js
 import React from 'react';
-import DataTableComponent from '../reusable/DataTableComponent'; // Adjust path as needed
+import DataTableComponent from '../reusable/DataTableComponent'; 
 
 const Receipt = () => {
   const columns = [
@@ -25,9 +25,11 @@ const Receipt = () => {
         header="Billing Table"
         columns={columns}
         data={data}
-        showEdit={false}   // No edit functionality needed
-        showreceipt={false} // Receipt functionality not required
-        showdollar={false}  // Dollar functionality not required
+        showEdit={false}   
+        showreceipt={false} 
+        showdelete={true}
+        showdollar={false}  
+        showActions={true} 
       />
     </div>
   );

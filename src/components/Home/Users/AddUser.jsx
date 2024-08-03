@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { Button, Grid, Box, Typography, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { Button, Grid, Box, Typography, MenuItem, Select, FormControl, InputLabel, FormHelperText } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
-import InputComponent from '../reusable/InputComponent';
-import CheckboxComponent from '../reusable/CheckboxComponent';
+import InputComponent from '../../reusable/InputComponent';
+import CheckboxComponent from '../../reusable/CheckboxComponent';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Validation schema
@@ -18,11 +18,17 @@ const validationSchema = Yup.object({
     viewPayments: Yup.boolean(),
     addUsers: Yup.boolean(),
     makePremiumModules: Yup.boolean(),
-  }),
-  password: Yup.string().required('Password is required'),
+  }).test(
+    'at-least-one-permission',
+    'Select at least one permission',
+    (value) => Object.values(value).some(Boolean)
+  ).required('Select at least one permission'),
+  password: Yup.string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters long'),
 });
 
-const AddUser = () => {
+const AddUser = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -55,7 +61,7 @@ const AddUser = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('https://ilipaone.com/api/users', payload, {
+      await axios.post('https://ilipaone.com/api/users', payload, {
         headers: {
           'Content-Type': 'application/json',
           // 'Authorization': `Bearer ${token}`,
@@ -64,16 +70,21 @@ const AddUser = () => {
 
       toast.success('User added successfully');
       resetForm();
+
+      
+      setTimeout(() => {
+        onClose();
+      }, 2000); 
     } catch (error) {
       console.error('Error adding user:', error);
-      toast.error(`Error adding user: ${error.response ? error.response.data.message : error.message}`);
+      toast.error(`${error.response ? error.response.data.errors.email : error.message}`);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <Box p={3} border={1} borderColor="grey.400" borderRadius={4} width={1}>
+    <Box>
       <Formik
         initialValues={{
           name: '',
@@ -103,28 +114,26 @@ const AddUser = () => {
                 <InputComponent label="Phone" name="phone" type="text" />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
-                  <InputLabel>Role</InputLabel>
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel style={{ fontSize: '12px', marginTop: '-5px' }}>Role</InputLabel>
                   <Field
                     as={Select}
                     name="role"
                     label="Role"
                     value={values.role}
                     onChange={(e) => setFieldValue('role', e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px', height: '45px' }}
+                    style={{ borderRadius: '25px', fontSize: '12px', height: '42px' }}
                   >
                     {['Admin', 'Manager'].map((role) => (
-                      <MenuItem key={role} value={role}>{role}</MenuItem>
+                      <MenuItem key={role} value={role} style={{  fontSize: '12px', }}>{role}</MenuItem>
                     ))}
                   </Field>
+                  <ErrorMessage name="role">
+                    {msg => <FormHelperText style={{ color: '#d9535f' }}>{msg}</FormHelperText>}
+                  </ErrorMessage>
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">Permissions</Typography>
-                <CheckboxComponent label="View Payments" name="permissions.viewPayments" />
-                <CheckboxComponent label="Add Users" name="permissions.addUsers" />
-                <CheckboxComponent label="Make Premium Modules" name="permissions.makePremiumModules" />
-              </Grid>
+              
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Password"
@@ -134,15 +143,22 @@ const AddUser = () => {
                   showPassword={showPassword}
                   setShowPassword={setShowPassword}
                 />
+              </Grid><Grid item xs={12}>
+                <Typography variant="subtitle1" style={{ fontSize: '12px' }}>Permissions</Typography>
+                <CheckboxComponent style={{ fontSize: '12px' }} label="View Payments" name="permissions.viewPayments" />
+                <CheckboxComponent style={{ fontSize: '12px' }} label="Add Users" name="permissions.addUsers" />
+                <CheckboxComponent style={{ fontSize: '12px' }}  label="Make Premium Modules" name="permissions.makePremiumModules" />
+                <ErrorMessage name="permissions">
+                  {msg => <FormHelperText style={{ color: '#d9535f' }}>{msg}</FormHelperText>}
+                </ErrorMessage>
               </Grid>
               <Grid item xs={12}>
                 <Button
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
-                  sx={{
+                  style={{
                     backgroundColor: '#06163A',
-                    '&:hover': { backgroundColor: '#06163A' },
                     borderRadius: '25px',
                     fontSize: '0.875rem',
                   }}
@@ -154,7 +170,12 @@ const AddUser = () => {
           </Form>
         )}
       </Formik>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        rtl={false}
+        style={{ zIndex: 1300, paddingTop:'55px'}} 
+      />
     </Box>
   );
 };

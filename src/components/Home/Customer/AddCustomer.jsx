@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Button, Grid, Box, InputAdornment, IconButton, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
-import InputComponent from '../reusable/InputComponent';
+import InputComponent from '../../reusable/InputComponent';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -75,7 +75,9 @@ const AddCustomer = () => {
   };
 
   return (
-    <Box p={3} border={1} borderColor="grey.400" borderRadius={4} width={1}>
+    <Box 
+    // p={3} border={1} borderColor="grey.400" borderRadius={4} width={1}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -144,14 +146,14 @@ const AddCustomer = () => {
                 />
               </Grid><Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
-                  <InputLabel>Industry</InputLabel>
+                  <InputLabel style={{ fontSize: '12px'}}>Industry</InputLabel>
                   <Field
                     as={Select}
                     name="industry"
                     label="Industry"
                     value={values.industry}
                     onChange={(e) => setFieldValue('industry', e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '14px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px' ,height:'40px'}}
                   >
                     {industries.map((industry) => (
                       <MenuItem key={industry} value={industry}>
@@ -163,14 +165,14 @@ const AddCustomer = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
-                  <InputLabel>Company Size</InputLabel>
+                  <InputLabel style={{ fontSize: '12px',}}>Company Size</InputLabel>
                   <Field
                     as={Select}
                     name="company_size"
                     label="Company Size"
                     value={values.company_size}
                     onChange={(e) => setFieldValue('company_size', e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '14px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px' ,height:'40px'}}
                   >
                     {company_sizes.map((size) => (
                       <MenuItem key={size} value={size}>

@@ -9,6 +9,8 @@ import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Validation schema using Yup
 const validationSchema = Yup.object({
@@ -52,7 +54,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         country: customer.user_fields.country || 'N/A',
         companyAddress: customer.user_fields.company_address || 'N/A',
         companySize: customer.user_fields.company_size || 'N/A',
-        password: 'N/A', 
+        password: ' ', 
       });
     }
   }, [customer]);
@@ -73,8 +75,10 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
       await axios.put(`https://ilipaone.com/api/users/${customer.id}`, payload);
       onSave(); 
       onHide();
+      toast.success('Customer Edit successfully')
     } catch (error) {
       console.error('Error updating user:', error);
+      // toast.error('Customer Edit successfully')
     }
   };
 
@@ -184,6 +188,12 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
           </Form>
         )}
       </Formik>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        rtl={false}
+        style={{ zIndex: 1300, paddingTop:'55px'}} 
+      />
     </Dialog>
   );
 };

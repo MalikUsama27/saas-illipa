@@ -4,77 +4,82 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { InputSwitch } from 'primereact/inputswitch';
 import 'primeicons/primeicons.css';
-import '../../css/DataTableComponent.css'; 
+import '../../css/DataTableComponent.css';
 
-const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumChange, onEdit,onreceipt, onDelete, showEdit ,showreceipt,showdollar}) => {
+const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumChange, onEdit, onReceipt, onDelete, showEdit, showReceipt, showDollar, showinfo, oninfo, showdelete, showActions }) => {
 
   const switchTemplate = (rowData, field, onChange) => (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <InputSwitch 
         checked={rowData[field]} 
-        onChange={(e) => onChange && onChange(e, rowData.id)} 
+        onChange={(e) => onChange && onChange(rowData.id, e.value)} 
       />
     </div>
   );
 
   const actionTemplate = (rowData) => (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Button
-        icon="pi pi-pencil"
-        className="p-button-primary p-button-sm"
-        style={{
-          marginRight: '8px',
-          color: '#fff',
-          // backgroundColor:'#06163A',
-          textAlign: 'center',
-          fontFamily: "'Open Sans', sans-serif",
-          fontSize: '12px'
-        }}
-        onClick={() => onEdit(rowData.id)}
-      />
-      {/* {showdollar&&(
-       <Button
-        icon="pi pi-dollar"
-        className="p-button-primary p-button-sm"
-        style={{
-          marginRight: '8px',
-          color: '#fff',
-          textAlign: 'center',
-          backgroundColor: '#',
-          fontFamily: "'Open Sans', sans-serif",
-          fontSize: '12px'
-        }}
-        onClick={() => onEdit(rowData.id)}
-      />)} */}
-      {showreceipt && (
-       <Button
-        icon="pi pi-receipt"
-        className="p-button-primary p-button-sm"
-        style={{
-          marginRight: '8px',
-          color: '#fff',
-          backgroundColor: 'orange',
-          textAlign: 'center',
-          fontFamily: "'Open Sans', sans-serif",
-          fontSize: '12px'
-        }}
-        onClick={() => onreceipt('')}
-      />)}
-      
-      <Button
-        icon="pi pi-trash"
-        className="p-button-danger p-button-sm"
-        style={{
-          marginRight: '8px',
-          backgroundColor: '#d9534f',
-          color: '#fff',
-          textAlign: 'center',
-          fontFamily: "'Open Sans', sans-serif",
-          fontSize: '12px'
-        }}
-        onClick={() => onDelete(rowData.id)}
-      />
+      {showDollar && (
+        <Button
+          icon="pi pi-dollar"
+          className="p-button-primary p-button-sm"
+          style={{
+            marginRight: '8px',
+            color: '#fff',
+            textAlign: 'center',
+            backgroundColor: '#FF5722', 
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '12px'
+          }}
+          onClick={() => onEdit(rowData.id)}
+        />
+      )}
       {showEdit && (
+        <Button
+          icon="pi pi-pencil"
+          className="p-button-primary p-button-sm"
+          style={{
+            marginRight: '8px',
+            color: '#fff',
+            textAlign: 'center',
+            backgroundColor: '#06163A',
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '12px'
+          }}
+          onClick={() => onEdit(rowData.id)}
+        />
+      )}
+      {showReceipt && (
+        <Button
+          icon="pi pi-receipt"
+          className="p-button-primary p-button-sm"
+          style={{
+            marginRight: '8px',
+            color: '#fff',
+            backgroundColor: 'orange',
+            textAlign: 'center',
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '12px'
+          }}
+          onClick={() => onReceipt()}
+        />
+      )}
+      {showdelete && (
+        <Button
+          icon="pi pi-trash"
+          className="p-button-danger p-button-sm"
+          style={{
+            marginRight: '8px',
+            backgroundColor: '#d9534f',
+            color: '#fff',
+            textAlign: 'center',
+            fontFamily: "'Open Sans', sans-serif",
+            fontSize: '12px'
+          }}
+          onClick={() => onDelete(rowData.id)}
+        />
+      )}
+      {showinfo && (
         <Button
           icon="pi pi-info-circle"
           className="p-button-success p-button-sm"
@@ -86,6 +91,7 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
             fontFamily: "'Open Sans', sans-serif",
             fontSize: '12px'
           }}
+          onClick={() => oninfo()}
         />
       )}
     </div>
@@ -108,7 +114,9 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
               col.body}
           />
         ))}
-        <Column header="Actions" body={actionTemplate} headerStyle={{ backgroundColor: "#06163A", color: 'white' }} />
+        {showActions && (
+          <Column header="Actions" body={actionTemplate} headerStyle={{ backgroundColor: "#06163A", color: 'white' }} />
+        )}
       </DataTable>
     </div>
   );

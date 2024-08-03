@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { RingLoader } from 'react-spinners';
 import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 import DataTableComponent from '../reusable/DataTableComponent';
 import EditUser from './Users/Edituser'; 
 import DeleteUser from './Users/DeleteUser'; 
+import AddUser from './Users/AddUser';
 
 const Users = () => {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [addUserDialogVisible, setAddUserDialogVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchUsers = async () => {
@@ -40,7 +43,7 @@ const Users = () => {
   }, []);
 
   const handleAddUser = () => {
-    navigate('/dashboard/add-user');
+    setAddUserDialogVisible(true);
   };
 
   const handleEdit = (userId) => {
@@ -70,12 +73,17 @@ const Users = () => {
     fetchUsers(); 
   };
 
+  const handleCloseAddUserDialog = () => {
+    setAddUserDialogVisible(false);
+    fetchUsers(); // Fetch users again if necessary
+  };
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
         <Button
           label="Add User"
-          style={{ margin: '5px', backgroundColor: '#06163A',borderRadius:'10px' }}
+          style={{ margin: '5px', backgroundColor: '#06163A', borderRadius: '10px' }}
           onClick={handleAddUser}
         />
       </div>
@@ -90,12 +98,15 @@ const Users = () => {
             { field: 'email', header: 'Email' },
             { field: 'phone', header: 'Phone' },
             { field: 'role', header: 'Role' },
-            { field: 'permissions', header: 'Permissions' },
+            { field: 'permissions', header: 'Permissions'},
           ]}
           header="User"
           data={users}
+          showEdit={true}
           onEdit={handleEdit}
+          showdelete={true}
           onDelete={handleDelete}
+          showActions={true} 
         />
       )}
       {selectedUser && (
@@ -113,6 +124,15 @@ const Users = () => {
           onConfirm={handleConfirmDelete}
         />
       )}
+      <Dialog
+        header="Add New User"
+        visible={addUserDialogVisible}
+        onHide={() => setAddUserDialogVisible(false)}
+        style={{ width: '50vw' }}
+        
+      >
+        <AddUser onClose={handleCloseAddUserDialog} />
+      </Dialog>
     </div>
   );
 };

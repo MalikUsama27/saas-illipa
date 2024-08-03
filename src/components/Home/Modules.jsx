@@ -10,6 +10,7 @@ const modulesData = [
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
+    active: false 
   },
   {
     id: 546,
@@ -18,6 +19,7 @@ const modulesData = [
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
+    active: false 
   },
   {
     id: 547,
@@ -26,15 +28,17 @@ const modulesData = [
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
+    active: false 
   }
 ];
 
 const Modules = () => {
   const [modules, setModules] = useState(modulesData);
 
-  const handlePremiumChange = (e, id) => {
-    const updatedModules = modules.map(module => 
-      module.id === id ? { ...module, premium: e.value } : module
+ 
+  const handleActiveChange = (id, newStatus) => {
+    const updatedModules = modules.map(module =>
+      module.id === id ? { ...module, active: newStatus } : module
     );
     setModules(updatedModules);
   };
@@ -45,23 +49,25 @@ const Modules = () => {
     { field: 'description', header: 'Description' },
     { field: 'monthlyPrice', header: 'Monthly Price' },
     { field: 'yearlyPrice', header: 'Yearly Price' },
-    { field: 'premium', header: 'Premium' }
+    
+    { field: 'active', header: 'Premium' } 
   ];
 
   return (
-    <div>
-      {/* <h2>Modules</h2> */}
+    <div style={{paddingTop:'58px'}}>
       <DataTableComponent 
-      header="Modules"
+        header="Modules"
         columns={columns} 
         data={modules} 
-        onPremiumChange={handlePremiumChange} 
-        showEdit={false}
+        onSwitchChange={handleActiveChange} 
+        showActions={true} 
+        showEdit={true}
+        showdelete={true} 
+        showinfo={true}
       />
-       <Outlet/>
+      <Outlet/>
     </div>
   );
 };
 
 export default Modules;
-
