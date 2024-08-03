@@ -54,7 +54,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         country: customer.user_fields.country || 'N/A',
         companyAddress: customer.user_fields.company_address || 'N/A',
         companySize: customer.user_fields.company_size || 'N/A',
-        password: ' ', 
+        password: '', 
       });
     }
   }, [customer]);
