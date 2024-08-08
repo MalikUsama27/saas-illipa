@@ -129,7 +129,7 @@ const AddUser = ({ onClose }) => {
                     ))}
                   </Field>
                   <ErrorMessage name="role">
-                    {msg => <FormHelperText style={{ color: '#d9535f' }}>{msg}</FormHelperText>}
+                    {msg => <FormHelperText style={{ color: '#D32F2F', fontSize:'12px' }}>{msg}</FormHelperText>}
                   </ErrorMessage>
                 </FormControl>
               </Grid>
@@ -149,7 +149,7 @@ const AddUser = ({ onClose }) => {
                 <CheckboxComponent style={{ fontSize: '12px' }} label="Add Users" name="permissions.addUsers" />
                 <CheckboxComponent style={{ fontSize: '12px' }}  label="Make Premium Modules" name="permissions.makePremiumModules" />
                 <ErrorMessage name="permissions">
-                  {msg => <FormHelperText style={{ color: '#d9535f' }}>{msg}</FormHelperText>}
+                  {msg => <FormHelperText style={{ color: '#D32F2F', fontSize:'12px' }}>{msg}</FormHelperText>}
                 </ErrorMessage>
               </Grid>
               <Grid item xs={12}>

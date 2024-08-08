@@ -38,7 +38,9 @@ const Customer = () => {
         country: user.user_fields?.country || 'N/A',
         company_size: user.user_fields?.company_size || 'N/A',
         industry: user.user_fields?.industry || 'N/A',
+        userid: user.user_fields?.user_id,
       }));
+
       setCustomers(userData);
     } catch (error) {
       console.error('Error fetching customer data', error);
@@ -82,11 +84,20 @@ const Customer = () => {
       }
     }
   };
-const handleinfo=()=>{
-  navigate('/dashboard/revenue-projection');
-}
-  const handleReceipt = () => {
-    navigate('/dashboard/receipt');
+
+  const handleReceipt = (customer) => {
+    if (!customer || !customer.userid) {
+      console.error('Invalid customer object or missing userid');
+      return;
+    }
+
+    const { userid } = customer;
+    console.log('Selected User ID for Receipt:', userid);
+    navigate('/dashboard/receipt', { state: { customerId: userid } });
+  };
+
+  const handleinfo = () => {
+    navigate('/dashboard/revenue-projection');
   };
 
   const columns = [
@@ -101,8 +112,8 @@ const handleinfo=()=>{
   ];
 
   return (
-    <div style={{ height: 'auto', position: 'relative' }}>    
-    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+    <div style={{ height: 'auto', position: 'relative' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
         <Button
           label="Add Customer"
           style={{ margin: '5px', backgroundColor: '#06163A', borderRadius: '10px' }}
@@ -113,22 +124,22 @@ const handleinfo=()=>{
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
           <RingLoader color="#06163A" />
         </div>
-      ):(
-  <>
-      <DataTableComponent
-        header="Customer List"
-        columns={columns}
-        data={customers}
-        showEdit={true}
-        showReceipt={true}
-        showdelete={true} showinfo={true}
-        showActions={true} 
-        onEdit={handleEditCustomer}
-        onDelete={handleDeleteCustomer}
-        onReceipt={handleReceipt}
-        oninfo={handleinfo}
-       
-      /></>)}
+      ) : (
+        <DataTableComponent
+          header="Customer List"
+          columns={columns}
+          data={customers}
+          showEdit={true}
+          showReceipt={true}
+          showdelete={true}
+          showinfo={true}
+          showActions={true}
+          onEdit={handleEditCustomer}
+          onDelete={handleDeleteCustomer}
+          onReceipt={handleReceipt}
+          oninfo={handleinfo}
+        />
+      )}
       {selectedCustomer && (
         <EditCustomer
           visible={editDialogVisible}
@@ -137,11 +148,14 @@ const handleinfo=()=>{
           onSave={handleSave}
         />
       )}
-      <DeleteCustomer
-        visible={deleteDialogVisible}
-        onHide={() => setDeleteDialogVisible(false)}
-        onConfirm={handleConfirmDelete}
-      />
+      {customerIdToDelete && (
+        <DeleteCustomer
+          visible={deleteDialogVisible}
+          customerId={customerIdToDelete}
+          onHide={() => setDeleteDialogVisible(false)}
+          onDelete={handleConfirmDelete}
+        />
+      )}
       <Dialog
         header="Add New Customer"
         visible={addDialogVisible}

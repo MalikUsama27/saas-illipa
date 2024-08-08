@@ -49,13 +49,14 @@ const EditUser = ({ visible, onClose, user, onSave }) => {
         : user?.user_fields?.permissions || '',
       password: '',
     },
+   
     enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
       try {
         const token = localStorage.getItem('token');
 
-       
+      
         const permissionsArray = values.permissions
           .split(', ')
           .map(label => availablePermissions.find(p => p.label === label)?.key)

@@ -33,6 +33,8 @@ const Login = () => {
 
         if (response.data.token) {
           localStorage.setItem('token', response.data.token);
+          localStorage.setItem('permissions', response.data.permissions);
+
           window.location.reload();
           toast.success('Login Successfully');
         } else {

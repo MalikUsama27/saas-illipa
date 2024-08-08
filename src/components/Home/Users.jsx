@@ -75,7 +75,7 @@ const Users = () => {
 
   const handleCloseAddUserDialog = () => {
     setAddUserDialogVisible(false);
-    fetchUsers(); // Fetch users again if necessary
+    fetchUsers();
   };
 
   return (

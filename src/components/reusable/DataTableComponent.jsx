@@ -8,14 +8,16 @@ import '../../css/DataTableComponent.css';
 
 const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumChange, onEdit, onReceipt, onDelete, showEdit, showReceipt, showDollar, showinfo, oninfo, showdelete, showActions }) => {
 
+ 
   const switchTemplate = (rowData, field, onChange) => (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <InputSwitch 
-        checked={rowData[field]} 
+        checked={rowData[field] === 1} 
         onChange={(e) => onChange && onChange(rowData.id, e.value)} 
       />
     </div>
   );
+
 
   const actionTemplate = (rowData) => (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -31,7 +33,7 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
             fontFamily: "'Open Sans', sans-serif",
             fontSize: '12px'
           }}
-          onClick={() => onEdit(rowData.id)}
+          onClick={() => onEdit(rowData)}
         />
       )}
       {showEdit && (
@@ -61,7 +63,7 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
             fontFamily: "'Open Sans', sans-serif",
             fontSize: '12px'
           }}
-          onClick={() => onReceipt()}
+          onClick={() => onReceipt(rowData)}
         />
       )}
       {showdelete && (
@@ -107,10 +109,8 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
             field={col.field} 
             header={col.header} 
             headerStyle={{ backgroundColor: "#06163A", color: 'white' }} 
-            body={col.field === 'premium' ? 
-              (rowData) => switchTemplate(rowData, 'premium', onPremiumChange) :
-              col.field === 'active' ?
-              (rowData) => switchTemplate(rowData, 'active', onSwitchChange) : 
+            body={col.field === 'status' ? 
+              (rowData) => switchTemplate(rowData, 'status', onSwitchChange) : 
               col.body}
           />
         ))}

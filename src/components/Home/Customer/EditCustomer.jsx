@@ -6,9 +6,6 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import InputComponent from '../../reusable/InputComponent'; 
 import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -29,6 +26,7 @@ const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technol
 const companySizes = ['>10', '11-25', '26-50', '50-100', '100+'];
 
 const EditCustomer = ({ visible, onHide, customer, onSave }) => {
+  const [showPassword, setShowPassword] = useState(false);
   const [initialValues, setInitialValues] = useState({
     username: '',
     email: '',
@@ -40,21 +38,19 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
     companySize: '',
     password: '',
   });
-  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    console.log(customer)
-    if (customer && typeof customer === 'object') {
+    if (customer) {
       setInitialValues({
-        username: customer.username || 'N/A',
-        email: customer.email || 'N/A',
-        mobile: customer.user_fields.phone || 'N/A',
-        companyName: customer.user_fields.company_name || 'N/A',
-        industry: customer.user_fields.industry || 'N/A',
-        country: customer.user_fields.country || 'N/A',
-        companyAddress: customer.user_fields.company_address || 'N/A',
-        companySize: customer.user_fields.company_size || 'N/A',
-        password: '', 
+        username: customer.username || '',
+        email: customer.email || '',
+        mobile: customer.user_fields?.phone || '',
+        companyName: customer.user_fields?.company_name || '',
+        industry: customer.user_fields?.industry || '',
+        country: customer.user_fields?.country || '',
+        companyAddress: customer.user_fields?.company_address || '',
+        companySize: customer.user_fields?.company_size || '',
+        password: '',
       });
     }
   }, [customer]);
@@ -72,13 +68,14 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         company_size: values.companySize,
       };
 
+      // PUT request to update customer
       await axios.put(`https://ilipaone.com/api/users/${customer.id}`, payload);
       onSave(); 
       onHide();
-      toast.success('Customer Edit successfully')
+      toast.success('Customer updated successfully');
     } catch (error) {
       console.error('Error updating user:', error);
-      // toast.error('Customer Edit successfully')
+      toast.error('Error updating customer');
     }
   };
 
@@ -88,21 +85,21 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
       visible={visible}
       onHide={onHide}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'end',padding: '10px', borderTop: '1px solid #ddd' }}>
+        <div style={{ display: 'flex', justifyContent: 'end', padding: '10px', borderTop: '1px solid #ddd' }}>
           <Button
             label="Save"
             icon="pi pi-check"
             type="submit"
             form="edit-form"
             className="p-button-success"
-            style={{ fontSize: '12px',background:'#06163A',borderRadius: '25px', }}
+            style={{ fontSize: '12px', background:'#06163A', borderRadius: '25px' }}
           />
           <Button
             label="Cancel"
             icon="pi pi-times"
             onClick={onHide}
             className="p-button-secondary"
-            style={{ fontSize: '12px',background:'#d9535f' ,borderRadius: '25px',}}
+            style={{ fontSize: '12px', background:'#d9535f', borderRadius: '25px' }}
           />
         </div>
       }
@@ -116,7 +113,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
       >
         {({ setFieldValue, values }) => (
           <Form id="edit-form">
-            <div style={{ display: 'grid', gap: '16px',marginTop:'10px',  gridTemplateColumns: '1fr 1fr', marginBottom: '20px' }}>
+            <div style={{ display: 'grid', gap: '16px', marginTop:'10px', gridTemplateColumns: '1fr 1fr', marginBottom: '20px' }}>
               <div>
                 <InputComponent label="Username" name="username" />
               </div>
@@ -138,7 +135,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                     label="Industry"
                     value={values.industry}
                     onChange={(e) => setFieldValue("industry", e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px',height: '47px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '47px' }}
                   >
                     {industries.map((industry) => (
                       <MenuItem key={industry} value={industry}>{industry}</MenuItem>
@@ -155,7 +152,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                     label="Company Size"
                     value={values.companySize}
                     onChange={(e) => setFieldValue("companySize", e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px',height: '47px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '47px' }}
                   >
                     {companySizes.map((size) => (
                       <MenuItem key={size} value={size}>{size}</MenuItem>
@@ -174,14 +171,12 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                   <InputComponent
                     label="Password"
                     name="password"
-                    type={showPassword ? 'text' : 'password'}
+                    
+                    isPassword={true}  
+                    showPassword={showPassword}
+                    setShowPassword={setShowPassword}
                   />
-                  <IconButton
-                    style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)' }}
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
+                 
                 </div>
               </div>
             </div>

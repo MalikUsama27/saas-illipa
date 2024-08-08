@@ -1,8 +1,46 @@
-// Receipt.js
-import React from 'react';
-import DataTableComponent from '../reusable/DataTableComponent'; 
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+import DataTableComponent from '../reusable/DataTableComponent';
+import { RingLoader } from 'react-spinners';
 
 const Receipt = () => {
+  const location = useLocation();
+  const { customerId } = location.state || {};
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    console.log('Customer ID from Location State:', customerId);
+
+    if (customerId) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(`https://ilipaone.com/api/transactions/${customerId}`);
+          const receiptData = response.data.map(receipt => ({
+            billingMonth: receipt.billing_month || 'N/A',
+            revenuePlan: receipt.revenue_plan_threshold|| 'N/A',
+            billedAmount: receipt.billed_amount || 'N/A',
+            date: receipt.date || 'N/A',
+            transactionId: receipt.transaction_id|| 'N/A',
+            nextBillingDate: receipt.next_billing_date || 'N/A',
+          }));
+          setData(receiptData);
+        } catch (error) {
+          console.error('Error fetching receipt data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    } else {
+      console.error('No customer ID provided.');
+      setLoading(false);
+    }
+  }, [customerId]);
+
   const columns = [
     { field: 'billingMonth', header: 'Billing Month' },
     { field: 'revenuePlan', header: 'Revenue Plan' },
@@ -12,25 +50,24 @@ const Receipt = () => {
     { field: 'nextBillingDate', header: 'Next Billing Date' },
   ];
 
-  const data = [
-    { billingMonth: 'July 2024', revenuePlan: 'Basic', billedAmount: '$100', date: '2024-07-01', transactionId: 'T12345', nextBillingDate: '2024-08-01' },
-    { billingMonth: 'June 2024', revenuePlan: 'Standard', billedAmount: '$200', date: '2024-06-01', transactionId: 'T12346', nextBillingDate: '2024-07-01' },
-    { billingMonth: 'May 2024', revenuePlan: 'Premium', billedAmount: '$300', date: '2024-05-01', transactionId: 'T12347', nextBillingDate: '2024-06-01' },
-  ];
-
   return (
     <div>
-      {/* <h1 style={{ textAlign: 'center' }}>Company Billing Details</h1> */}
-      <DataTableComponent
-        header="Billing Table"
-        columns={columns}
-        data={data}
-        showEdit={false}   
-        showreceipt={false} 
-        showdelete={true}
-        showdollar={false}  
-        showActions={true} 
-      />
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
+          <RingLoader color="#06163A" />
+        </div>
+      ) : (
+        <DataTableComponent
+          header="Transaction Details"
+          columns={columns}
+          data={data}
+          showEdit={false}
+          showReceipt={false}
+          showdelete={false}
+          showdollar={false}
+          showActions={false}
+        />
+      )}
     </div>
   );
 };

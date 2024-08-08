@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import DataTableComponent from '../reusable/DataTableComponent';
 import { Outlet } from 'react-router-dom';
+import { InputSwitch } from 'primereact/inputswitch';
 
 const modulesData = [
   {
@@ -35,10 +36,9 @@ const modulesData = [
 const Modules = () => {
   const [modules, setModules] = useState(modulesData);
 
- 
-  const handleActiveChange = (id, newStatus) => {
+  const handleActiveChange = (id, checked) => {
     const updatedModules = modules.map(module =>
-      module.id === id ? { ...module, active: newStatus } : module
+      module.id === id ? { ...module, active: checked } : module
     );
     setModules(updatedModules);
   };
@@ -49,23 +49,29 @@ const Modules = () => {
     { field: 'description', header: 'Description' },
     { field: 'monthlyPrice', header: 'Monthly Price' },
     { field: 'yearlyPrice', header: 'Yearly Price' },
-    
-    { field: 'active', header: 'Premium' } 
+    {
+      field: 'active',
+      header: 'Active',
+      body: rowData => (
+        <InputSwitch
+          checked={rowData.active}
+          onChange={(e) => handleActiveChange(rowData.id, e.value)}
+        />
+      )
+    }
   ];
 
   return (
-    <div style={{paddingTop:'58px'}}>
+    <div style={{ paddingTop: '58px' }}>
       <DataTableComponent 
         header="Modules"
         columns={columns} 
         data={modules} 
-        onSwitchChange={handleActiveChange} 
         showActions={true} 
         showEdit={true}
         showdelete={true} 
-        showinfo={true}
       />
-      <Outlet/>
+      <Outlet />
     </div>
   );
 };

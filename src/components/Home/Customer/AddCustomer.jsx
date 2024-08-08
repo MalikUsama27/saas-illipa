@@ -4,8 +4,7 @@ import * as Yup from 'yup';
 import { Button, Grid, Box, InputAdornment, IconButton, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import InputComponent from '../../reusable/InputComponent';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -128,21 +127,10 @@ const AddCustomer = () => {
                 <InputComponent
                   label="Password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  isPassword={true}        
                   required
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
                 />
               </Grid><Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
