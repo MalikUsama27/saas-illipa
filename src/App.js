@@ -35,7 +35,7 @@ function App() {
   }, [navigate, location.pathname]);
 
   return (
-    <Router>
+    // <Router>
     <Routes>
       <Route exact path="/" element={<Login />} />
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
@@ -55,7 +55,7 @@ function App() {
         />
       {/* </Route> */}
     </Routes>
-    </Router>
+    // </Router>
   );
 }
 
