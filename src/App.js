@@ -25,15 +25,14 @@ function App() {
       }
     } else {
       if (location.pathname !== "/") {
-        navigate("/login");
+        navigate("/");
       }
     }
   }, [navigate, location.pathname]);
 
   return (
     <Routes>
-      <Route exact path="/login" element={<Login />} />
-      <Route exact path="/" element={<h1>Hello</h1>} />
+      <Route exact path="/" element={<Login />} />
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
       <Route exact path="/dashboard" element={<Layout />}>
         <Route exact path="modules" element={<Modules />} />
