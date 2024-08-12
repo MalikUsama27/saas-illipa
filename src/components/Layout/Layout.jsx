@@ -18,7 +18,7 @@ const Layout = () => {
   };
 
   const handleNavigation = (view) => {
-    navigate(`/${view.toLowerCase().replace(' ', '-')}`);
+    navigate(`/dashboard/${view.toLowerCase().replace(' ', '-')}`);
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-// import Layout from "./components/Layout/Layout";
+import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import Modules from "./components/Home/Modules";
@@ -35,27 +35,26 @@ function App() {
   }, [navigate, location.pathname]);
 
   return (
-    // <Router>
+
     <Routes>
       <Route exact path="/" element={<Login />} />
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
-      {/* <Route exact path="/dashboard" element={<Layout />}> */}
-        <Route exact path="/modules" element={<Modules />} />
-        <Route exact path="/customers" element={<Customer />} />
-        <Route exact path="/revenue-plan" element={<RevenuePlan />} />
+      <Route exact path="/dashboard" element={<Layout />}>
+        <Route exact path="modules" element={<Modules />} />
+        <Route exact path="customers" element={<Customer />} />
+        <Route exact path="revenue-plan" element={<RevenuePlan />} />
         {/* <Route exact  path="add-revenue" element={<AddRevenuePlan />} /> */}
-        <Route exact path="/users" element={<Users />} />
+        <Route exact path="users" element={<Users />} />
         {/* <Route exact  path="add-user" element={<AddUser />} /> */}
         {/* <Route exact  path="add-customer" element={<AddCustomer/>}/> */}
-        <Route exact path="/receipt" element={<Receipt />} />
+        <Route exact path="receipt" element={<Receipt />} />
         <Route
           exact
-          path="/revenue-projection"
+          path="revenue-projection"
           element={<RevenueProjection />}
         />
-      {/* </Route> */}
+      </Route>
     </Routes>
-    // </Router>
   );
 }
 
