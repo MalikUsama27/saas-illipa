@@ -22,7 +22,7 @@ function App() {
     console.log("path",location.pathname);
     if (token) {
       if (location.pathname === "/"  )  {
-        navigate("/modules");
+        navigate("/dashboard/modules");
       }
       // else if(location.pathname ==='/modules'){
       //   navigate("/modules");
