@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import React from "react";
+import { Routes, Route, } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -14,21 +14,21 @@ import Receipt from "./components/Home/Receipt";
 import RevenueProjection from "./components/Home/RevenueProjection";
 
 function App() {
-  const navigate = useNavigate();
-  const location = useLocation();
+//   const navigate = useNavigate();
+//   const location = useLocation();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      if (location.pathname === "/") {
-        navigate("/dashboard/modules");
-      }
-    } else {
-      if (location.pathname !== "/") {
-        navigate("/");
-      }
-    }
-  }, [navigate, location.pathname]);
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//       if (location.pathname === "/") {
+//         navigate("/dashboard/modules");
+//       }
+//     } else {
+//       if (location.pathname !== "/") {
+//         navigate("/");
+//       }
+//     }
+//   }, [navigate, location.pathname]);
 
   return (
     <Routes>

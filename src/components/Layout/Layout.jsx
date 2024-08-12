@@ -14,7 +14,7 @@ const Layout = () => {
   const handleLogout = () => {
     localStorage.clear();
     navigate('/login');
-    window.location.reload();
+    window.location.reload(); 
   };
 
   const handleNavigation = (view) => {
