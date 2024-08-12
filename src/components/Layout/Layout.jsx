@@ -13,7 +13,7 @@ const Layout = ({ title }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/');
+    navigate('/login');
     window.location.reload();
   };
 

@@ -10,7 +10,7 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
 
  
   const switchTemplate = (rowData, field, onChange) => (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{ display: 'flex'}}>
       <InputSwitch 
         checked={rowData[field] === 1} 
         onChange={(e) => onChange && onChange(rowData.id, e.value)} 
@@ -20,7 +20,7 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
 
 
   const actionTemplate = (rowData) => (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ display: 'flex' }}>
       {showDollar && (
         <Button
           icon="pi pi-dollar"
@@ -108,14 +108,14 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
             key={index} 
             field={col.field} 
             header={col.header} 
-            headerStyle={{ backgroundColor: "#06163A", color: 'white' }} 
+            headerStyle={{ backgroundColor: "#06163A", color: 'white' ,   }} 
             body={col.field === 'status' ? 
               (rowData) => switchTemplate(rowData, 'status', onSwitchChange) : 
               col.body}
           />
         ))}
         {showActions && (
-          <Column header="Actions" body={actionTemplate} headerStyle={{ backgroundColor: "#06163A", color: 'white' }} />
+          <Column header="Actions" body={actionTemplate} headerStyle={{ backgroundColor: "#06163A", color: 'white', textAlign: 'center', }} />
         )}
       </DataTable>
     </div>

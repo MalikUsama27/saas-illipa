@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
-import { TextField, IconButton, Grid, Box, Button } from '@mui/material';
+import { TextField, IconButton, Grid, Box, Button, InputAdornment, Checkbox, FormControlLabel } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const InputField = ({ label, name, value, onChange, disabled = false, ...props }) => (
+const InputField = ({ label, name, value, onChange, onBlur, disabled = false, currency = false, ...props }) => (
   <TextField
     label={label}
     name={name}
     value={value}
     onChange={onChange}
+    onBlur={onBlur}
     fullWidth
     variant="outlined"
     size="small"
     disabled={disabled}
+    InputProps={{
+      startAdornment: currency ? <InputAdornment position="start">$</InputAdornment> : null,
+    }}
     sx={{
       '& .MuiOutlinedInput-root': {
         borderRadius: '25px',
@@ -26,60 +30,92 @@ const InputField = ({ label, name, value, onChange, disabled = false, ...props }
       '& .MuiOutlinedInput-notchedOutline': {
         borderRadius: '25px',
       },
+      '& input': {
+        textAlign: 'left',
+      }
     }}
     {...props}
   />
 );
 
-const AddRevenuePlan = () => {
+const AddRevenuePlan = ({ onClose }) => {
   const [plans, setPlans] = useState([{ min_value: '1', max_value: '', amount: '' }]);
   const [title, setTitle] = useState('');
   const [currentIndex, setCurrentIndex] = useState(plans.length - 1);
+  const [noMaxValue, setNoMaxValue] = useState(false);
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
     setPlans(prevPlans =>
-      prevPlans.map((plan, i) => (i === index ? { ...plan, [name]: value } : plan))
+      prevPlans.map((plan, i) =>
+        i === index
+          ? {
+              ...plan,
+              [name]: value
+            }
+          : plan
+      )
+    );
+  };
+
+  const handleBlur = (e, index) => {
+    const { name, value } = e.target;
+
+    // Convert value to number and format
+    let formattedValue = value;
+    if (name !== 'amount') {
+      const numericValue = parseFloat(value.replace(/[^0-9.]/g, ''));
+      formattedValue = isNaN(numericValue) ? '' : numericValue.toFixed(2);
+    }
+
+    setPlans(prevPlans =>
+      prevPlans.map((plan, i) =>
+        i === index
+          ? {
+              ...plan,
+              [name]: formattedValue
+            }
+          : plan
+      )
     );
   };
 
   const handleAddPlan = () => {
-    const isValid = plans.every(plan => plan.max_value && plan.amount);
-    if (!isValid) {
-      toast.error('Please complete all fields in the current plan before adding a new one.');
-      return;
-    }
+    const currentPlan = plans[currentIndex];
+    const isCurrentPlanValid =
+      currentPlan.min_value &&
+      (noMaxValue || currentPlan.max_value) &&
+      (noMaxValue || parseFloat(currentPlan.max_value) > parseFloat(currentPlan.min_value)) &&
+      currentPlan.amount;
 
-    if (currentIndex !== plans.length - 1) {
-      toast.error('Please complete the current row before adding a new one.');
+    if (!isCurrentPlanValid) {
+      toast.error('Please complete the current plan correctly before adding a new one.');
       return;
     }
 
     const lastPlan = plans[plans.length - 1];
-    if (lastPlan.max_value && lastPlan.min_value && parseInt(lastPlan.max_value) <= parseInt(lastPlan.min_value)) {
-      toast.error('Max Value must be greater than Min Value.');
-      return;
+    if (lastPlan.max_value || noMaxValue) {
+      const newMinValue = (parseFloat(lastPlan.max_value || '0') + 0.01).toFixed(2);
+      const newPlan = {
+        min_value: newMinValue,
+        max_value: '',
+        amount: ''
+      };
+
+      setPlans([...plans, newPlan]);
+      setCurrentIndex(plans.length);
+    } else {
+      toast.error('Max Value must be set before adding a new plan.');
     }
-
-    const newMinValue = lastPlan.max_value ? (parseInt(lastPlan.max_value) + 1).toString() : '1';
-
-    const newPlan = {
-      min_value: newMinValue, 
-      max_value: '',
-      amount: ''
-    };
-
-    setPlans([...plans, newPlan]);
-    setCurrentIndex(plans.length); 
   };
 
   const handleDeletePlan = (index) => {
     if (index === plans.length - 1) {
       if (plans.length > 1) {
         setPlans(plans.filter((_, i) => i !== index));
-        setCurrentIndex(Math.max(0, currentIndex - 1)); 
+        setCurrentIndex(Math.max(0, currentIndex - 1));
       } else {
-        toast.error('At least 3 plan must be present.');
+        toast.error('At least 1 plan must be present.');
       }
     } else {
       toast.error('You cannot delete previous rows.');
@@ -87,36 +123,51 @@ const AddRevenuePlan = () => {
   };
 
   const handleSubmit = async () => {
-    if (title.trim() === '' || plans.some(plan => !plan.max_value || !plan.amount)) {
-      toast.error('Please fill in all fields.');
+    if (plans.some((_, index) => index === currentIndex && (!plans[index].min_value || (!noMaxValue && !plans[index].max_value) || !plans[index].amount))) {
+      toast.error('Please complete the current row before submitting.');
+      return;
+    }
+
+    if (title.trim() === '' || plans.some(plan => !plan.min_value || (!noMaxValue && !plan.max_value) || !plan.amount)) {
+      toast.error('Please add a title and complete all plans.');
+      return;
+    }
+
+    if (plans.some(plan => !noMaxValue && parseFloat(plan.max_value) <= parseFloat(plan.min_value))) {
+      toast.error('Max value must be greater than min value.');
+      return;
+    }
+
+    if (plans.length <= 2) {
+      toast.error('You must have at least 3 plans.');
       return;
     }
 
     try {
-      const formattedPlans = plans.map(({ min_value, max_value, amount }) => ({
-        min_value,
-        max_value,
-        prize: amount
+      const formattedPlans = plans.map(({ min_value, max_value, amount }, index) => ({
+        min_value: parseFloat(min_value).toFixed(2),
+        max_value: (index === plans.length - 1 && noMaxValue) ? '1000000.00' : parseFloat(max_value).toFixed(2),
+        prize: parseFloat(amount).toFixed(0),  
+        ...(index === plans.length - 1 && noMaxValue ? { max_value_status: true } : {})
       }));
 
       const payload = {
         title,
-        status: false,
+        status: true,
         ranges: formattedPlans
       };
 
       const response = await axios.post('https://ilipaone.com/api/revenue-plans', payload);
       if (response.status === 201) {
-        setPlans([{ min_value: '1', max_value: '', amount: '' }]);
+        setPlans([{ min_value: '1.00', max_value: '', amount: '' }]);
         setTitle('');
-        setCurrentIndex(0);
         toast.success('Plans submitted successfully.');
+        onClose();
       } else {
         toast.error('Failed to submit plans.');
       }
     } catch (error) {
       console.error('Error submitting plans:', error);
-      toast.error('Add Atleast 3 plans');
     }
   };
 
@@ -128,7 +179,9 @@ const AddRevenuePlan = () => {
           name="min_value"
           value={plan.min_value}
           onChange={(e) => handleChange(e, index)}
-          disabled={index !== plans.length + 1} 
+          onBlur={(e) => handleBlur(e, index)}
+          disabled={index !== plans.length + 1}
+          currency
         />
       </Grid>
       <Grid item xs={12} sm={3}>
@@ -137,7 +190,9 @@ const AddRevenuePlan = () => {
           name="max_value"
           value={plan.max_value}
           onChange={(e) => handleChange(e, index)}
-          disabled={index !== currentIndex} 
+          onBlur={(e) => handleBlur(e, index)}
+          disabled={index !== currentIndex || (index === plans.length - 1 && noMaxValue)}
+          currency
         />
       </Grid>
       <Grid item xs={12} sm={2}>
@@ -146,18 +201,22 @@ const AddRevenuePlan = () => {
           name="amount"
           value={plan.amount}
           onChange={(e) => handleChange(e, index)}
-          disabled={index !== currentIndex} 
+          onBlur={(e) => handleBlur(e, index)}
+          disabled={index !== currentIndex}
+          currency
         />
       </Grid>
       <Grid item xs={12} sm={1} display="flex" justifyContent="center" alignItems="center">
-        <IconButton 
-          color="secondary" 
-          onClick={() => handleDeletePlan(index)} 
-          size="small"
-          disabled={index !== plans.length - 1} 
-        >
-          <Delete />
-        </IconButton>
+        {index !== 0 && (
+          <IconButton
+            color="secondary"
+            onClick={() => handleDeletePlan(index)}
+            size="small"
+            disabled={index !== plans.length - 1}
+          >
+            <Delete />
+          </IconButton>
+        )}
       </Grid>
     </Grid>
   );
@@ -177,6 +236,13 @@ const AddRevenuePlan = () => {
           <IconButton color="primary" onClick={handleAddPlan} size="small">
             <Add />
           </IconButton>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <FormControlLabel
+            control={<Checkbox checked={noMaxValue} onChange={(e) => setNoMaxValue(e.target.checked)} />}
+            label="Do not require max value for last row"
+            disabled={plans.length <= 2} 
+          />
         </Grid>
       </Grid>
       <Box mt={2}>

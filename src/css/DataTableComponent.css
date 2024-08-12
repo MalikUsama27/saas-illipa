@@ -16,9 +16,19 @@
 .p-datatable .p-datatable-thead > tr > th {
   background-color: #06163A !important;
   color: white !important;
+  text-align: center;
 }
 
 .datatable-responsive {
   font-family: 'Open Sans';
   font-size: 12px;
+
+  text-align: center;
 }
+/* .p-datatable .p-datatable-tbody > tr > td {
+  text-align: center; 
+} */
+/* 
+.p-datatable .p-datatable-header {
+  text-align: center; 
+} */

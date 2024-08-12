@@ -14,7 +14,7 @@ const RevenuePlan = () => {
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [addPlanDialogVisible, setAddPlanDialogVisible] = useState(false); 
+  const [addPlanDialogVisible, setAddPlanDialogVisible] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -36,7 +36,7 @@ const RevenuePlan = () => {
   }, []);
 
   const handleAddRevenueClick = () => {
-    setAddPlanDialogVisible(true); 
+    setAddPlanDialogVisible(true);
   };
 
   const handleEdit = (id) => {
@@ -51,7 +51,7 @@ const RevenuePlan = () => {
     setDeleteDialogVisible(true);
   };
 
-  const handleSaveEdit = (updatedPlan) => {
+  const handleSaveEdit = () => {
     setEditDialogVisible(false);
     fetchData();
   };
@@ -62,38 +62,76 @@ const RevenuePlan = () => {
   };
 
   const handleActiveChange = async (planId, newStatus) => {
-    const updatedPlans = data.map(plan => ({
-      ...plan,
-      status: plan.id === planId ? (newStatus ? 1 : 0) : 0
-    }));
+    if (newStatus) {
+      // Deactivate all other plans
+      const updatedPlans = data.map(plan => ({
+        ...plan,
+        status: plan.id === planId ? 1 : 0
+      }));
 
-    setData(updatedPlans);
+      setData(updatedPlans);
 
-    // try {
-    //   // Update each plan's status on the server
-    //   await Promise.all(updatedPlans.map(plan =>
-    //     axios.patch(`https://ilipaone.com/api/revenue-plans/${plan.id}`, { status: plan.status })
-    //   ));
-    // } catch (error) {
-    //   console.error('Error updating status:', error);
-    //   fetchData(); // Re-fetch data to revert any failed status changes
-    // }
+      // Uncomment if you want to update the status on the server
+      // try {
+      //   await Promise.all(updatedPlans.map(plan =>
+      //     axios.patch(`https://ilipaone.com/api/revenue-plans/${plan.id}`, { status: plan.status })
+      //   ));
+      // } catch (error) {
+      //   console.error('Error updating status:', error);
+      //   fetchData(); // Re-fetch data to revert any failed status changes
+      // }
+    } else {
+      // Deactivate the selected plan only
+      const updatedPlans = data.map(plan => (
+        plan.id === planId ? { ...plan, status: 0 } : plan
+      ));
+
+      setData(updatedPlans);
+
+      // Uncomment if you want to update the status on the server
+      // try {
+      //   await axios.patch(`https://ilipaone.com/api/revenue-plans/${planId}`, { status: 0 });
+      // } catch (error) {
+      //   console.error('Error updating status:', error);
+      //   fetchData(); // Re-fetch data to revert any failed status changes
+      // }
+    }
+  };
+
+  const formatRanges = (ranges) => {
+    return ranges.map((range, index) => (
+      <div key={index} style={{ padding: '5px' }}>
+        {`$${range.min_value} - $${range.max_value}`}
+      </div>
+    ));
   };
 
   const columns = [
     { field: 'title', header: 'Title' },
-    { field: 'ranges', header: 'Ranges' }, 
-    { field: 'status', header: 'Active' }
+    { 
+      field: 'ranges', 
+      header: 'Ranges', 
+      body: rowData => (
+        <div>
+          {formatRanges(rowData.ranges)}
+        </div>
+      )
+    },
+    { 
+      field: 'ranges', 
+      header: 'Amount',
+      body: rowData => (
+        <div>
+          {rowData.ranges.map((range, index) => (
+            <div key={index} style={{ padding: '5px' }}>
+              {`$${range.prize}`}
+            </div>
+          ))}
+        </div>
+      )
+    },
+    { field: 'status', header: 'Default Plan' }
   ];
-
-  // Format range data for display
-  const formatRanges = (ranges) => {
-    return ranges.map((range, index) => (
-      <div key={index} style={{padding:'10px'}}>
-        {`$${range.min_value} - $${range.max_value} : $${range.prize}`}
-      </div>
-    ));
-  };
 
   return (
     <div>
@@ -113,10 +151,7 @@ const RevenuePlan = () => {
           <DataTableComponent
             header="Revenue Plan"
             columns={columns}
-            data={data.map(plan => ({
-              ...plan,
-              ranges: formatRanges(plan.ranges) 
-            }))}
+            data={data}
             onEdit={handleEdit}
             onDelete={handleDelete}
             onSwitchChange={handleActiveChange}
@@ -131,12 +166,12 @@ const RevenuePlan = () => {
               visible={editDialogVisible}
               onHide={() => setEditDialogVisible(false)}
               header="Edit Revenue Plan"
+              style={{ width: '50vw' }}
               modal
             >
               <EditPlan
                 plan={selectedPlan}
-                onSave={handleSaveEdit}
-                
+                onSave={() => {handleSaveEdit(); fetchData();}}
                 onClose={() => setEditDialogVisible(false)}
               />
             </Dialog>
@@ -159,12 +194,10 @@ const RevenuePlan = () => {
           <Dialog
             header="Add New Revenue Plan"
             visible={addPlanDialogVisible}
-            onHide={() => {setAddPlanDialogVisible(false)
-              fetchData();
-            }}
+            onHide={() => setAddPlanDialogVisible(false)}
             style={{ width: '50vw' }}
           >
-            <AddRevenuePlan />
+            <AddRevenuePlan onClose={() => {setAddPlanDialogVisible(false); fetchData();}} />
           </Dialog>
         </>
       )}
