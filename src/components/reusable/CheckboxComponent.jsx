@@ -3,7 +3,7 @@ import { Checkbox, FormControlLabel } from '@mui/material';
 import { useField } from 'formik';
 
 const CheckboxComponent = ({ label, name, ...props }) => {
-  const [field, meta, helpers] = useField({ name, type: 'checkbox' });
+  const [field] = useField({ name, type: 'checkbox' });
 
   return (
     <FormControlLabel

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Button, Grid, Box, InputAdornment, IconButton, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import { Button, Grid, Box,  MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import InputComponent from '../../reusable/InputComponent';
 
@@ -37,17 +37,17 @@ const company_sizes = ['>10', '11-25', '26-50', '50-100', '100+'];
 const AddCustomer = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  // const handleClickShowPassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  // const handleMouseDownPassword = (event) => {
+  //   event.preventDefault();
+  // };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const token = localStorage.getItem('token');
+      // const token = localStorage.getItem('token');
       const response = await fetch('https://ilipaone.com/api/users', {
         method: 'POST',
         headers: {

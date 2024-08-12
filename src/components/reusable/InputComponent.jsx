@@ -7,7 +7,6 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 const InputComponent = ({ label, name, type = 'text', options = [], isPassword = false, showPassword, setShowPassword, ...props }) => {
   const [field, meta] = useField(name);
 
-  // Handle password visibility toggle
   const handleClickShowPassword = () => {
     if (setShowPassword) {
       setShowPassword(prev => !prev);

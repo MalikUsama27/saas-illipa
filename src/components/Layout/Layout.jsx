@@ -1,5 +1,5 @@
 import React from 'react';
-import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, List, ListItem, ListItemIcon, ListItemText, Grid } from '@mui/material';
+import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import logo from "../../assets/logo.svg";
@@ -8,7 +8,7 @@ import Dashboard from '../Home/Dashboard';
 
 const drawerWidth = 240;
 
-const Layout = ({ title }) => {
+const Layout = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
