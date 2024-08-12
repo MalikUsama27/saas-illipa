@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import DataTableComponent from '../reusable/DataTableComponent';
 import { Outlet } from 'react-router-dom';
 import { InputSwitch } from 'primereact/inputswitch';
+import Layout from '../Layout/Layout';
 
 const modulesData = [
   {
@@ -62,6 +63,8 @@ const Modules = () => {
   ];
 
   return (
+    
+    <Layout>
     <div style={{ paddingTop: '58px' }}>
       <DataTableComponent 
         header="Modules"
@@ -72,7 +75,7 @@ const Modules = () => {
         showdelete={true} 
       />
       <Outlet />
-    </div>
+    </div></Layout>
   );
 };
 

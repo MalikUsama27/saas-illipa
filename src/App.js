@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import Layout from "./components/Layout/Layout";
+// import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import Modules from "./components/Home/Modules";
@@ -37,7 +37,7 @@ function App() {
     <Routes>
       <Route exact path="/" element={<Login />} />
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
-      <Route exact path="/dashboard" element={<Layout />}>
+      {/* <Route exact path="/dashboard" element={<Layout />}> */}
         <Route exact path="modules" element={<Modules />} />
         <Route exact path="customers" element={<Customer />} />
         <Route exact path="revenue-plan" element={<RevenuePlan />} />
@@ -51,7 +51,7 @@ function App() {
           path="revenue-projection"
           element={<RevenueProjection />}
         />
-      </Route>
+      {/* </Route> */}
     </Routes>
   );
 }
