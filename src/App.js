@@ -20,7 +20,9 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      if (location.pathname === "/" || location.pathname.includes('/dashboard/modules'))  {
+      if (location.pathname === "/"  )  {
+        navigate("/dashboard/modules");
+      }else if(location.pathname ==='/dashboard/modules'){
         navigate("/dashboard/modules");
       }
     } else {
