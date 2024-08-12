@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 // import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -35,6 +35,7 @@ function App() {
   }, [navigate, location.pathname]);
 
   return (
+    <Router>
     <Routes>
       <Route exact path="/" element={<Login />} />
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
@@ -54,6 +55,7 @@ function App() {
         />
       {/* </Route> */}
     </Routes>
+    </Router>
   );
 }
 
