@@ -60,7 +60,7 @@ const AddUser = ({ onClose }) => {
     };
 
     try {
-      const token = localStorage.getItem('token');
+      // const token = localStorage.getItem('token');
       await axios.post('https://ilipaone.com/api/users', payload, {
         headers: {
           'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { RingLoader } from 'react-spinners';
 import { Button } from 'primereact/button';
@@ -10,7 +10,7 @@ import DeleteUser from './Users/DeleteUser';
 import AddUser from './Users/AddUser';
 
 const Users = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editDialogVisible, setEditDialogVisible] = useState(false);

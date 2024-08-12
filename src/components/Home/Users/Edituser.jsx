@@ -34,7 +34,7 @@ const availablePermissions = [
 ];
 
 const EditUser = ({ visible, onClose, user, onSave }) => {
-  const [fetchingUser, setFetchingUser] = useState(false);
+  const [fetchingUser] = useState(false);
   const [rolesOptions, setRolesOptions] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
 
