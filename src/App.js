@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import {BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 // import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
