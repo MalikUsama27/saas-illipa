@@ -63,7 +63,7 @@ const Layout = () => {
         <Grid container sx={{ flexGrow: 1, p: 3 }}>
           <Grid item xs={12}>
             <Container>
-              <Outlet />
+              {/* <Outlet /> */}
             </Container>
           </Grid>
         </Grid>
