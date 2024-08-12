@@ -19,6 +19,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    console.log("path",location.pathname);
     if (token) {
       if (location.pathname === "/"  )  {
         navigate("/dashboard/modules");
