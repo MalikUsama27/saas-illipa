@@ -3,7 +3,7 @@ import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Cont
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import logo from "../../assets/logo.svg";
-import { Outlet } from 'react-router-dom';
+// import { Outlet } from 'react-router-dom';
 import Dashboard from '../Home/Dashboard'; 
 
 const drawerWidth = 240;
