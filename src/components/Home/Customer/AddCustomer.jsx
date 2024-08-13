@@ -173,7 +173,12 @@ const AddCustomer = ({ onSave }) => {
           </Form>
         )}
       </Formik>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        rtl={false}
+        style={{ zIndex: 1300, paddingTop: '55px' }}
+      />
     </Box>
   );
 };

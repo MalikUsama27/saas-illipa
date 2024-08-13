@@ -23,7 +23,7 @@ const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
       visible={visible}
       onHide={onHide}
       footer={
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', padding: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px',  }}>
           <Button
             label="Yes"
             icon="pi pi-check"
@@ -40,7 +40,7 @@ const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
           />
         </div>
       }
-      style={{ width: '30vw', borderRadius: '10px', padding: '20px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}
+    
     >
       <p>Are you sure you want to delete this customer?</p>
       <ToastContainer

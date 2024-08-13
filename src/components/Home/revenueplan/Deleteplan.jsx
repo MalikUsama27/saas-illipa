@@ -22,8 +22,8 @@ const DeletePlan = ({ selectedPlan, onClose, onDeleteSuccess }) => {
   };
 
   return (
-    <div style={{ textAlign: 'center', padding: '20px' }}>
-      <p style={{ marginBottom: '20px', fontSize: '16px' }}>
+    <div style={{ textAlign: 'center' }}>
+      <p style={{ fontSize: '16px' }}>
         Are you sure you want to delete this revenue plan?
       </p>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
