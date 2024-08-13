@@ -7,6 +7,9 @@ import axios from 'axios';
 import EditPlan from '../Home/revenueplan/Editplan';
 import AddRevenuePlan from '../Home/revenueplan/AddRevenuePlan';
 import DeletePlan from '../Home/revenueplan/Deleteplan';
+import Sure from '../Home/revenueplan/sure';
+import Oneplan from '../Home/revenueplan/One';
+import { ToastContainer, toast } from 'react-toastify';
 
 const RevenuePlan = () => {
   const [data, setData] = useState([]);
@@ -15,6 +18,13 @@ const RevenuePlan = () => {
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [addPlanDialogVisible, setAddPlanDialogVisible] = useState(false);
+  const [confirmDialogVisible, setConfirmDialogVisible] = useState(false);
+  const [activeDialogVisible, setActiveDialogVisible] = useState(false);
+
+  const [planToChange, setPlanToChange] = useState(null);
+  const [newStatus, setNewStatus] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [dialogType, setDialogType] = useState(''); // Added state for dialog type
 
   const fetchData = async () => {
     try {
@@ -61,51 +71,63 @@ const RevenuePlan = () => {
     setDeleteDialogVisible(false);
   };
 
-  const handleActiveChange = async (planId, newStatus) => {
-    if (newStatus) {
-      // Deactivate all other plans
-      const updatedPlans = data.map(plan => ({
-        ...plan,
-        status: plan.id === planId ? 1 : 0
-      }));
+  const handleSwitchChange = (planId, newStatus) => {
+    setPlanToChange(planId);
+    setNewStatus(newStatus);
 
-      setData(updatedPlans);
-
-      // Uncomment if you want to update the status on the server
-      // try {
-      //   await Promise.all(updatedPlans.map(plan =>
-      //     axios.patch(`https://ilipaone.com/api/revenue-plans/${plan.id}`, { status: plan.status })
-      //   ));
-      // } catch (error) {
-      //   console.error('Error updating status:', error);
-      //   fetchData(); // Re-fetch data to revert any failed status changes
-      // }
+    const activePlansCount = data.filter(plan => plan.status).length;
+    if (activePlansCount <= 1 && newStatus === false) {
+      setShowToast(true);
+      setDialogType('oneplan'); // Set dialog type to 'oneplan'
+      setActiveDialogVisible(true);
     } else {
-      // Deactivate the selected plan only
-      const updatedPlans = data.map(plan => (
-        plan.id === planId ? { ...plan, status: 0 } : plan
-      ));
-
-      setData(updatedPlans);
-
-      // Uncomment if you want to update the status on the server
-      // try {
-      //   await axios.patch(`https://ilipaone.com/api/revenue-plans/${planId}`, { status: 0 });
-      // } catch (error) {
-      //   console.error('Error updating status:', error);
-      //   fetchData(); // Re-fetch data to revert any failed status changes
-      // }
+      setShowToast(false);
+      setDialogType('sure'); // Set dialog type to 'sure'
+      setConfirmDialogVisible(true);
     }
   };
 
-  const formatRanges = (ranges) => {
-    return ranges.map((range, index) => (
-      <div key={index} style={{ padding: '5px' }}>
-        {`$${range.min_value} - $${range.max_value}`}
-      </div>
-    ));
+  const confirmSwitchChange = async () => {
+    if (dialogType === 'oneplan') {
+      // Show the 'oneplan' dialog
+      setActiveDialogVisible(true);
+      setConfirmDialogVisible(false);
+      return;
+    }
+
+    if (showToast) {
+      toast.error('Cannot deactivate this plan as it is the only active plan.');
+      setConfirmDialogVisible(false);
+      return;
+    }
+
+    if (newStatus) {
+      const updatedPlans = data.map(plan => ({
+        ...plan,
+        status: plan.id === planToChange ? true : false
+      }));
+      setData(updatedPlans);
+
+      try {
+        await Promise.all(updatedPlans.map(plan =>
+          axios.post(`https://ilipaone.com/api/revenue-plans/${plan.id}/toggle-status`, { status: plan.status })
+        ));
+        fetchData();
+      } catch (error) {
+        console.error('Error updating status:', error);
+        fetchData();
+      }
+    } else {
+      const updatedPlans = data.map(plan => (
+        plan.id === planToChange ? { ...plan, status: 0 } : plan
+      ));
+      setData(updatedPlans);
+    }
+
+    setConfirmDialogVisible(false);
   };
 
+  // Define columns here
   const columns = [
     { field: 'title', header: 'Title' },
     { 
@@ -113,7 +135,11 @@ const RevenuePlan = () => {
       header: 'Ranges', 
       body: rowData => (
         <div>
-          {formatRanges(rowData.ranges)}
+          {rowData.ranges.map((range, index) => (
+            <div key={index} style={{ padding: '5px' }}>
+              {`$${range.min_value } - $${range.max_value}`}
+            </div>
+          ))}
         </div>
       )
     },
@@ -154,11 +180,9 @@ const RevenuePlan = () => {
             data={data}
             onEdit={handleEdit}
             onDelete={handleDelete}
-            onSwitchChange={handleActiveChange}
+            onSwitchChange={handleSwitchChange}
             showEdit={true}
             showdelete={true}
-            showReceipt={false}
-            showDollar={false}
             showActions={true}
           />
           {selectedPlan && (
@@ -191,6 +215,21 @@ const RevenuePlan = () => {
               />
             </Dialog>
           )}
+          {confirmDialogVisible && dialogType === 'sure' && (
+            <Sure
+              onClose={() => setConfirmDialogVisible(false)}
+              onConfirm={confirmSwitchChange}
+            />
+          )}
+          {activeDialogVisible && dialogType === 'oneplan' && (
+            <Oneplan
+              onClose={() => setActiveDialogVisible(false)}
+              onConfirm={() => {
+                confirmSwitchChange();
+                setActiveDialogVisible(false);
+              }}
+            />
+          )}
           <Dialog
             header="Add New Revenue Plan"
             visible={addPlanDialogVisible}
@@ -201,6 +240,12 @@ const RevenuePlan = () => {
           </Dialog>
         </>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        rtl={false}
+        style={{ zIndex: 1300, paddingTop: '55px' }}
+      />
     </div>
   );
 };

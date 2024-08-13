@@ -7,7 +7,7 @@ import './Login.css';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import loginImage from '../../assets/images/loginimg.PNG';
-import logo from '../../assets/logo.png';
+import logo from '../../assets/logo2.png';
 import { Button } from 'primereact/button';
 import ForgotPassword from './ForgotPassword';
 
@@ -35,7 +35,7 @@ const Login = () => {
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('permissions', response.data.permissions);
 
-          // window.location.reload();
+          window.location.reload();
           navigate('/')
           toast.success('Login Successfully');
         } else {

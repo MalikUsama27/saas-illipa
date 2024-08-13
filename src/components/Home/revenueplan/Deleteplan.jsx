@@ -6,11 +6,17 @@ import { ToastContainer, toast } from 'react-toastify';
 const DeletePlan = ({ selectedPlan, onClose, onDeleteSuccess }) => {
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://ilipaone.com/api/revenue-plans/${selectedPlan.id}`);
+     const response= await axios.delete(`https://ilipaone.com/api/revenue-plans/${selectedPlan.id}`);
       toast.success('Plan deleted successfully!');
       onDeleteSuccess();
     } catch (error) {
-      toast.error('Error deleting plan.');
+      if (error.response && error.response.data && error.response.data.message) {
+        // Show the specific error message
+        toast.error(error.response.data.message);
+      } else {
+        // Show a generic error message
+        toast.error('Error deleting plan. Please try again.');
+      }
       console.error('Error deleting plan:', error);
     }
   };

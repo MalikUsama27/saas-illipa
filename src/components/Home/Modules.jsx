@@ -6,7 +6,7 @@ import { InputSwitch } from 'primereact/inputswitch';
 const modulesData = [
   {
     id: 545,
-    name: 'Sale',
+    name: 'Accounts & Finance',
     description: 'Lorem Ipsum dolor sit amet',
     premium: false,
     monthlyPrice: 0,
@@ -15,7 +15,7 @@ const modulesData = [
   },
   {
     id: 546,
-    name: 'CRM',
+    name: 'POS',
     description: 'Lorem Ipsum dolor sit amet',
     premium: false,
     monthlyPrice: 0,
@@ -24,7 +24,25 @@ const modulesData = [
   },
   {
     id: 547,
-    name: 'Accounting',
+    name: 'Sales',
+    description: 'Lorem Ipsum dolor sit amet',
+    premium: false,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    active: false 
+  },
+  {
+    id: 548,
+    name: 'Inventory Mangement',
+    description: 'Lorem Ipsum dolor sit amet',
+    premium: false,
+    monthlyPrice: 0,
+    yearlyPrice: 0,
+    active: false 
+  },
+  {
+    id: 549,
+    name: 'HRM',
     description: 'Lorem Ipsum dolor sit amet',
     premium: false,
     monthlyPrice: 0,

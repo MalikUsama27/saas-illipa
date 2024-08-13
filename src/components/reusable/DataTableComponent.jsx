@@ -14,7 +14,9 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
       <InputSwitch 
         checked={rowData[field] === 1} 
         onChange={(e) => onChange && onChange(rowData.id, e.value)} 
+        
       />
+      {/* {console.log(rowData.id)} */}
     </div>
   );
 
