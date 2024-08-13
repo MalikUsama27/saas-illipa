@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 const DeletePlan = ({ selectedPlan, onClose, onDeleteSuccess }) => {
   const handleDelete = async () => {
     try {
-     const response= await axios.delete(`https://ilipaone.com/api/revenue-plans/${selectedPlan.id}`);
+      await axios.delete(`https://ilipaone.com/api/revenue-plans/${selectedPlan.id}`);
       toast.success('Plan deleted successfully!');
       onDeleteSuccess();
     } catch (error) {
