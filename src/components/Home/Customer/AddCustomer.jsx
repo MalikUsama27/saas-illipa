@@ -47,7 +47,7 @@ const AddCustomer = ({ onSave }) => {
       });
 
       if (response.ok && response.status === 201) {
-        const data = await response.json();
+         await response.json();
         // console.log('Customer added successfully:', data);
         toast.success('Customer added successfully');
         onSave(); // Close dialog and fetch data
