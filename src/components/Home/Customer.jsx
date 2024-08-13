@@ -51,6 +51,7 @@ const Customer = () => {
 
   const handleAddCustomer = () => {
     setAddDialogVisible(true);
+    
   };
 
   const handleSave = () => {
@@ -79,6 +80,7 @@ const Customer = () => {
         await axios.delete(`https://ilipaone.com/api/users/${customerIdToDelete}`);
         setCustomers(customers.filter(customer => customer.id !== customerIdToDelete));
         setDeleteDialogVisible(false);
+        fetchData();
       } catch (error) {
         console.error('Error deleting customer:', error);
       }
