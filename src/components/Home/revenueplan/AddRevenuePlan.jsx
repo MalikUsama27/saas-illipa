@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 
 const InputField = ({ label, name, currency, ...props }) => (
   <Field name={name}>
-    {({ field }) => (
+    {({ field, meta }) => (
       <TextField
         {...field}
         label={label}
@@ -51,6 +51,8 @@ const InputField = ({ label, name, currency, ...props }) => (
           }
         }}
         {...props}
+        error={Boolean(meta.touched && meta.error)}
+        helperText={meta.touched && meta.error ? meta.error : ''}
       />
     )}
   </Field>
@@ -65,13 +67,16 @@ const AddRevenuePlan = ({ onClose }) => {
         noMaxValue: false
       }}
       validationSchema={validationSchema}
+      validateOnChange={true}
+      validateOnBlur={true}
       onSubmit={async (values, { setSubmitting }) => {
         try {
           const lastPlan = values.plans[values.plans.length - 1];
-
-          // Ensure the last plan is valid
+          if (lastPlan.max_value && lastPlan.min_value && parseFloat(lastPlan.max_value) <= parseFloat(lastPlan.min_value)) {
+            toast.error('Max Value must be greater than Min Value.');
+            return;
+          }
           if (lastPlan.min_value && (values.noMaxValue || lastPlan.max_value) && (values.noMaxValue || parseFloat(lastPlan.max_value) > parseFloat(lastPlan.min_value)) && lastPlan.amount) {
-            // Ensure all previous plans are completed
             if (values.plans.some((plan, index) => index < values.plans.length - 1 && (!plan.max_value || !plan.amount))) {
               toast.error('Please complete all fields in previous plans.');
               return;
@@ -95,9 +100,10 @@ const AddRevenuePlan = ({ onClose }) => {
               toast.success('Plans submitted successfully.');
               onClose();
             } else {
-              toast.error(response.message);
+              toast.error('Failed to submit plans.');
             }
           } else {
+            
             toast.error('Please complete the last plan correctly before submitting.');
           }
         } catch (error) {
@@ -108,7 +114,7 @@ const AddRevenuePlan = ({ onClose }) => {
         }
       }}
     >
-      {({ values, setFieldValue, handleSubmit, errors, touched, setFieldTouched }) => (
+      {({ values, setFieldValue, handleSubmit, errors, touched, setFieldTouched, isValid, dirty }) => (
         <Form onSubmit={handleSubmit}>
           <Box mt={2} p={2} border={1} borderColor="grey.400" borderRadius={4} width={1}>
             <Grid container spacing={1} alignItems="center">
@@ -218,8 +224,9 @@ const AddRevenuePlan = ({ onClose }) => {
               variant="contained"
               sx={{ backgroundColor: '#06163A', borderRadius: '10px', '&:hover': { backgroundColor: '#06163A' }, mt: 2 }}
               type="submit"
+              disabled={!isValid || !dirty || values.plans.length < 3 || !values.title}
             >
-              Submit Plan
+              Submit Plans
             </Button>
             <ToastContainer
               position="top-right"

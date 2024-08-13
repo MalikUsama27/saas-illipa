@@ -19,7 +19,7 @@ const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   plans: Yup.array().of(
     Yup.object().shape({
-      min_value: Yup.number().required('Min value is required'),
+      min_value: Yup.number().required('Min value is required').min(0, 'Min value cannot be negative'),
       max_value: Yup.number()
         .when('noMaxValue', {
           is: false,
@@ -65,7 +65,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
 
         const payload = {
           title: values.title,
-          status: true,
+          status: false,
           ranges: formattedPlans
         };
 
@@ -106,18 +106,6 @@ const EditPlan = ({ plan, onSave, onClose }) => {
         amount: ''
       }
     ]);
-  };
-
-  const handleDeletePlan = (index) => {
-    if (index === formik.values.plans.length - 1) {
-      if (formik.values.plans.length > 1) {
-        formik.setFieldValue('plans', formik.values.plans.filter((_, i) => i !== index));
-      } else {
-        toast.error('At least one plan must be present.');
-      }
-    } else {
-      toast.error('You cannot delete previous rows.');
-    }
   };
 
   return (
@@ -165,7 +153,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
         </Grid>
         <Box mt={2}>
           <FieldArray name="plans">
-            {() => (
+            {({ push, remove }) => (
               formik.values.plans.map((plan, index) => (
                 <Grid container spacing={1} key={index} sx={{ paddingTop: '2%' }}>
                   <Grid item xs={12} sm={3}>
@@ -243,13 +231,23 @@ const EditPlan = ({ plan, onSave, onClose }) => {
                       disabled={index !== formik.values.plans.length - 1}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={2}>
-                    {index > 0 && (
+                  <Grid item xs={12} sm={1} display="flex" justifyContent="center" alignItems="center">
+                    {index !== 0 && (
                       <IconButton
                         color="secondary"
-                        onClick={() => handleDeletePlan(index)}
+                        onClick={() => {
+                          if (index === formik.values.plans.length - 1) {
+                            if (formik.values.plans.length > 1) {
+                              formik.setFieldValue('plans', formik.values.plans.filter((_, i) => i !== index));
+                            } else {
+                              toast.error('At least 1 plan must be present.');
+                            }
+                          } else {
+                            toast.error('You cannot delete previous rows.');
+                          }
+                        }}
                         size="small"
-                        sx={{ marginTop: '5px' }}
+                        disabled={index !== formik.values.plans.length - 1}
                       >
                         <Delete />
                       </IconButton>
@@ -270,6 +268,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
               width: '200px',
             }}
             onClick={() => formik.submitForm()}
+            disabled={formik.values.plans.length < 3} // Disable submit if fewer than 3 plans
           >
             Update Plan
           </Button>

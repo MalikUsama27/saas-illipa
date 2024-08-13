@@ -231,7 +231,7 @@ const RevenuePlan = () => {
             />
           )}
           <Dialog
-            header="Add A Revenue Plan"
+            header={`Add a New Revenue Plan`}
             visible={addPlanDialogVisible}
             onHide={() => setAddPlanDialogVisible(false)}
             style={{ width: '50vw' }}
