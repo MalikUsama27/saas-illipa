@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Button, Grid, Box,  MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import { Button, Grid, Box, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import InputComponent from '../../reusable/InputComponent';
-
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -15,10 +14,10 @@ const validationSchema = Yup.object({
   country: Yup.string().required('Country is required'),
   company_address: Yup.string().required('Company Address is required'),
   company_size: Yup.string().required('Company Size is required'),
-  password: Yup.string().required('Password is required'),
+  password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters long'),
 });
 
-// Initial values
+
 const initialValues = {
   company_name: '',
   email: '',
@@ -30,41 +29,32 @@ const initialValues = {
   password: '',
 };
 
-// Dropdown options
+
 const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technology', 'Education'];
 const company_sizes = ['>10', '11-25', '26-50', '50-100', '100+'];
 
-const AddCustomer = () => {
+const AddCustomer = ({ onSave }) => {
   const [showPassword, setShowPassword] = useState(false);
-
-  // const handleClickShowPassword = () => {
-  //   setShowPassword(!showPassword);
-  // };
-
-  // const handleMouseDownPassword = (event) => {
-  //   event.preventDefault();
-  // };
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      // const token = localStorage.getItem('token');
       const response = await fetch('https://ilipaone.com/api/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(values),
       });
 
-      if (!response.ok) {
+      if (response.ok && response.status === 201) {
+        const data = await response.json();
+        // console.log('Customer added successfully:', data);
+        toast.success('Customer added successfully');
+        onSave(); // Close dialog and fetch data
+      } else {
         const errorText = await response.text();
         throw new Error(`Error: ${response.status} - ${response.statusText}. Response: ${errorText}`);
       }
-
-      const data = await response.json();
-      console.log('Customer added successfully:', data);
-      toast.success('Customer added successfully');
     } catch (error) {
       console.error('Error adding customer:', error);
       toast.error(`Error adding customer: ${error.message}`);
@@ -74,9 +64,7 @@ const AddCustomer = () => {
   };
 
   return (
-    <Box 
-    // p={3} border={1} borderColor="grey.400" borderRadius={4} width={1}
-    >
+    <Box>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -109,7 +97,6 @@ const AddCustomer = () => {
                   inputProps={{ pattern: '[0-9]*' }}
                 />
               </Grid>
-             
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Country"
@@ -123,25 +110,27 @@ const AddCustomer = () => {
                   name="company_address"
                   required
                 />
-              </Grid>  <Grid item xs={12} sm={6}>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Password"
                   name="password"
-                  isPassword={true}        
+                  isPassword={true}
                   required
                   showPassword={showPassword}
                   setShowPassword={setShowPassword}
                 />
-              </Grid><Grid item xs={12} sm={6}>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
-                  <InputLabel style={{ fontSize: '12px'}}>Industry</InputLabel>
+                  <InputLabel style={{ fontSize: '12px' }}>Industry</InputLabel>
                   <Field
                     as={Select}
                     name="industry"
                     label="Industry"
                     value={values.industry}
                     onChange={(e) => setFieldValue('industry', e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px' ,height:'40px'}}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
                   >
                     {industries.map((industry) => (
                       <MenuItem key={industry} value={industry}>
@@ -153,14 +142,14 @@ const AddCustomer = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
-                  <InputLabel style={{ fontSize: '12px',}}>Company Size</InputLabel>
+                  <InputLabel style={{ fontSize: '12px' }}>Company Size</InputLabel>
                   <Field
                     as={Select}
                     name="company_size"
                     label="Company Size"
                     value={values.company_size}
                     onChange={(e) => setFieldValue('company_size', e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px' ,height:'40px'}}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
                   >
                     {company_sizes.map((size) => (
                       <MenuItem key={size} value={size}>
@@ -170,7 +159,6 @@ const AddCustomer = () => {
                   </Field>
                 </FormControl>
               </Grid>
-             
               <Grid item xs={12}>
                 <Button
                   type="submit"

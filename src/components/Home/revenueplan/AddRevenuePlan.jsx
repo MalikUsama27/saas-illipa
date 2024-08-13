@@ -219,7 +219,7 @@ const AddRevenuePlan = ({ onClose }) => {
               sx={{ backgroundColor: '#06163A', borderRadius: '10px', '&:hover': { backgroundColor: '#06163A' }, mt: 2 }}
               type="submit"
             >
-              Submit Plans
+              Submit Plan
             </Button>
             <ToastContainer
               position="top-right"

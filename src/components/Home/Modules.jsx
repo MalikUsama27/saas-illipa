@@ -69,7 +69,7 @@ const Modules = () => {
     { field: 'yearlyPrice', header: 'Yearly Price' },
     {
       field: 'active',
-      header: 'Active',
+      header: 'Make Premium',
       body: rowData => (
         <InputSwitch
           checked={rowData.active}
