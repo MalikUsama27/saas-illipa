@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 
-const One = ({ onClose, onConfirm }) => {
+const One = ({ onClose }) => {
   return (
     <Dialog
       visible
