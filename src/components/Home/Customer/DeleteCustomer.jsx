@@ -6,17 +6,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
-  
   const handleDelete = async () => {
     try {
       await axios.delete(`https://ilipaone.com/api/users/${customerId}`);
-      onDelete();
+      onDelete(); // Notify parent to update the customer list
       toast.success('Customer deleted successfully');
     } catch (error) {
       console.error('Error deleting customer:', error);
       toast.error('Error deleting customer');
     }
-    onHide();
   };
 
   return (
@@ -31,14 +29,14 @@ const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
             icon="pi pi-check"
             className="p-button-success"
             onClick={handleDelete}
-            style={{ width: '100px', fontSize: '12px', background:'#06163A', borderRadius: '25px' }}
+            style={{ width: '100px', fontSize: '12px', background: '#06163A', borderRadius: '25px' }}
           />
           <Button
             label="No"
             icon="pi pi-times"
             className="p-button-danger"
             onClick={onHide}
-            style={{ width: '100px', fontSize: '12px', background:'#d9535f', borderRadius: '25px' }}
+            style={{ width: '100px', fontSize: '12px', background: '#d9535f', borderRadius: '25px' }}
           />
         </div>
       }
@@ -49,7 +47,7 @@ const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
         position="top-right"
         autoClose={5000}
         rtl={false}
-        style={{ zIndex: 1300, paddingTop:'55px'}}
+        style={{ zIndex: 1300, paddingTop: '55px' }}
       />
     </Dialog>
   );

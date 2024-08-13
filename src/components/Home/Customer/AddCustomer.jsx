@@ -57,7 +57,7 @@ const AddCustomer = ({ onSave }) => {
       }
     } catch (error) {
       console.error('Error adding customer:', error);
-      toast.error(`Error adding customer: ${error.message}`);
+      toast.error(`Email Already Taken`);
     } finally {
       setSubmitting(false);
     }

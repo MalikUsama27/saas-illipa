@@ -40,7 +40,6 @@ const Customer = () => {
         industry: user.user_fields?.industry || 'N/A',
         userid: user.user_fields?.user_id,
       }));
-
       setCustomers(userData);
     } catch (error) {
       console.error('Error fetching customer data', error);
@@ -51,7 +50,6 @@ const Customer = () => {
 
   const handleAddCustomer = () => {
     setAddDialogVisible(true);
-    
   };
 
   const handleSave = () => {
@@ -74,19 +72,6 @@ const Customer = () => {
     setDeleteDialogVisible(true);
   };
 
-  const handleConfirmDelete = async () => {
-    if (customerIdToDelete) {
-      try {
-        await axios.delete(`https://ilipaone.com/api/users/${customerIdToDelete}`);
-        setCustomers(customers.filter(customer => customer.id !== customerIdToDelete));
-        setDeleteDialogVisible(false);
-        fetchData();
-      } catch (error) {
-        console.error('Error deleting customer:', error);
-      }
-    }
-  };
-
   const handleReceipt = (customer) => {
     if (!customer || !customer.userid) {
       console.error('Invalid customer object or missing userid');
@@ -98,7 +83,7 @@ const Customer = () => {
     navigate('/dashboard/receipt', { state: { customerId: userid } });
   };
 
-  const handleinfo = () => {
+  const handleInfo = () => {
     navigate('/dashboard/revenue-projection');
   };
 
@@ -139,7 +124,7 @@ const Customer = () => {
           onEdit={handleEditCustomer}
           onDelete={handleDeleteCustomer}
           onReceipt={handleReceipt}
-          oninfo={handleinfo}
+          oninfo={handleInfo}
         />
       )}
       {selectedCustomer && (
@@ -150,12 +135,15 @@ const Customer = () => {
           onSave={handleSave}
         />
       )}
-      {customerIdToDelete && (
+      {customerIdToDelete !== null && (
         <DeleteCustomer
           visible={deleteDialogVisible}
           customerId={customerIdToDelete}
           onHide={() => setDeleteDialogVisible(false)}
-          onDelete={handleConfirmDelete}
+          onDelete={() => {
+            setDeleteDialogVisible(false);
+            fetchData();
+          }}
         />
       )}
       <Dialog
