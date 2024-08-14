@@ -65,7 +65,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
 
         const payload = {
           title: values.title,
-          status: false,
+          status: plan?.status,
           ranges: formattedPlans
         };
 

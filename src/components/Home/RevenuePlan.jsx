@@ -4,12 +4,14 @@ import { Dialog } from 'primereact/dialog';
 import { RingLoader } from 'react-spinners';
 import DataTableComponent from '../reusable/DataTableComponent';
 import axios from 'axios';
+
 import EditPlan from '../Home/revenueplan/Editplan';
 import AddRevenuePlan from '../Home/revenueplan/AddRevenuePlan';
 import DeletePlan from '../Home/revenueplan/Deleteplan';
 import Sure from '../Home/revenueplan/sure';
 import Oneplan from '../Home/revenueplan/One';
 import { ToastContainer, toast } from 'react-toastify';
+import ActivePlan from '../Home/revenueplan/ActivePlan';
 
 const RevenuePlan = () => {
   const [data, setData] = useState([]);
@@ -22,9 +24,9 @@ const RevenuePlan = () => {
   const [activeDialogVisible, setActiveDialogVisible] = useState(false);
 
   const [planToChange, setPlanToChange] = useState(null);
-  const [newStatus, setNewStatus] = useState(null);
+  const [ setNewStatus] = useState(null);
   const [showToast, setShowToast] = useState(false);
-  const [dialogType, setDialogType] = useState(''); // Added state for dialog type
+  const [dialogType, setDialogType] = useState('');
 
   const fetchData = async () => {
     try {
@@ -57,8 +59,14 @@ const RevenuePlan = () => {
 
   const handleDelete = (id) => {
     const plan = data.find(item => item.id === id);
-    setSelectedPlan(plan);
-    setDeleteDialogVisible(true);
+    const activePlansCount = data.filter(plan => plan.status).length;
+
+    if (plan.status && activePlansCount <= 1) {
+      setActiveDialogVisible(true); // Show the error dialog if trying to delete the only active plan
+    } else {
+      setSelectedPlan(plan);
+      setDeleteDialogVisible(true);
+    }
   };
 
   const handleSaveEdit = () => {
@@ -78,18 +86,17 @@ const RevenuePlan = () => {
     const activePlansCount = data.filter(plan => plan.status).length;
     if (activePlansCount <= 1 && newStatus === false) {
       setShowToast(true);
-      setDialogType('oneplan'); // Set dialog type to 'oneplan'
+      setDialogType('oneplan');
       setActiveDialogVisible(true);
     } else {
       setShowToast(false);
-      setDialogType('sure'); // Set dialog type to 'sure'
+      setDialogType('sure');
       setConfirmDialogVisible(true);
     }
   };
 
   const confirmSwitchChange = async () => {
     if (dialogType === 'oneplan') {
-      // Show the 'oneplan' dialog
       setActiveDialogVisible(true);
       setConfirmDialogVisible(false);
       return;
@@ -101,33 +108,17 @@ const RevenuePlan = () => {
       return;
     }
 
-    if (newStatus) {
-      const updatedPlans = data.map(plan => ({
-        ...plan,
-        status: plan.id === planToChange ? true : false
-      }));
-      setData(updatedPlans);
-
-      try {
-        await Promise.all(updatedPlans.map(plan =>
-          axios.post(`https://ilipaone.com/api/revenue-plans/${plan.id}/toggle-status`, { status: plan.status })
-        ));
-        fetchData();
-      } catch (error) {
-        console.error('Error updating status:', error);
-        fetchData();
-      }
-    } else {
-      const updatedPlans = data.map(plan => (
-        plan.id === planToChange ? { ...plan, status: 0 } : plan
-      ));
-      setData(updatedPlans);
+    try {
+      await axios.post(`https://ilipaone.com/api/revenue-plans/${planToChange}/toggle-status`);
+      fetchData(); 
+    } catch (error) {
+      console.error('Error updating status:', error);
+      fetchData();
     }
 
     setConfirmDialogVisible(false);
   };
 
-  // Define columns here
   const columns = [
     { field: 'title', header: 'Title' },
     { 
@@ -137,7 +128,9 @@ const RevenuePlan = () => {
         <div>
           {rowData.ranges.map((range, index) => (
             <div key={index} style={{ padding: '5px' }}>
-              {`$${range.min_value } - $${range.max_value}`}
+              {range.max_value_status === 1
+                ? `$${range.min_value} + $${range.max_value}`
+                : `$${range.min_value} - $${range.max_value}`}
             </div>
           ))}
         </div>
@@ -238,6 +231,12 @@ const RevenuePlan = () => {
           >
             <AddRevenuePlan onClose={() => {setAddPlanDialogVisible(false); fetchData();}} />
           </Dialog>
+          {/* ActivePlan dialog for error handling */}
+          {activeDialogVisible && (
+            <ActivePlan
+              onClose={() => setActiveDialogVisible(false)}
+            />
+          )}
         </>
       )}
       <ToastContainer
