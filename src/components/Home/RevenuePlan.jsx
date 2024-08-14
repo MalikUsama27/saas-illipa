@@ -130,7 +130,7 @@ const RevenuePlan = () => {
           {rowData.ranges.map((range, index) => (
             <div key={index} style={{ padding: '5px' }}>
               {range.max_value_status === 1
-                ? `$${range.min_value} + $${range.max_value}`
+                ? `$${range.min_value} + `
                 : `$${range.min_value} - $${range.max_value}`}
             </div>
           ))}
