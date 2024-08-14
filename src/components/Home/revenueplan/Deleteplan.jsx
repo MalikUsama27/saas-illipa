@@ -7,8 +7,9 @@ const DeletePlan = ({ selectedPlan, onClose, onDeleteSuccess }) => {
   const handleDelete = async () => {
     try {
       await axios.delete(`https://ilipaone.com/api/revenue-plans/${selectedPlan.id}`);
-      toast.success('Plan deleted successfully!');
-      onDeleteSuccess();
+        onDeleteSuccess();
+     
+    
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         // Show the specific error message

@@ -63,7 +63,7 @@ const RevenuePlan = () => {
     const activePlansCount = data.filter(plan => plan.status).length;
 
     if (plan.status && activePlansCount <= 1) {
-      setActiveDialogVisible(true); // Show the error dialog if trying to delete the only active plan
+      setActiveDialogVisible(true); 
     } else {
       setSelectedPlan(plan);
       setDeleteDialogVisible(true);
@@ -77,8 +77,10 @@ const RevenuePlan = () => {
 
   const handleDeleteSuccess = () => {
     setData(data.filter(item => item.id !== selectedPlan.id));
+    // toast.success('Plan deleted successfully!');
     setDeleteDialogVisible(false);
-  };
+    
+};
 
   const handleSwitchChange = (planId, newStatus) => {
     setPlanToChange(planId);

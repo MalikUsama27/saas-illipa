@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
           is: false,
           then: Yup.number().required('Max value is required').moreThan(Yup.ref('min_value'), 'Max value must be greater than min value'),
         }),
-      amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
+      amount: Yup.number().required('Amount is required').integer('Amount must be an integer'),
     })
   ).min(3, 'You must have at least 3 plans')
 });
