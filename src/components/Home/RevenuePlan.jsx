@@ -24,7 +24,8 @@ const RevenuePlan = () => {
   const [activeDialogVisible, setActiveDialogVisible] = useState(false);
 
   const [planToChange, setPlanToChange] = useState(null);
-  const [ setNewStatus] = useState(null);
+   // eslint-disable-next-line
+  const [newStatus, setNewStatus] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [dialogType, setDialogType] = useState('');
 
