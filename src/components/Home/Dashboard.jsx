@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 // Define the permissions and their corresponding keys
 const availablePermissions = [
-  { label: 'Add Users', key: 'add_users' },
-  { label: 'View Payments', key: 'view_payments' },
+  { label: 'View Users', key: 'view_users' },
+  { label: 'View Customers', key: 'view_payments' },
   { label: 'Make Premium Modules', key: 'make_premium_modules' },
   { label: 'all', key: 'view_all' }
 ];
@@ -18,30 +18,33 @@ const Dashboard = ({ handleNavigation }) => {
   const [title, setTitle] = useState('Dashboard');
   const [permissions, setPermissions] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     // Retrieve permissions from localStorage
     const storedPermissions = localStorage.getItem('permissions');
     if (storedPermissions) {
       const permissionsArray = storedPermissions
         .split(',')
-        .map(label => label.trim()) 
+        .map(label => label.trim())
         .map(label => availablePermissions.find(p => p.label === label)?.key)
         .filter(Boolean);
 
-      console.log('Permissions:', permissionsArray); 
       setPermissions(permissionsArray);
-      if (!permissionsArray.includes('view_all')) {
-        navigate('/dashboard/users');
-      }
     }
-  }, [navigate]);
+  }, []);
 
+  useEffect(() => {
+    // Redirect based on permissions if there are no permissions or restricted permissions
+    if (permissions.length === 0) {
+      navigate('/dashboard');
+    }
+  }, [permissions, navigate]);
 
   const handleClick = (view, title) => {
     setTitle(title);
     handleNavigation(view);
+    navigate(`/${view}`); 
   };
-
 
   const hasViewAll = permissions.includes('view_all');
 
@@ -53,7 +56,6 @@ const Dashboard = ({ handleNavigation }) => {
       <List>
         {hasViewAll ? (
           <>
-           
             <ListItem button onClick={() => handleClick('modules', 'Modules')}>
               <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
                 <DashboardIcon sx={{ color: '#fff' }} />
@@ -81,14 +83,14 @@ const Dashboard = ({ handleNavigation }) => {
           </>
         ) : (
           <>
-            {/* {permissions.includes('make_premium_modules') && (
+            {permissions.includes('make_premium_modules') && (
               <ListItem button onClick={() => handleClick('modules', 'Modules')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
                   <DashboardIcon sx={{ color: '#fff' }} />
                 </ListItemIcon>
                 <ListItemText primary="Modules" />
               </ListItem>
-            )} */}
+            )}
             {permissions.includes('view_payments') && (
               <ListItem button onClick={() => handleClick('customers', 'Customers')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
@@ -97,7 +99,7 @@ const Dashboard = ({ handleNavigation }) => {
                 <ListItemText primary="Customers" />
               </ListItem>
             )}
-            {permissions.includes('add_users') && (
+            {permissions.includes('view_users') && (
               <ListItem button onClick={() => handleClick('users', 'Users')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
                   <AccountCircleIcon sx={{ color: '#fff' }} />

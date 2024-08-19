@@ -8,7 +8,7 @@ const DeletePlan = ({ selectedPlan, onClose, onDeleteSuccess }) => {
     try {
       await axios.delete(`https://ilipaone.com/api/revenue-plans/${selectedPlan.id}`);
         onDeleteSuccess();
-     
+    //  toast.success(`Successfully`,{autoClose: 3000})
     
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {

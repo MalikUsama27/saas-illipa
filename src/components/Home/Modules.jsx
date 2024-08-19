@@ -87,9 +87,9 @@ const Modules = () => {
         header="Modules"
         columns={columns} 
         data={modules} 
-        showActions={true} 
-        showEdit={true}
-        showdelete={true} 
+        // showActions={true} 
+        // showEdit={true}
+        // showdelete={true} 
       />
       <Outlet />
     </div>

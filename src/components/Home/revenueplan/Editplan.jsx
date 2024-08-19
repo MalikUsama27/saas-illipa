@@ -36,10 +36,10 @@ const EditPlan = ({ plan, onSave, onClose }) => {
       title: plan?.title || '',
       plans: plan?.ranges.map(r => ({
         id: r.id,
-        min_value: r.min_value,
-        max_value: r.max_value,
-        amount: r.prize,
-        max_value_status: r.max_value_status
+        min_value: r.min_value || '',
+        max_value: r.max_value || '',
+        amount: r.prize || '',
+        max_value_status: r.max_value_status || false
       })) || [{ min_value: '', max_value: '', amount: '' }],
       noMaxValue: plan?.ranges.some(r => r.max_value_status) || false
     },
@@ -47,8 +47,8 @@ const EditPlan = ({ plan, onSave, onClose }) => {
     validateOnChange: false,
     validateOnBlur: false,
     onSubmit: async (values) => {
+      console.log(values)
       try {
-        // Perform manual validation
         await validationSchema.validate(values, { abortEarly: false });
 
         const lastPlan = formik.values.plans[formik.values.plans.length - 1];
@@ -58,7 +58,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
         }
         const formattedPlans = values.plans.map(({ min_value, max_value, amount }, index) => ({
           min_value: min_value,
-          max_value: (index === values.plans.length - 1 && values.noMaxValue) ? '100000000000.00' : max_value,
+          max_value: (index === values.plans.length - 1 && values.noMaxValue) ? '100000000000.00' : (max_value || '0'),
           prize: amount,
           ...(index === values.plans.length - 1 && values.noMaxValue ? { max_value_status: 1 } : {})
         }));
@@ -70,8 +70,8 @@ const EditPlan = ({ plan, onSave, onClose }) => {
         };
 
         if (plan) {
-          // For updating an existing plan
           const response = await axios.put(`https://ilipaone.com/api/revenue-plans/${plan.id}`, payload);
+        
           if (response.status === 200) {
             toast.success('Plans updated successfully.');
             onSave();
@@ -82,7 +82,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
           toast.error('Failed to submit plans.');
         }
       } catch (error) {
-        if (error.name === 'ValidationError') {
+        if (error && error.inner) {
           error.inner.forEach(err => toast.error(err.message));
         } else {
           console.error('Error submitting plans:', error);
@@ -93,16 +93,18 @@ const EditPlan = ({ plan, onSave, onClose }) => {
   });
 
   const handleEditPlan = () => {
+    console.log('aaaaaa')
     const lastPlan = formik.values.plans[formik.values.plans.length - 1];
     if (lastPlan.min_value && lastPlan.max_value && parseFloat(lastPlan.max_value) <= parseFloat(lastPlan.min_value)) {
       toast.error('Max Value must be greater than Min Value.');
       return;
     }
+    
     formik.setFieldValue('plans', [
       ...formik.values.plans,
       {
         min_value: (parseFloat(lastPlan.max_value) + 0.01).toFixed(2),
-        max_value: '',
+        max_value: formik.max_value,
         amount: ''
       }
     ]);
@@ -136,7 +138,12 @@ const EditPlan = ({ plan, onSave, onClose }) => {
             />
           </Grid>
           <Grid item xs={12} sm={4} display="flex" alignItems="center">
-            <IconButton color="primary" onClick={handleEditPlan} size="small">
+            <IconButton
+              color="primary"
+              onClick={handleEditPlan}
+              size="small"
+              disabled={formik.values.noMaxValue && formik.values.plans.length > 3} // Disable add button based on noMaxValue
+            >
               <Add />
             </IconButton>
           </Grid>
@@ -145,9 +152,9 @@ const EditPlan = ({ plan, onSave, onClose }) => {
               control={<Checkbox
                 checked={formik.values.noMaxValue}
                 onChange={(e) => formik.setFieldValue('noMaxValue', e.target.checked)}
+                disabled={formik.values.plans.length <= 2} // Disable checkbox if fewer than 3 plans
               />}
               label="Do not require max value for last row"
-              disabled={formik.values.plans.length <= 2}
             />
           </Grid>
         </Grid>
@@ -228,7 +235,6 @@ const EditPlan = ({ plan, onSave, onClose }) => {
                           fontFamily: 'Open Sans',
                         },
                       }}
-                      disabled={index !== formik.values.plans.length - 1}
                     />
                   </Grid>
                   <Grid item xs={12} sm={1} display="flex" justifyContent="center" alignItems="center">
@@ -268,7 +274,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
               width: '200px',
             }}
             onClick={() => formik.submitForm()}
-            disabled={formik.values.plans.length < 3} // Disable submit if fewer than 3 plans
+            disabled={formik.values.plans.length < 3}
           >
             Update Plan
           </Button>

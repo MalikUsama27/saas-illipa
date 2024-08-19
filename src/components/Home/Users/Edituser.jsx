@@ -28,9 +28,9 @@ const validationSchema = Yup.object({
 
 // Available permissions
 const availablePermissions = [
-  { key: 'View Payments', label: 'View Payments' },
-  { key: 'Add Users', label: 'Add Users' },
-  { key: 'Make Premium Modules', label: 'Make Premium Modules' }
+  { key: 'View Payments', label: 'View Customers' },
+  { key: 'Add Users', label: 'View Users' },
+  // { key: 'Make Premium Modules', label: 'Make Premium Modules' }
 ];
 
 const EditUser = ({ visible, onClose, user, onSave }) => {

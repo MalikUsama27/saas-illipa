@@ -12,6 +12,7 @@ import Users from "./components/Home/Users";
 // import AddCustomer from './components/Home/AddCustomer';
 import Receipt from "./components/Home/Receipt";
 import RevenueProjection from "./components/Home/RevenueProjection";
+import Graphs from "./components/Home/Graphs";
 
 function App() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ function App() {
     console.log("path",location.pathname);
     if (token) {
       if (location.pathname === "/"  )  {
-        navigate("/dashboard/modules");
+        navigate("/dashboard");
       }
       // else if(location.pathname ==='/modules'){
       //   navigate("/modules");
@@ -39,7 +40,9 @@ function App() {
     <Routes>
       <Route exact path="/" element={<Login />} />
       <Route exact path="/forgot-password" element={<ForgotPassword />} />
-      <Route exact path="/dashboard" element={<Layout />}>
+      <Route exact path="/" element={<Layout />}>
+      <Route exact path="dashboard" element={<Graphs/>} />
+
         <Route exact path="modules" element={<Modules />} />
         <Route exact path="customers" element={<Customer />} />
         <Route exact path="revenue-plan" element={<RevenuePlan />} />

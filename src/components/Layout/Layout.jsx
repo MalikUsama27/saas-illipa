@@ -1,5 +1,5 @@
 import React from 'react';
-import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, Grid } from '@mui/material';
+import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, Grid  } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import logo from "../../assets/logo.svg";
@@ -18,13 +18,13 @@ const Layout = () => {
   };
 
   const handleNavigation = (view) => {
-    navigate(`/dashboard/${view.toLowerCase().replace(' ', '-')}`);
+    navigate(`/${view.toLowerCase().replace(' ', '-')}`);
   };
 
   return (
     <Box sx={{ display: 'flex', height: '100vh' }}>
       <CssBaseline />
-      <Drawer
+      <Drawer 
         variant="permanent"
         sx={{
           width: drawerWidth,
@@ -48,7 +48,6 @@ const Layout = () => {
       sx={{
         backgroundColor: '#fff', 
         color: '#000', 
-        zIndex: (theme) => theme.zIndex.drawer + 1, 
       }}
     >
           <Toolbar>
@@ -62,7 +61,7 @@ const Layout = () => {
         </AppBar>
         <Grid container sx={{ flexGrow: 1, p: 3 }}>
           <Grid item xs={12}>
-            <Container>
+            <Container >
               <Outlet />
             </Container>
           </Grid>

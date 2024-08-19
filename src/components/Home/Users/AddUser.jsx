@@ -38,10 +38,10 @@ const AddUser = ({ onClose }) => {
       .filter(([_, value]) => value)
       .map(([key]) => {
         switch (key) {
-          case 'viewPayments':
-            return 'View Payments';
-          case 'addUsers':
-            return 'Add Users';
+          case 'Customers':
+            return 'View Customers';
+          case 'viewUsers':
+            return 'View Users';
           case 'makePremiumModules':
             return 'Make Premium Modules';
           default:
@@ -145,9 +145,9 @@ const AddUser = ({ onClose }) => {
                 />
               </Grid><Grid item xs={12}>
                 <Typography variant="subtitle1" style={{ fontSize: '12px' }}>Permissions</Typography>
-                <CheckboxComponent style={{ fontSize: '12px' }} label="View Payments" name="permissions.viewPayments" />
-                <CheckboxComponent style={{ fontSize: '12px' }} label="Add Users" name="permissions.addUsers" />
-                <CheckboxComponent style={{ fontSize: '12px' }}  label="Make Premium Modules" name="permissions.makePremiumModules" />
+                <CheckboxComponent style={{ fontSize: '12px' }} label="View Customers" name="permissions.Customers" />
+                <CheckboxComponent style={{ fontSize: '12px' }} label="View Users" name="permissions.viewUsers" />
+                {/* <CheckboxComponent style={{ fontSize: '12px' }}  label="Make Premium Modules" name="permissions.makePremiumModules" /> */}
                 <ErrorMessage name="permissions">
                   {msg => <FormHelperText style={{ color: '#D32F2F', fontSize:'12px' }}>{msg}</FormHelperText>}
                 </ErrorMessage>

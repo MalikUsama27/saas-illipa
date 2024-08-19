@@ -80,11 +80,11 @@ const Customer = () => {
 
     const { userid } = customer;
     console.log('Selected User ID for Receipt:', userid);
-    navigate('/dashboard/receipt', { state: { customerId: userid } });
+    navigate('/receipt', { state: { customerId: userid } });
   };
 
   const handleInfo = () => {
-    navigate('/dashboard/revenue-projection');
+    navigate('/revenue-projection');
   };
 
   const columns = [
