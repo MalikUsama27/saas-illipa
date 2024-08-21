@@ -8,93 +8,49 @@ import '../../css/DataTableComponent.css';
 
 const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumChange, onEdit, onReceipt, onDelete, showEdit, showReceipt, showDollar, showinfo, oninfo, showdelete, showActions }) => {
 
- 
   const switchTemplate = (rowData, field, onChange) => (
-    <div style={{ display: 'flex'}}>
+    <div className="switch-container">
       <InputSwitch 
         checked={rowData[field] === 1} 
         onChange={(e) => onChange && onChange(rowData.id, e.value)} 
-        
       />
-      {/* {console.log(rowData.id)} */}
     </div>
   );
 
-
   const actionTemplate = (rowData) => (
-    <div style={{ display: 'flex' }}>
+    <div className="action-buttons">
       {showDollar && (
         <Button
           icon="pi pi-dollar"
-          className="p-button-primary p-button-sm"
-          style={{
-            marginRight: '8px',
-            color: '#fff',
-            textAlign: 'center',
-            backgroundColor: '#FF5722', 
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '12px'
-          }}
+          className={`p-button-primary p-button-sm action-button button-dollars`}
           onClick={() => onEdit(rowData)}
         />
       )}
       {showEdit && (
         <Button
           icon="pi pi-pencil"
-          className="p-button-primary p-button-sm"
-          style={{
-            marginRight: '8px',
-            color: '#fff',
-            textAlign: 'center',
-            backgroundColor: '#06163A',
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '12px'
-          }}
+          className={`p-button-primary p-button-sm action-button button-edit`}
           onClick={() => onEdit(rowData.id)}
         />
       )}
       {showReceipt && (
         <Button
           icon="pi pi-receipt"
-          className="p-button-primary p-button-sm"
-          style={{
-            marginRight: '8px',
-            color: '#fff',
-            backgroundColor: 'orange',
-            textAlign: 'center',
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '12px'
-          }}
+          className={`p-button-primary p-button-sm action-button button-receipt`}
           onClick={() => onReceipt(rowData)}
         />
       )}
       {showdelete && (
         <Button
           icon="pi pi-trash"
-          className="p-button-danger p-button-sm"
-          style={{
-            marginRight: '8px',
-            backgroundColor: '#d9534f',
-            color: '#fff',
-            textAlign: 'center',
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '12px'
-          }}
+          className={`p-button-danger p-button-sm action-button button-delete`}
           onClick={() => onDelete(rowData.id)}
         />
       )}
       {showinfo && (
         <Button
           icon="pi pi-info-circle"
-          className="p-button-success p-button-sm"
-          style={{
-            marginRight: '8px',
-            backgroundColor: '#4CAF50',
-            color: '#fff',
-            textAlign: 'center',
-            fontFamily: "'Open Sans', sans-serif",
-            fontSize: '12px'
-          }}
+          className={`p-button-success p-button-sm action-button button-info`}
           onClick={() => oninfo()}
         />
       )}
@@ -110,14 +66,14 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
             key={index} 
             field={col.field} 
             header={col.header} 
-            headerStyle={{ backgroundColor: "#06163A", color: 'white' ,   }} 
+            headerStyle={{ backgroundColor: "#06163A", color: 'white' }} 
             body={col.field === 'status' ? 
               (rowData) => switchTemplate(rowData, 'status', onSwitchChange) : 
               col.body}
           />
         ))}
         {showActions && (
-          <Column header="Actions" body={actionTemplate} headerStyle={{ backgroundColor: "#06163A", color: 'white', textAlign: 'center', }} />
+          <Column header="Actions" body={actionTemplate} headerStyle={{ backgroundColor: "#06163A", color: 'white', textAlign: 'center' }} />
         )}
       </DataTable>
     </div>

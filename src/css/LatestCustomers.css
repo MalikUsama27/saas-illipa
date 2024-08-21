@@ -1,0 +1,34 @@
+.latest-customers {
+    padding: 1rem;
+    background-color: #f3f2f260;
+    width: '25px';
+}
+
+.customer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.customer-info {
+    margin-left: 1rem;
+}
+
+.customer-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.customer-details {
+    color: #666;
+    font-size: 12px;
+}
+
+.customer-email {
+    color: #007bff;
+    font-size: 12px;
+}
+
+.p-divider {
+    margin: 0.5rem 0;
+}

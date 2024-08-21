@@ -1,0 +1,39 @@
+/* AddRevenuePlan.css */
+
+/* Specific styling for input fields */
+.text-field {
+  border-radius: 25px;
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Add button styling */
+.add-button {
+  border-radius: 25px;
+  color: rgb(108, 131, 192);
+}
+
+/* Delete button styling */
+.delete-button {
+  color: #d32f2f;
+  border-radius: 25px;
+}
+
+/* Submit button styling */
+.submit-button {
+  background-color: #06163A;
+  border-radius: 25px;
+  color: white;
+}
+
+/* Checkbox label styling */
+.checkbox-label {
+  font-size: 14px;
+}
+
+/* Container box styling */
+.container-box {
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  padding: 20px;
+}

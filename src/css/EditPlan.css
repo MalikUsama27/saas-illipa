@@ -1,0 +1,47 @@
+.text-field {
+    margin-bottom: 15px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-family: 'Open Sans';
+  }
+  
+  .add-button {
+    background-color: #06163A;
+    border-radius: 50%;
+    color: white;
+  }
+  
+  .add-button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .checkbox-label {
+    font-size: 14px;
+  }
+  
+  .plan-row {
+    padding-top: 2%;
+  }
+  
+  .delete-button {
+    color: #d32f2f;
+  }
+  
+  .delete-button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  .submit-button {
+    background-color: #06163A;
+    border-radius: 25px;
+    width: 200px;
+    color: white;
+  }
+  
+  .submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  

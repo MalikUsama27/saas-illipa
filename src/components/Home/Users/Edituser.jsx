@@ -28,8 +28,8 @@ const validationSchema = Yup.object({
 
 // Available permissions
 const availablePermissions = [
-  { key: 'View Payments', label: 'View Customers' },
-  { key: 'Add Users', label: 'View Users' },
+  { key: 'View Customers', label: 'View Customers' },
+  { key: 'View Users', label: 'View Users' },
   // { key: 'Make Premium Modules', label: 'Make Premium Modules' }
 ];
 
@@ -209,6 +209,7 @@ const EditUser = ({ visible, onClose, user, onSave }) => {
                   type={showPassword ? 'text' : 'password'}
                   {...formik.getFieldProps('password')}
                   className="p-inputtext p-component"
+                  // isPasword={true}
                   style={{ width: '50%', borderRadius: '25px' }}
                 />
                 <IconButton

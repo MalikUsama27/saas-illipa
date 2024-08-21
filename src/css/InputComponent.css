@@ -1,0 +1,28 @@
+/* InputComponent.css */
+.input-field {
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
+  height: 40px;
+}
+
+.input-field .MuiInputBase-root {
+  border-radius: 25px; /* Sets the border-radius for the input root element */
+}
+
+.input-field .MuiOutlinedInput-notchedOutline {
+  border-radius: 25px; /* Ensures the outline also has the same border-radius */
+}
+
+.input-field .MuiInputBase-input {
+  padding: 10px; /* Adds padding inside the input field */
+}
+
+.input-label {
+  font-size: 10px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.end-adornment {
+  display: flex;
+  align-items: center; /* Aligns any end adornment (like an icon) to the center */
+}

@@ -3,6 +3,7 @@ import { TextField, InputAdornment, IconButton, MenuItem } from '@mui/material';
 import { useField } from 'formik';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import '../../css/InputComponent.css';
 
 const InputComponent = ({ label, name, type = 'text', options = [], isPassword = false, showPassword, setShowPassword, ...props }) => {
   const [field, meta] = useField(name);
@@ -26,9 +27,9 @@ const InputComponent = ({ label, name, type = 'text', options = [], isPassword =
       error={meta.touched && Boolean(meta.error)}
       helperText={meta.touched && meta.error}
       select={options.length > 0}
-      InputProps={isPassword ? {
-        endAdornment: (
-          <InputAdornment position="end">
+      InputProps={{
+        endAdornment: isPassword ? (
+          <InputAdornment position="end" className="end-adornment">
             <IconButton
               aria-label="toggle password visibility"
               onClick={handleClickShowPassword}
@@ -37,26 +38,13 @@ const InputComponent = ({ label, name, type = 'text', options = [], isPassword =
               {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
-        ),
-      } : {}}
-      sx={{
-        '& .MuiOutlinedInput-root': {
-          borderRadius: '25px',
-          fontSize: '12px',
-          fontFamily: 'Open Sans',
-          height: '40px',
-          '& input': {
-            padding: '10px',
-          },
-        },
-        '& .MuiInputLabel-root': {
-          fontSize: '12px',
-          fontFamily: 'Open Sans',
-        },
-        '& .MuiOutlinedInput-notchedOutline': {
-          borderRadius: '25px',
-        },
+        ) : null,
+        classes: {
+          root: 'input-field',
+          notchedOutline: 'input-outline',
+        }
       }}
+      InputLabelProps={{ className: 'input-label' }}
     >
       {options.map((option) => (
         <MenuItem key={option} value={option}>

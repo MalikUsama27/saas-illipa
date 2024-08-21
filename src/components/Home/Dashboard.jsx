@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import PeopleIcon from '@mui/icons-material/People';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,7 +44,7 @@ const Dashboard = ({ handleNavigation }) => {
   const handleClick = (view, title) => {
     setTitle(title);
     handleNavigation(view);
-    navigate(`/${view}`); 
+    navigate(`/${view.toLowerCase().replace(' ', '-')}`); 
   };
 
   const hasViewAll = permissions.includes('view_all');
@@ -70,13 +71,13 @@ const Dashboard = ({ handleNavigation }) => {
             </ListItem>
             <ListItem button onClick={() => handleClick('revenue-plan', 'Revenue Plan')}>
               <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
-                <NotificationsIcon sx={{ color: '#fff' }} />
+                <AttachMoneyIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText primary="Revenue Plan" />
             </ListItem>
             <ListItem button onClick={() => handleClick('users', 'Users')}>
               <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
-                <AccountCircleIcon sx={{ color: '#fff' }} />
+                <PeopleIcon sx={{ color: '#fff' }} />
               </ListItemIcon>
               <ListItemText primary="Users" />
             </ListItem>

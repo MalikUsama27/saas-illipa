@@ -14,7 +14,7 @@ import axios from 'axios';
 import { Add, Delete } from '@mui/icons-material';
 import { useFormik, FieldArray, FormikProvider } from 'formik';
 import * as Yup from 'yup';
-
+import '../../../css/EditPlan.css'
 const validationSchema = Yup.object({
   title: Yup.string().required('Title is required'),
   plans: Yup.array().of(

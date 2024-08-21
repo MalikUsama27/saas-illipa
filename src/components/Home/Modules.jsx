@@ -7,7 +7,7 @@ const modulesData = [
   {
     id: 545,
     name: 'Accounts & Finance',
-    description: 'Lorem Ipsum dolor sit amet',
+    description: 'Oversee financial operations, including invoicing, payments, and budgeting, to ensure accurate and compliant accounting.',
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -16,7 +16,7 @@ const modulesData = [
   {
     id: 546,
     name: 'POS',
-    description: 'Lorem Ipsum dolor sit amet',
+    description: 'Process transactions quickly and efficiently at the point of sale, with real-time inventory and sales tracking.',
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -25,7 +25,7 @@ const modulesData = [
   {
     id: 547,
     name: 'Sales',
-    description: 'Lorem Ipsum dolor sit amet',
+    description: 'Manage customer relationships, track sales orders, and streamline the sales process from lead generation to order fulfillment.',
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -34,7 +34,7 @@ const modulesData = [
   {
     id: 548,
     name: 'Inventory Mangement',
-    description: 'Lorem Ipsum dolor sit amet',
+    description: 'Monitor stock levels, manage warehouse operations, and automate reordering to maintain optimal inventory.',
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -43,7 +43,7 @@ const modulesData = [
   {
     id: 549,
     name: 'HRM',
-    description: 'Lorem Ipsum dolor sit amet',
+    description: 'Handle employee management, payroll, benefits, and recruitment to streamline HR processes and improve workforce management.',
     premium: false,
     monthlyPrice: 0,
     yearlyPrice: 0,
@@ -82,7 +82,7 @@ const Modules = () => {
   return (
     
 
-    <div style={{ paddingTop: '58px' }}>
+    <div >
       <DataTableComponent 
         header="Modules"
         columns={columns} 

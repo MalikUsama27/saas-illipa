@@ -1,7 +1,8 @@
+/* DataTableComponent.css */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Segoe+UI+Emoji&display=swap');
 
 .datatable-container {
-  font-family: 'Open Sans', ;
+  font-family: 'Open Sans', sans-serif;
   font-size: 12px;
 }
 
@@ -10,7 +11,7 @@
   text-align: left;
   margin-bottom: 16px;
   color: #06163A;
-  font-family:  'Open Sans'; 
+  font-family: 'Open Sans', sans-serif;
 }
 
 .p-datatable .p-datatable-thead > tr > th {
@@ -20,15 +21,44 @@
 }
 
 .datatable-responsive {
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
   font-size: 12px;
-
   text-align: center;
 }
-/* .p-datatable .p-datatable-tbody > tr > td {
-  text-align: center; 
-} */
-/* 
-.p-datatable .p-datatable-header {
-  text-align: center; 
-} */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.action-button {
+  margin-right: 8px;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+}
+
+.button-dollars {
+  background-color: #FF5722;
+  color: #fff;
+}
+
+.button-edit {
+  background-color: #06163A;
+  color: #fff;
+}
+
+.button-receipt {
+  background-color: orange;
+  color: #fff;
+}
+
+.button-delete {
+  background-color: #d9534f;
+  color: #fff;
+}
+
+.button-info {
+  background-color: #4CAF50;
+  color: #fff;
+}

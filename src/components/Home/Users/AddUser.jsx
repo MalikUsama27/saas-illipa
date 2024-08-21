@@ -38,7 +38,7 @@ const AddUser = ({ onClose }) => {
       .filter(([_, value]) => value)
       .map(([key]) => {
         switch (key) {
-          case 'Customers':
+          case 'viewCustomers':
             return 'View Customers';
           case 'viewUsers':
             return 'View Users';
@@ -60,21 +60,15 @@ const AddUser = ({ onClose }) => {
     };
 
     try {
-      // const token = localStorage.getItem('token');
       await axios.post('https://ilipaone.com/api/users', payload, {
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${token}`,
         },
       });
 
       toast.success('User added successfully');
       resetForm();
-
-      
-      setTimeout(() => {
-        onClose();
-      }, 2000); 
+      onClose();
     } catch (error) {
       console.error('Error adding user:', error);
       toast.error(`${error.response ? error.response.data.errors.email : error.message}`);
@@ -125,7 +119,7 @@ const AddUser = ({ onClose }) => {
                     style={{ borderRadius: '25px', fontSize: '12px', height: '42px' }}
                   >
                     {['Admin', 'Manager'].map((role) => (
-                      <MenuItem key={role} value={role} style={{  fontSize: '12px', }}>{role}</MenuItem>
+                      <MenuItem key={role} value={role} style={{ fontSize: '12px' }}>{role}</MenuItem>
                     ))}
                   </Field>
                   <ErrorMessage name="role">
@@ -133,21 +127,23 @@ const AddUser = ({ onClose }) => {
                   </ErrorMessage>
                 </FormControl>
               </Grid>
-              
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Password"
                   name="password"
                   type="password"
-                  isPassword
+                  isPassword={true}
                   showPassword={showPassword}
                   setShowPassword={setShowPassword}
                 />
-              </Grid><Grid item xs={12}>
+              </Grid>
+              <Grid item xs={12}>
                 <Typography variant="subtitle1" style={{ fontSize: '12px' }}>Permissions</Typography>
-                <CheckboxComponent style={{ fontSize: '12px' }} label="View Customers" name="permissions.Customers" />
-                <CheckboxComponent style={{ fontSize: '12px' }} label="View Users" name="permissions.viewUsers" />
-                {/* <CheckboxComponent style={{ fontSize: '12px' }}  label="Make Premium Modules" name="permissions.makePremiumModules" /> */}
+                <Box display="flex" flexDirection="row" gap={2}>
+                  <CheckboxComponent style={{ fontSize: '12px' }} label="View Customers" name="permissions.viewCustomers" />
+                  <CheckboxComponent style={{ fontSize: '12px' }} label="View Users" name="permissions.viewUsers" />
+                  {/* <CheckboxComponent style={{ fontSize: '12px' }} label="Make Premium Modules" name="permissions.makePremiumModules" /> */}
+                </Box>
                 <ErrorMessage name="permissions">
                   {msg => <FormHelperText style={{ color: '#D32F2F', fontSize:'12px' }}>{msg}</FormHelperText>}
                 </ErrorMessage>

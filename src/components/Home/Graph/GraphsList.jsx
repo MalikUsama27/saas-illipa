@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect,useState  } from 'react';
+import axios from 'axios';
 import { Card } from 'primereact/card';
-import 'primeicons/primeicons.css'; // PrimeReact Icons
+import 'primeicons/primeicons.css'; 
 
 import blue from '../../../assets/Graphs/blue.svg';
 import yellow from '../../../assets/Graphs/yellow.svg';
@@ -8,38 +9,55 @@ import purple from '../../../assets/Graphs/purple.svg';
 import green from '../../../assets/Graphs/green.svg';
 
 const GraphsList = () => {
+    // console.log(process.env.REACT_APP_API_BASE_URL,'888');
+    const [totalUsers, setTotalUsers] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Fetch data from the API
+                const response = await axios.get('https://ilipaone.com/api/users');
+                setTotalUsers(response.data.length);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
     const graphsData = [
         {
             icon: 'pi pi-users',
-            value: '3882',
+            value: totalUsers.toString(),
             title: 'Customers Signed Up',
             bgImage: blue,
             iconColor: '#007bff'
         },
         {
-            icon: 'pi pi-map',
+            icon: 'pi pi-dollar',
             value: '532',
             title: 'Revenue',
             bgImage: yellow,
             iconColor: '#FFA500'
         },
         {
-            icon: 'pi pi-directions',
-            value: '12.6%',
+            icon: 'pi pi-users',
+            value: '12',
             title: 'Premium Users',
             bgImage: green,
             iconColor: '#28a745'
         },
         {
-            icon: 'pi pi-comments',
+            icon: 'pi pi-question',
             value: '440',
-            title: 'Free Users',
+            title: 'Queries',
             bgImage: purple,
             iconColor: '#6f42c1'
         }
     ];
 
     return (
+        
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', padding: '1rem 0' }}>
             {graphsData.map((data, index) => (
                 <Card key={index} 

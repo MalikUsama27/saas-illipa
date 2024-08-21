@@ -103,7 +103,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
           />
         </div>
       }
-      style={{ width: '60%', borderRadius: '10px', padding: '20px', boxShadow: '0 4px 8px rgba(0,0,0,0.2)' }}
+      style={{ width: '60%', borderRadius: '10px', padding: '20px'}}
     >
       <Formik
         initialValues={initialValues}

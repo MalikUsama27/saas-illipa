@@ -5,6 +5,7 @@ import { Add, Delete } from '@mui/icons-material';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../../../css/AddRevenuePlan.css';
 
 // Validation Schema
 const validationSchema = Yup.object({
@@ -103,7 +104,6 @@ const AddRevenuePlan = ({ onClose }) => {
               toast.error('Failed to submit plans.');
             }
           } else {
-            
             toast.error('Please complete the last plan correctly before submitting.');
           }
         } catch (error) {
@@ -114,9 +114,9 @@ const AddRevenuePlan = ({ onClose }) => {
         }
       }}
     >
-      {({ values, setFieldValue, handleSubmit, errors, touched, setFieldTouched, isValid, dirty }) => (
+      {({ values, setFieldValue, handleSubmit, isValid, dirty }) => (
         <Form onSubmit={handleSubmit}>
-          <Box mt={2} p={2} border={1} borderColor="grey.400" borderRadius={4} width={1}>
+          <Box mt={2} p={2} border={1} borderColor="grey.400" borderRadius={4} width={1} className="container-box">
             <Grid container spacing={1} alignItems="center">
               <Grid item xs={8} sm={8}>
                 <InputField
@@ -143,6 +143,8 @@ const AddRevenuePlan = ({ onClose }) => {
                       toast.error('Please complete the current plan correctly before adding a new one.');
                     }
                   }}
+                  className="add-button"
+                  disabled={values.noMaxValue}
                 >
                   <Add />
                 </IconButton>
@@ -152,6 +154,7 @@ const AddRevenuePlan = ({ onClose }) => {
                   control={<Checkbox checked={values.noMaxValue} onChange={(e) => setFieldValue('noMaxValue', e.target.checked)} />}
                   label="Do not require max value for last row"
                   disabled={values.plans.length <= 2}
+                  className="checkbox-label"
                 />
               </Grid>
             </Grid>
@@ -165,7 +168,6 @@ const AddRevenuePlan = ({ onClose }) => {
                         name={`plans.${index}.min_value`}
                         value={plan.min_value}
                         onChange={(e) => setFieldValue(`plans.${index}.min_value`, e.target.value)}
-                        onBlur={() => setFieldTouched(`plans.${index}.min_value`)}
                         currency
                         disabled={index !== values.plans.length + 1}
                       />
@@ -176,7 +178,6 @@ const AddRevenuePlan = ({ onClose }) => {
                         name={`plans.${index}.max_value`}
                         value={plan.max_value}
                         onChange={(e) => setFieldValue(`plans.${index}.max_value`, e.target.value)}
-                        onBlur={() => setFieldTouched(`plans.${index}.max_value`)}
                         currency
                         disabled={index !== values.plans.length - 1 || values.noMaxValue}
                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} 
@@ -188,7 +189,6 @@ const AddRevenuePlan = ({ onClose }) => {
                         name={`plans.${index}.amount`}
                         value={plan.amount}
                         onChange={(e) => setFieldValue(`plans.${index}.amount`, e.target.value)}
-                        onBlur={() => setFieldTouched(`plans.${index}.amount`)}
                         currency
                         disabled={index !== values.plans.length - 1}
                         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }} 
@@ -210,6 +210,7 @@ const AddRevenuePlan = ({ onClose }) => {
                             }
                           }}
                           size="small"
+                          className="delete-button"
                           disabled={index !== values.plans.length - 1}
                         >
                           <Delete />
@@ -222,7 +223,7 @@ const AddRevenuePlan = ({ onClose }) => {
             </Box>
             <Button
               variant="contained"
-              sx={{ backgroundColor: '#06163A', borderRadius: '10px', '&:hover': { backgroundColor: '#06163A' }, mt: 2 }}
+              className="submit-button"
               type="submit"
               disabled={!isValid || !dirty || values.plans.length < 3 || !values.title}
             >
