@@ -223,7 +223,13 @@ const AddRevenuePlan = ({ onClose }) => {
             </Box>
             <Button
               variant="contained"
-              className="submit-button"
+              // className="submit-button"
+              sx={{
+                backgroundColor: '#06163A',
+                borderRadius: '25px',
+                '&:hover': { backgroundColor: '#06163A' },
+                width: '200px',
+              }}
               type="submit"
               disabled={!isValid || !dirty || values.plans.length < 3 || !values.title}
             >
