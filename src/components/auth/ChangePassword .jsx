@@ -23,7 +23,7 @@ const ChangePassword = ({ show, handleClose, otp }) => {
         }
     const email=    localStorage.getItem('email');
         try {
-            const response = await axios.post('https://ilipaone.com/api/forgot-update', {
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/forgot-update`, {
                 email,
                 otp,
                 password: newPassword,

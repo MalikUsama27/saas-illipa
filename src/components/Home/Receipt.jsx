@@ -17,7 +17,7 @@ const Receipt = () => {
       const fetchData = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(`https://ilipaone.com/api/transactions/${customerId}`);
+          const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/transactions/${customerId}`);
           const receiptData = response.data.map(receipt => ({
             billingMonth: receipt.billing_month || 'N/A',
             revenuePlan: receipt.revenue_plan_threshold|| 'N/A',

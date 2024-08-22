@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const availablePermissions = [
   { label: 'View Users', key: 'view_users' },
   { label: 'View Customers', key: 'view_payments' },
-  { label: 'Make Premium Modules', key: 'make_premium_modules' },
+  // { label: 'Make Premium Modules', key: 'make_premium_modules' },
   { label: 'all', key: 'view_all' }
 ];
 
@@ -39,7 +39,7 @@ const Dashboard = ({ handleNavigation }) => {
     if (permissions.length === 0) {
       navigate('/dashboard');
     }
-  }, [permissions, navigate]);
+  }, [permissions,navigate]);
 
   const handleClick = (view, title) => {
     setTitle(title);
@@ -84,14 +84,14 @@ const Dashboard = ({ handleNavigation }) => {
           </>
         ) : (
           <>
-            {permissions.includes('make_premium_modules') && (
+            {/* {permissions.includes('make_premium_modules') && (
               <ListItem button onClick={() => handleClick('modules', 'Modules')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
                   <DashboardIcon sx={{ color: '#fff' }} />
                 </ListItemIcon>
                 <ListItemText primary="Modules" />
               </ListItem>
-            )}
+            )} */}
             {permissions.includes('view_payments') && (
               <ListItem button onClick={() => handleClick('customers', 'Customers')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>

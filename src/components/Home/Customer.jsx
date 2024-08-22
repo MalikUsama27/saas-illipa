@@ -26,7 +26,7 @@ const Customer = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('https://ilipaone.com/api/users?user=customers');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users?user=customers`);
       const userData = response.data.map(user => ({
         id: user.id,
         name: user.name,
@@ -59,7 +59,7 @@ const Customer = () => {
 
   const handleEditCustomer = async (id) => {
     try {
-      const response = await axios.get(`https://ilipaone.com/api/users/${id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users/${id}`);
       setSelectedCustomer(response.data);
       setEditDialogVisible(true);
     } catch (error) {
@@ -129,10 +129,12 @@ const Customer = () => {
       )}
       {selectedCustomer && (
         <EditCustomer
+        
           visible={editDialogVisible}
           customer={selectedCustomer}
           onHide={() => setEditDialogVisible(false)}
           onSave={handleSave}
+          style={{ width: '50vw' }}
         />
       )}
       {customerIdToDelete !== null && (

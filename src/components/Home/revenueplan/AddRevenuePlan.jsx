@@ -96,7 +96,7 @@ const AddRevenuePlan = ({ onClose }) => {
               ranges: formattedPlans
             };
 
-            const response = await axios.post('https://ilipaone.com/api/revenue-plans', payload);
+            const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/revenue-plans`, payload);
             if (response.status === 201) {
               toast.success('Plans submitted successfully.');
               onClose();

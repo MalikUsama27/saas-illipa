@@ -4,8 +4,8 @@ import { Dialog } from 'primereact/dialog';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import InputComponent from '../../reusable/InputComponent'; 
-import { MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import InputComponent from '../../reusable/InputComponent';
+import { MenuItem, Select, FormControl, InputLabel, Grid } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -69,7 +69,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
       };
 
       // PUT request to update customer
-      await axios.put(`https://ilipaone.com/api/users/${customer.id}`, payload);
+      await axios.put(`${process.env.REACT_APP_API_BASE_URL}/users/${customer.id}`, payload);
       onSave(); 
       onHide();
       toast.success('Customer updated successfully');
@@ -84,27 +84,22 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
       header="Edit Customer"
       visible={visible}
       onHide={onHide}
-      footer={
-        <div style={{ display: 'flex', justifyContent: 'end', padding: '10px', borderTop: '1px solid #ddd' }}>
-          <Button
-            label="Save"
-            icon="pi pi-check"
-            type="submit"
-            form="edit-form"
-            className="p-button-success"
-            style={{ fontSize: '12px', background:'#06163A', borderRadius: '25px' }}
-          />
-          <Button
+      // footer={
+        // <div style={{ display: 'flex', justifyContent: 'end', padding: '10px', borderTop: '1px solid #ddd' }}>
+      
+          // {
+            /* <Button
             label="Cancel"
             icon="pi pi-times"
             onClick={onHide}
             className="p-button-secondary"
             style={{ fontSize: '12px', background:'#d9535f', borderRadius: '25px' }}
-          />
-        </div>
-      }
-      style={{ width: '60%', borderRadius: '10px', padding: '20px'}}
-    >
+          /> */
+        // }
+        // </div>
+      // }
+      // style={{ width: '60%', borderRadius: '10px', padding: '20px'}}
+    >    
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -112,22 +107,25 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         onSubmit={handleSubmit}
       >
         {({ setFieldValue, values }) => (
-          <Form id="edit-form">
-            <div style={{ display: 'grid', gap: '16px', marginTop:'10px', gridTemplateColumns: '1fr 1fr', marginBottom: '20px' }}>
-              <div>
+          <Form id="edit-form"style={{ width: '46vw'}}>
+           <Grid container spacing={3}>
+              <Grid item xs={12} sm={6}>
                 <InputComponent label="Username" name="username" />
-              </div>
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <InputComponent label="Email" name="email" />
-              </div>
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <InputComponent label="Mobile" name="mobile" />
-              </div>
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <InputComponent label="Company Name" name="companyName" />
-              </div>
-              <div>
-                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputComponent label="Company Address" name="companyAddress" />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
                   <InputLabel>Industry</InputLabel>
                   <Field
                     as={Select}
@@ -135,16 +133,18 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                     label="Industry"
                     value={values.industry}
                     onChange={(e) => setFieldValue("industry", e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px', height: '47px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px' }}
                   >
                     {industries.map((industry) => (
-                      <MenuItem key={industry} value={industry}>{industry}</MenuItem>
+                      <MenuItem key={industry} value={industry} style={{ fontSize: '12px' }}>
+                        {industry}
+                      </MenuItem>
                     ))}
                   </Field>
                 </FormControl>
-              </div>
-              <div>
-                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined">
                   <InputLabel>Company Size</InputLabel>
                   <Field
                     as={Select}
@@ -152,36 +152,40 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                     label="Company Size"
                     value={values.companySize}
                     onChange={(e) => setFieldValue("companySize", e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px', height: '47px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px' }}
                   >
                     {companySizes.map((size) => (
-                      <MenuItem key={size} value={size}>{size}</MenuItem>
+                      <MenuItem key={size} value={size} style={{ fontSize: '12px' }}>
+                        {size}
+                      </MenuItem>
                     ))}
                   </Field>
                 </FormControl>
-              </div>
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <InputComponent label="Country" name="country" />
-              </div>
-              <div>
-                <InputComponent label="Company Address" name="companyAddress" />
-              </div>
-              <div>
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <div style={{ position: 'relative' }}>
                   <InputComponent
                     label="Password"
                     name="password"
-                    
                     isPassword={true}  
                     showPassword={showPassword}
                     setShowPassword={setShowPassword}
                   />
-                 
                 </div>
-              </div>
-            </div>
+              </Grid>
+            </Grid>
+            <Button
+              label="UPDATE CUSTOMER"
+              type="submit"
+              form="edit-form"
+              className="p-button-success"
+              style={{ backgroundColor: '#06163A', borderRadius: '10px', marginTop: '20px' }}
+            />
           </Form>
-        )}
+          )}
       </Formik>
       <ToastContainer
         position="top-right"

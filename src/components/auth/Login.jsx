@@ -9,10 +9,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import loginImage from '../../assets/images/loginimg.PNG';
 import logo from '../../assets/logo2.png';
 import { Button } from 'primereact/button';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';  // Importing eye icons
 import ForgotPassword from './ForgotPassword';
 
 const Login = () => {
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);  // State for toggling password visibility
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -26,7 +28,7 @@ const Login = () => {
     }),
     onSubmit: async (values) => {
       try {
-        const response = await axios.post('https://ilipaone.com/api/login', {
+        const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/login`, {
           username_or_email: values.email,
           password: values.password,
         });
@@ -66,16 +68,23 @@ const Login = () => {
               className={formik.touched.email && formik.errors.email ? 'input-error' : ''}
             />
             {formik.touched.email && formik.errors.email && <div className="error-message">{formik.errors.email}</div>}
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={formik.touched.password && formik.errors.password ? 'input-error' : ''}
-            />
+            
+            <div className="password-input-container">
+              <input
+                type={showPassword ? 'text' : 'password'}  
+                name="password"
+                placeholder="Password"
+                value={formik.values.password}
+                // onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={formik.touched.password && formik.errors.password ? 'input-error' : ''}
+              />
+              <span onClick={() => setShowPassword(!showPassword)} className="password-toggle-icon">
+                {showPassword ?  <FaEye />:<FaEyeSlash /> }  
+              </span>
+            </div>
             {formik.touched.password && formik.errors.password && <div className="error-message">{formik.errors.password}</div>}
+            
             <button type="submit" className="login-button">Login</button>
           </form>
           <Button type="button" className="forgot-password" onClick={() => setForgotPasswordVisible(true)}>

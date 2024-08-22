@@ -13,25 +13,25 @@ import Users from "./components/Home/Users";
 import Receipt from "./components/Home/Receipt";
 import RevenueProjection from "./components/Home/RevenueProjection";
 import Graphs from "./components/Home/Graphs";
-
+// import 'dotenv/config'
+// require('dotenv').config()
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
-
+ 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("path",location.pathname);
-    if (token) {
-      if (location.pathname === "/"  )  {
-        navigate("/dashboard");
-      }
-      // else if(location.pathname ==='/modules'){
-      //   navigate("/modules");
-      // }
-    } else {
-      if (location.pathname !== "/") {
-        navigate("/");
-      }
+    const currentPath = location.pathname;
+  
+    console.log("Current Path:", currentPath);
+    console.log("Token:", token);
+  
+    if (token && currentPath === "/") {
+      navigate("/dashboard");
+    } else if (!token && currentPath !== "/") {
+      navigate("/");
+    }else if (token && currentPath !== "/" && currentPath !== "/dashboard") {
+      navigate(currentPath);
     }
   }, [navigate, location.pathname]);
 

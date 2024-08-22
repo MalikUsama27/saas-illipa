@@ -60,7 +60,7 @@ const AddUser = ({ onClose }) => {
     };
 
     try {
-      await axios.post('https://ilipaone.com/api/users', payload, {
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/users`, payload, {
         headers: {
           'Content-Type': 'application/json',
         },

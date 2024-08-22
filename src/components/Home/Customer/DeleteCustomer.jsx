@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://ilipaone.com/api/users/${customerId}`);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/users/${customerId}`);
       onDelete(); // Notify parent to update the customer list
       toast.success('Customer deleted successfully');
     } catch (error) {

@@ -20,7 +20,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://ilipaone.com/api/users');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users`);
       const formattedUsers = response.data.map(user => ({
         name: user.name,
         email: user.email,
@@ -59,7 +59,7 @@ const Users = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://ilipaone.com/api/users/${selectedUser.id}`);
+      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/users/${selectedUser.id}`);
       setUsers(users.filter(user => user.id !== selectedUser.id));
     } catch (error) {
       console.error('Error deleting user:', error);

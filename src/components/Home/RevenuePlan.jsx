@@ -31,7 +31,7 @@ const RevenuePlan = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('https://ilipaone.com/api/revenue-plans');
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/revenue-plans`);
       if (response.status === 200) {
         setData(response.data);
       } else {
@@ -112,7 +112,7 @@ const RevenuePlan = () => {
     }
 
     try {
-      await axios.post(`https://ilipaone.com/api/revenue-plans/${planToChange}/toggle-status`);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/revenue-plans/${planToChange}/toggle-status`);
       fetchData(); 
     } catch (error) {
       console.error('Error updating status:', error);

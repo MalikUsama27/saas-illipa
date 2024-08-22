@@ -17,7 +17,7 @@ const ForgotPassword = ({ visible, onHide }) => {
     const handleButtonClick = async () => {
         if (!otpSent) {
             try {
-                const response = await axios.post('https://ilipaone.com/api/forgot-password', { email });
+                const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/forgot-password`, { email });
                 localStorage.setItem('email', email); 
                 if (response.data.message === 'No user found.') {
                     toast.error('No user found with this email address. Please check and try again.');
@@ -33,7 +33,7 @@ const ForgotPassword = ({ visible, onHide }) => {
             }
         } else {
             try {
-                const response = await axios.post('https://ilipaone.com/api/forgot-verification', { email, otp });
+                const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/forgot-verification`, { email, otp });
                 if (response.data.message) {
                     toast.success('OTP verified successfully.');
                     setShowChangePassword(true);

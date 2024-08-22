@@ -20,7 +20,7 @@ const RevenueGraph = () => {
                     borderColor: documentStyle.getPropertyValue('--blue-500'),
                     yAxisID: 'y',
                     tension: 0.4,
-                    data: [65, 59, 80, 81, 56, 55, 10]
+                    data: [65, 59, 60, 60, 56, 55, 60]
                 }
                
             ]

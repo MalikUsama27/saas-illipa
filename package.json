@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "env": "^0.0.2",
     "formik": "^2.4.6",
     "mdb-react-ui-kit": "^8.0.0",
     "primeicons": "^7.0.0",

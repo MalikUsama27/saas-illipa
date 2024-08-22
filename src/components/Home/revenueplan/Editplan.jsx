@@ -70,7 +70,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
         };
 
         if (plan) {
-          const response = await axios.put(`https://ilipaone.com/api/revenue-plans/${plan.id}`, payload);
+          const response = await axios.put(`${process.env.REACT_APP_API_BASE_URL}/revenue-plans/${plan.id}`, payload);
         
           if (response.status === 200) {
             toast.success('Plans updated successfully.');

@@ -31,14 +31,14 @@ const initialValues = {
 
 
 const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technology', 'Education'];
-const company_sizes = ['>10', '11-25', '26-50', '50-100', '100+'];
+const company_sizes = ['1-10', '11-25', '26-50', '50-100', '100+'];
 
 const AddCustomer = ({ onSave }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await fetch('https://ilipaone.com/api/users', {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,14 +72,7 @@ const AddCustomer = ({ onSave }) => {
       >
         {({ isSubmitting, setFieldValue, values }) => (
           <Form>
-            <Grid container spacing={2} mt={2}>
-              <Grid item xs={12} sm={6}>
-                <InputComponent
-                  label="Company Name"
-                  name="company_name"
-                  required
-                />
-              </Grid>
+            <Grid container spacing={2} mt={2}> 
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Email"
@@ -87,7 +80,7 @@ const AddCustomer = ({ onSave }) => {
                   type="email"
                   required
                 />
-              </Grid>
+              </Grid> 
               <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Phone"
@@ -99,30 +92,20 @@ const AddCustomer = ({ onSave }) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <InputComponent
-                  label="Country"
-                  name="country"
+                  label="Company Name"
+                  name="company_name"
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+             <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Company Address"
                   name="company_address"
                   required
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <InputComponent
-                  label="Password"
-                  name="password"
-                  isPassword={true}
-                  required
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
+               <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px', fontSize: '12px'  }}>
                   <InputLabel style={{ fontSize: '12px' }}>Industry</InputLabel>
                   <Field
                     as={Select}
@@ -133,7 +116,7 @@ const AddCustomer = ({ onSave }) => {
                     sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
                   >
                     {industries.map((industry) => (
-                      <MenuItem key={industry} value={industry}>
+                      <MenuItem key={industry} value={industry}  style={{fontSize:'12px'}}>
                         {industry}
                       </MenuItem>
                     ))}
@@ -152,19 +135,39 @@ const AddCustomer = ({ onSave }) => {
                     sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
                   >
                     {company_sizes.map((size) => (
-                      <MenuItem key={size} value={size}>
+                      <MenuItem key={size} value={size} style={{fontSize:'12px'}}>
                         {size}
                       </MenuItem>
                     ))}
                   </Field>
                 </FormControl>
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputComponent
+                  label="Country"
+                  name="country"
+                  required
+                />
+              </Grid>
+              
+              <Grid item xs={12} sm={6}>
+                <InputComponent
+                  label="Password"
+                  name="password"
+                  isPassword={true}
+                  required
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <Button
+                // label="Add Customer"
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
-                  sx={{ backgroundColor: '#06163A', borderRadius: '10px', '&:hover': { backgroundColor: '#06163A' } }}
+                  sx={{ backgroundColor: '#06163A', borderRadius: '10px' }}
                 >
                   Add Customer
                 </Button>

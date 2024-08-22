@@ -9,7 +9,7 @@ const LatestCustomers = () => {
     useEffect(() => {
         const fetchCustomers = async () => {
             try {
-                const response = await axios.get('https://ilipaone.com/api/users?user=customers');
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users?user=customers`);
                 const data = response.data;
                 setCustomers(data.slice(-5).reverse());
             } catch (error) {
@@ -26,10 +26,11 @@ const LatestCustomers = () => {
             {customers.map((customer, index) => (
                 <div key={index} className="customer-card">
                     <Avatar
-                        label={getInitials(customer.username)}
+                        // label={getInitials(customer.username)}
+                        icon='pi pi-user'
                         className="avatar"
                         shape="circle"
-                        style={{  backgroundColor: '#007bff'
+                        style={{  backgroundColor: '#ffffff'
                             //  getAvatarColor(getInitials(customer.username)) 
                             }}
                     />
@@ -46,10 +47,10 @@ const LatestCustomers = () => {
     );
 };
 
-const getInitials = (username) => {
-    const initials = username.split(' ').map(name => name.charAt(0).toUpperCase()).join('');
-    return initials;
-};
+// const getInitials = (username) => {
+//     const initials = username.split(' ').map(name => name.charAt(0).toUpperCase()).join('');
+//     return initials;
+// };
 
 // const getAvatarColor = (initials) => {
 //     const colors = {

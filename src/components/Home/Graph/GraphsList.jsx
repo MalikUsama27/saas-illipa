@@ -9,14 +9,14 @@ import purple from '../../../assets/Graphs/purple.svg';
 import green from '../../../assets/Graphs/green.svg';
 
 const GraphsList = () => {
-    // console.log(process.env.REACT_APP_API_BASE_URL,'888');
+    console.log(process.env.REACT_APP_API_BASE_URL,'888');
     const [totalUsers, setTotalUsers] = useState(0);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // Fetch data from the API
-                const response = await axios.get('https://ilipaone.com/api/users');
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users`);
                 setTotalUsers(response.data.length);
             } catch (error) {
                 console.error('Error fetching data:', error);

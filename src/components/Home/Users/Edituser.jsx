@@ -74,7 +74,7 @@ const EditUser = ({ visible, onClose, user, onSave }) => {
         console.log('Payload to be sent:', requestData);
 
         await axios.put(
-          `https://ilipaone.com/api/users/${user.id}`,
+          `${process.env.REACT_APP_API_BASE_URL}/users/${user.id}`,
           requestData,
           {
             headers: {
@@ -129,11 +129,11 @@ const EditUser = ({ visible, onClose, user, onSave }) => {
         onHide={onClose}
         footer={
           <div>
-            <Button label="Save" icon="pi pi-check" style={{ background: '#06163A', borderRadius: '25px' }} onClick={formik.handleSubmit} />
-            <Button label="Cancel" icon="pi pi-times" style={{ background: '#d9535f', borderRadius: '25px' }} onClick={onClose} />
+           
+            {/* <Button label="Cancel" icon="pi pi-times" style={{ background: '#d9535f', borderRadius: '25px' }} onClick={onClose} /> */}
           </div>
         }
-        style={{ width: '50vw', borderRadius: '25px', fontFamily: 'Open Sans', fontSize: '12px' }}
+        style={{ width: '50vw', borderRadius: '25px', fontFamily: 'Open Sans', fontSize: '12px',height:'70%' }}
         modal
       >
         {fetchingUser ? (
@@ -245,7 +245,17 @@ const EditUser = ({ visible, onClose, user, onSave }) => {
                 <div style={{ color: 'red' }}>{formik.errors.permissions}</div>
               )}
             </div>
-          </div>
+            <Button label="UPDATE" 
+            // icon="pi pi-check" 
+            style={{
+              backgroundColor: '#06163A',
+              borderRadius: '25px',
+              fontSize: '0.875rem',
+              width: '100px',
+            }}
+             onClick={formik.handleSubmit} />
+          </div> 
+          
         )}
        <ToastContainer
         position="top-right"
