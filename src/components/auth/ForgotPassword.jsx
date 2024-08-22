@@ -85,7 +85,7 @@ const ForgotPassword = ({ visible, onHide }) => {
                     <Button
                         label={otpSent ? 'Verify OTP' : 'Send OTP'}
                         onClick={handleButtonClick}
-                        style={{ marginTop: '10px' }}
+                        style={{ marginTop: '10px',width: '30%' ,borderRadius:'15px',backgroundColor:'#06163A'}}
                     />
                 </div>
             </Dialog>
