@@ -48,7 +48,7 @@ const GraphsList = () => {
             iconColor: '#28a745'
         },
         {
-            icon: 'pi pi-question',
+            icon: 'pi pi-comments',
             value: '440',
             title: 'Queries',
             bgImage: purple,

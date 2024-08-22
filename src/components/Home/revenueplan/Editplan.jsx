@@ -25,7 +25,7 @@ const validationSchema = Yup.object({
           is: false,
           then: Yup.number().required('Max value is required').moreThan(Yup.ref('min_value'), 'Max value must be greater than min value'),
         }),
-      amount: Yup.number().required('Amount is required').positive('Amount must be positive').integer('Amount must be an integer'),
+      amount: Yup.number().required('Amount is required'),
     })
   ).min(3, 'You must have at least 3 plans')
 });
@@ -142,7 +142,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
               color="primary"
               onClick={handleEditPlan}
               size="small"
-              disabled={formik.values.noMaxValue && formik.values.plans.length > 3} // Disable add button based on noMaxValue
+              disabled={ formik.values.noMaxValue } // Disable add button based on noMaxValue
             >
               <Add />
             </IconButton>
@@ -253,7 +253,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
                           }
                         }}
                         size="small"
-                        disabled={index !== formik.values.plans.length - 1}
+                        disabled={index !== formik.values.plans.length - 1 || formik.values.noMaxValue}
                       >
                         <Delete />
                       </IconButton>

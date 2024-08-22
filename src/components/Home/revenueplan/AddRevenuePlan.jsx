@@ -211,7 +211,7 @@ const AddRevenuePlan = ({ onClose }) => {
                           }}
                           size="small"
                           className="delete-button"
-                          disabled={index !== values.plans.length - 1}
+                          disabled={index !== values.plans.length - 1 ||  values.noMaxValue}
                         >
                           <Delete />
                         </IconButton>
