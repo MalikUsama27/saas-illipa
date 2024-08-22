@@ -61,7 +61,7 @@ const Login = () => {
             <input
               type="text"
               name="email"
-              placeholder="User-Name or Email"
+              placeholder="Email"
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -75,7 +75,7 @@ const Login = () => {
                 name="password"
                 placeholder="Password"
                 value={formik.values.password}
-                // onChange={formik.handleChange}
+                onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 className={formik.touched.password && formik.errors.password ? 'input-error' : ''}
               />
