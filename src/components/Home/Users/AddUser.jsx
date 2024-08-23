@@ -42,8 +42,10 @@ const AddUser = ({ onClose }) => {
             return 'View Customers';
           case 'viewUsers':
             return 'View Users';
-          case 'makePremiumModules':
-            return 'Make Premium Modules';
+          case 'viewModules':
+            return 'View Modules';
+            case 'ViewPlans':
+            return 'View Plans';
           default:
             return '';
         }
@@ -60,6 +62,7 @@ const AddUser = ({ onClose }) => {
     };
 
     try {
+      console.log(payload)
       await axios.post(`${process.env.REACT_APP_API_BASE_URL}/users`, payload, {
         headers: {
           'Content-Type': 'application/json',
@@ -140,9 +143,11 @@ const AddUser = ({ onClose }) => {
               <Grid item xs={12}>
                 <Typography variant="subtitle1" style={{ fontSize: '12px' }}>Permissions</Typography>
                 <Box display="flex" flexDirection="row" gap={2}>
-                  <CheckboxComponent style={{ fontSize: '12px' }} label="View Customers" name="permissions.viewCustomers" />
-                  <CheckboxComponent style={{ fontSize: '12px' }} label="View Users" name="permissions.viewUsers" />
-                  {/* <CheckboxComponent style={{ fontSize: '12px' }} label="Make Premium Modules" name="permissions.makePremiumModules" /> */}
+                  <CheckboxComponent style={{ fontSize: '6px' }} label="View Customers" name="permissions.viewCustomers" />
+                  <CheckboxComponent style={{ fontSize: '6px' }} label="View Users" name="permissions.viewUsers" />
+                  <CheckboxComponent style={{ fontSize: '6px' }} label="View Modules" name="permissions.viewModules" />
+                  <CheckboxComponent style={{ fontSize: '6px' }} label="View Plans" name="permissions.ViewPlans" />
+
                 </Box>
                 <ErrorMessage name="permissions">
                   {msg => <FormHelperText style={{ color: '#D32F2F', fontSize:'12px' }}>{msg}</FormHelperText>}

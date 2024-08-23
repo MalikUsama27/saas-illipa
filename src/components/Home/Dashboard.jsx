@@ -11,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const availablePermissions = [
   { label: 'View Users', key: 'view_users' },
   { label: 'View Customers', key: 'view_payments' },
-  // { label: 'Make Premium Modules', key: 'make_premium_modules' },
+  { label: 'View Modules', key: 'view_modules' },
+  { label: 'View Plans', key: 'view_plans' },
   { label: 'all', key: 'view_all' }
 ];
 
@@ -84,14 +85,22 @@ const Dashboard = ({ handleNavigation }) => {
           </>
         ) : (
           <>
-            {/* {permissions.includes('make_premium_modules') && (
+            {permissions.includes('view_modules') && (
               <ListItem button onClick={() => handleClick('modules', 'Modules')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
                   <DashboardIcon sx={{ color: '#fff' }} />
                 </ListItemIcon>
                 <ListItemText primary="Modules" />
               </ListItem>
-            )} */}
+            )}
+             {permissions.includes('view_plans') && (
+              <ListItem button onClick={() => handleClick('revenue-plan', 'Revenue Plan')}>
+                <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>
+                <AttachMoneyIcon sx={{ color: '#fff' }} />      
+                          </ListItemIcon>
+                <ListItemText primary="Revenue Plan" />
+              </ListItem>
+            )}
             {permissions.includes('view_payments') && (
               <ListItem button onClick={() => handleClick('customers', 'Customers')}>
                 <ListItemIcon sx={{ minWidth: '30px', mr: 1 }}>

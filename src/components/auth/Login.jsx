@@ -44,7 +44,7 @@ const Login = () => {
           console.log('Login failed');
         }
       } catch (error) {
-        toast.error('Email and Password Incorrect');
+        toast.error('Email or Password Incorrect');
         console.error('Login error:', error);
       }
     },

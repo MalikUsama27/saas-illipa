@@ -33,6 +33,8 @@ const availableRoles = [
 const availablePermissions = [
   { key: 'View Customers', label: 'View Customers' },
   { key: 'View Users', label: 'View Users' },
+  { key: 'View Plans', label: 'View Plans' },
+  { key: 'View Modules', label: 'View Modules' }
   // Add more permissions as needed
 ];
 

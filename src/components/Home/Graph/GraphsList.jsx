@@ -16,7 +16,7 @@ const GraphsList = () => {
         const fetchData = async () => {
             try {
                 // Fetch data from the API
-                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users`);
+                const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users?user=customers`);
                 setTotalUsers(response.data.length);
             } catch (error) {
                 console.error('Error fetching data:', error);
