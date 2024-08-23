@@ -244,7 +244,7 @@ const RevenuePlan = () => {
       )}
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={800}
         rtl={false}
         style={{ zIndex: 1300, paddingTop: '55px' }}
       />

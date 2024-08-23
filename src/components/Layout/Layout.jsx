@@ -106,13 +106,13 @@ const Layout = () => {
                   width: '20ch',
                 },
               }}
-            >
+            ><MenuItem onClick={handleChangePassword} style={{fontSize:'12px'}}>
+                Change Password
+              </MenuItem>
               <MenuItem onClick={handleLogout} style={{fontSize:'12px'}}>
                 Logout
               </MenuItem>
-              <MenuItem onClick={handleChangePassword} style={{fontSize:'12px'}}>
-                Change Password
-              </MenuItem>
+              
             </Menu>
           </Toolbar>
         </AppBar>

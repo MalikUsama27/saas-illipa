@@ -45,7 +45,7 @@ const DeleteCustomer = ({ visible, onHide, customerId, onDelete }) => {
       <p>Are you sure you want to delete this customer?</p>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={800}
         rtl={false}
         style={{ zIndex: 1300, paddingTop: '55px' }}
       />
