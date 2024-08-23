@@ -116,7 +116,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
   return (
     <FormikProvider value={formik}>
       <Box mt={2} p={2} border={1} borderColor="grey.400" borderRadius={4} width={1}>
-        <Grid container spacing={2} alignItems="center">
+        <Grid container alignItems="center">
           <Grid item xs={12} sm={8}>
             <TextField
               label="Title"
@@ -150,7 +150,7 @@ const EditPlan = ({ plan, onSave, onClose }) => {
               <Add />
             </IconButton>
           </Grid>
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} >
             <FormControlLabel
               control={<Checkbox
                 checked={formik.values.noMaxValue}
