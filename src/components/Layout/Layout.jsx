@@ -94,7 +94,7 @@ const Layout = () => {
               {/* Title or additional elements here */}
             </Typography>
             <IconButton onClick={handleMenuClick}>
-              <PersonSharpIcon />
+              <PersonSharpIcon style={{width:'110%'}}/>
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -107,10 +107,10 @@ const Layout = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleLogout}>
+              <MenuItem onClick={handleLogout} style={{fontSize:'12px'}}>
                 Logout
               </MenuItem>
-              <MenuItem onClick={handleChangePassword}>
+              <MenuItem onClick={handleChangePassword} style={{fontSize:'12px'}}>
                 Change Password
               </MenuItem>
             </Menu>
