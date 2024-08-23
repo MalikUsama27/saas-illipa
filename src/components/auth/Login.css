@@ -134,6 +134,7 @@ body {
 .password-input-container input {
   width: 100%;
   padding: 10px;
+  color:#000000;
   padding-right: 2.5rem; /* Space for the icon */
   /* box-sizing: border-box; */
 }

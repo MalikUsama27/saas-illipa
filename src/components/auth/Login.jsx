@@ -14,7 +14,7 @@ import ForgotPassword from './ForgotPassword';
 
 const Login = () => {
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);  // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);  
   const navigate = useNavigate();
 
   const formik = useFormik({

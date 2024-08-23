@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, Grid } from '@mui/material';
+import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, Grid, Menu, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import LogoutIcon from '@mui/icons-material/Logout';
+import PersonSharpIcon from '@mui/icons-material/PersonSharp';
 import logo from "../../assets/logo.svg";
 import { Outlet } from 'react-router-dom';
 import Dashboard from '../Home/Dashboard';
-import LogoutDialog from '../auth/LogoutDialoge'; 
+import LogoutDialog from '../auth/LogoutDialoge';
+import UpdatePassword from '../auth/UpdatePassword'; 
 
 const drawerWidth = 190;
 
 const Layout = () => {
   const navigate = useNavigate();
   const [logoutDialogVisible, setLogoutDialogVisible] = useState(false);
+  const [updatePasswordDialogVisible, setUpdatePasswordDialogVisible] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleLogout = () => {
     setLogoutDialogVisible(true);
@@ -28,14 +31,25 @@ const Layout = () => {
     setLogoutDialogVisible(false);
   };
 
-  const handleNavigation = (view) => {
-    navigate(`/${view.toLowerCase().replace(' ', '-')}`);
+  const handleChangePassword = () => {
+    setUpdatePasswordDialogVisible(true);
+    handleMenuClose(); 
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
 
   const handleLogoClick = () => {
     navigate('/dashboard'); // Ensure correct path here
   };
-
+  const handleNavigation = (view) => {
+    navigate(`/${view.toLowerCase().replace(' ', '-')}`);
+  };
   return (
     <Box sx={{ display: 'flex', height: '100vh' }}>
       <CssBaseline />
@@ -79,9 +93,27 @@ const Layout = () => {
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               {/* Title or additional elements here */}
             </Typography>
-            <IconButton onClick={handleLogout}>
-              <LogoutIcon />
+            <IconButton onClick={handleMenuClick}>
+              <PersonSharpIcon />
             </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+              PaperProps={{
+                style: {
+                  maxHeight: 48 * 4.5,
+                  width: '20ch',
+                },
+              }}
+            >
+              <MenuItem onClick={handleLogout}>
+                Logout
+              </MenuItem>
+              <MenuItem onClick={handleChangePassword}>
+                Change Password
+              </MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
         <Grid container sx={{ flexGrow: 1, p: 3 }}>
@@ -97,6 +129,10 @@ const Layout = () => {
         visible={logoutDialogVisible} 
         onConfirm={confirmLogout} 
         onCancel={cancelLogout} 
+      />
+      <UpdatePassword
+        visible={updatePasswordDialogVisible}
+        onHide={() => setUpdatePasswordDialogVisible(false)}
       />
     </Box>
   );

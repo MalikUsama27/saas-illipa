@@ -99,7 +99,10 @@ const EditPlan = ({ plan, onSave, onClose }) => {
       toast.error('Max Value must be greater than Min Value.');
       return;
     }
-    
+    if (!lastPlan.min_value || !lastPlan.max_value || !lastPlan.amount) {
+      toast.error('Please complete the current row before adding a new one.');
+      return;
+    }
     formik.setFieldValue('plans', [
       ...formik.values.plans,
       {
