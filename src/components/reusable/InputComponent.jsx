@@ -7,7 +7,7 @@ import '../../css/InputComponent.css';
 
 const InputComponent = ({ label, name, type = 'text', options = [], isPassword = false, showPassword, setShowPassword, ...props }) => {
   const [field, meta] = useField(name);
-
+  // const { getFieldProps, touched, errors } = formik;
   const handleClickShowPassword = () => {
     if (setShowPassword) {
       setShowPassword(prev => !prev);

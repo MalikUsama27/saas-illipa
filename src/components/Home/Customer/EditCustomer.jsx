@@ -107,11 +107,8 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         onSubmit={handleSubmit}
       >
         {({ setFieldValue, values }) => (
-          <Form id="edit-form"style={{ width: '46vw'}}>
+          <Form id="edit-form"style={{ width: '46vw',paddingTop:'5px'}}>
            <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
-                <InputComponent label="Username" name="username" />
-              </Grid>
               <Grid item xs={12} sm={6}>
                 <InputComponent label="Email" name="email" />
               </Grid>
@@ -133,7 +130,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                     label="Industry"
                     value={values.industry}
                     onChange={(e) => setFieldValue("industry", e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '40px'  }}
                   >
                     {industries.map((industry) => (
                       <MenuItem key={industry} value={industry} style={{ fontSize: '12px' }}>
@@ -152,7 +149,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                     label="Company Size"
                     value={values.companySize}
                     onChange={(e) => setFieldValue("companySize", e.target.value)}
-                    sx={{ borderRadius: '25px', fontSize: '12px' }}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '40px'  }}
                   >
                     {companySizes.map((size) => (
                       <MenuItem key={size} value={size} style={{ fontSize: '12px' }}>
@@ -180,8 +177,6 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
             <Button
               label="UPDATE CUSTOMER"
               type="submit"
-              form="edit-form"
-              className="p-button-success"
               style={{ backgroundColor: '#06163A', borderRadius: '10px', marginTop: '20px' }}
             />
           </Form>

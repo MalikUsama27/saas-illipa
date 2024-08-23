@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Dropdown } from 'primereact/dropdown';
-import { RingLoader } from 'react-spinners';
+import { Grid, FormControlLabel, Checkbox, Select, MenuItem } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import IconButton from '@mui/material/IconButton';
-import { Checkbox, FormControlLabel } from '@mui/material';
-import { useFormik } from 'formik';
+import InputComponent from '../../reusable/InputComponent';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
 // Validation schema
@@ -21,250 +17,204 @@ const validationSchema = Yup.object({
   role: Yup.string().required('Role is required'),
   permissions: Yup.string().required('At least one permission is required'),
   password: Yup.string().when('confirmPassword', {
-    is: val => val && val.length > 0,
+    is: (val) => val && val.length > 0,
     then: Yup.string().required('Password is required'),
   }),
 });
+
+// Available roles
+const availableRoles = [
+  { id: 1, name: 'admin' },
+  { id: 2, name: 'manager' },
+  // Add more roles as needed
+];
 
 // Available permissions
 const availablePermissions = [
   { key: 'View Customers', label: 'View Customers' },
   { key: 'View Users', label: 'View Users' },
-  // { key: 'Make Premium Modules', label: 'Make Premium Modules' }
+  // Add more permissions as needed
 ];
 
 const EditUser = ({ visible, onClose, user, onSave }) => {
-  const [fetchingUser] = useState(false);
-  const [rolesOptions, setRolesOptions] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: user?.user_fields?.phone || '',
-      role: user?.roles?.[0]?.name || '',
-      permissions: Array.isArray(user?.user_fields?.permissions) 
-        ? user.user_fields.permissions.join(', ') 
-        : user?.user_fields?.permissions || '',
-      password: '',
-    },
-   
-    enableReinitialize: true,
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        const token = localStorage.getItem('token');
+  // Initialize form values based on user prop
+  const initialValues = {
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.user_fields?.phone || '',
+    role: user?.roles?.[0]?.name || '', // Correctly set the role value
+    permissions: Array.isArray(user?.user_fields?.permissions)
+      ? user.user_fields.permissions.join(', ')
+      : user?.user_fields?.permissions || '',
+    password: '',
+  };
+console.log(user?.roles?.[0]?.name)
+  const handleSubmit = async (values) => {
+    try {
+      const payload = {
+        name: values.name,
+        email: values.email,
+        password: values.password || undefined,
+        phone: values.phone,
+        role: values.role,
+        permissions: values.permissions,
+      };
 
-      
-        const permissionsArray = values.permissions
-          .split(', ')
-          .map(label => availablePermissions.find(p => p.label === label)?.key)
-          .filter(Boolean);
-
-        const requestData = {
-          name: values.name,
-          email: values.email,
-          phone: values.phone,
-          role: values.role,
-          permissions: permissionsArray.join(', '),
-          password: values.password || undefined,
-        };
-
-        console.log('Payload to be sent:', requestData);
-
-        await axios.put(
-          `${process.env.REACT_APP_API_BASE_URL}/users/${user.id}`,
-          requestData,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        toast.success('User updated successfully!');
-
-        onSave();
-        setTimeout(() => {
-          onClose();
-        }, 2000); 
-      } catch (error) {
-        console.error('Error updating user:', error);
-        toast.error('Failed to update user.');
-      }
+      await axios.put(
+        `${process.env.REACT_APP_API_BASE_URL}/users/${user.id}`,
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      toast.success('User updated successfully!');
+      onSave();
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast.error('Failed to update user.');
     }
-  });
+  };
 
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        setRolesOptions([
-          { label: 'Manager', value: 'manager' },
-          { label: 'Admin', value: 'admin' },
-        ]);
-      } catch (error) {
-        console.error('Error fetching roles:', error);
-      }
-    };
-    fetchRoles();
-  }, []);
-
-  const handlePermissionChange = (permission, checked) => {
-    const permissionLabel = availablePermissions.find(p => p.key === permission)?.label;
-    const currentPermissions = formik.values.permissions ? formik.values.permissions.split(', ').filter(p => p) : [];
+  const handlePermissionChange = (permission, checked, setFieldValue, permissions) => {
+    const permissionLabel = availablePermissions.find((p) => p.key === permission)?.label;
+    const currentPermissions = permissions.split(', ').filter((p) => p);
 
     const updatedPermissions = checked
       ? [...currentPermissions, permissionLabel].join(', ')
-      : currentPermissions.filter(p => p !== permissionLabel).join(', ');
+      : currentPermissions.filter((p) => p !== permissionLabel).join(', ');
 
-    formik.setFieldValue('permissions', updatedPermissions);
+    setFieldValue('permissions', updatedPermissions);
   };
 
   return (
-    <>
-      <Dialog
-        header="Edit User"
-        visible={visible}
-        onHide={onClose}
-        footer={
-          <div>
-           
-            {/* <Button label="Cancel" icon="pi pi-times" style={{ background: '#d9535f', borderRadius: '25px' }} onClick={onClose} /> */}
-          </div>
-        }
-        style={{ width: '50vw', borderRadius: '25px', fontFamily: 'Open Sans', fontSize: '12px',height:'70%' }}
-        modal
+    <Dialog
+      header="Edit User"
+      visible={visible}
+      onHide={onClose}
+      style={{ width: '50vw', borderRadius: '25px' }}
+      modal
+    >
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize={true}
+        onSubmit={handleSubmit}
       >
-        {fetchingUser ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-            <RingLoader color="#007ad9" />
-          </div>
-        ) : (
+        {({ setFieldValue, values, handleSubmit }) => (
           <div className="p-fluid" style={{ fontFamily: 'Open Sans', fontSize: '12px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <div style={{ flex: 1, marginRight: '10px' }}>
-                <label htmlFor="name" style={{ display: 'block',fontFamily: 'Open Sans', fontSize: '12px' }}>Name:</label>
-                <input
-                  id="name"
-                  type="text"
-                  {...formik.getFieldProps('name')}
-                  className="p-inputtext p-component"
-                  style={{ width: '100%', borderRadius: '25px',fontFamily: 'Open Sans', fontSize: '12px' }}
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12} sm={6}>
+                <InputComponent
+                  label="Name"
+                  name="name"
+                  formik={{ values, setFieldValue }}
                 />
-                {formik.touched.name && formik.errors.name && (
-                  <div style={{ color: 'red' }}>{formik.errors.name}</div>
-                )}
-              </div>
-              <div style={{ flex: 1 }}>
-                <label htmlFor="email" style={{ display: 'block',fontFamily: 'Open Sans', fontSize: '12px' }}>Email:</label>
-                <input
-                  id="email"
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <InputComponent
+                  label="Email"
+                  name="email"
                   type="email"
-                  {...formik.getFieldProps('email')}
-                  className="p-inputtext p-component"
-                  style={{ width: '100%', borderRadius: '25px' }}
+                  formik={{ values, setFieldValue }}
                 />
-                {formik.touched.email && formik.errors.email && (
-                  <div style={{ color: 'red' }}>{formik.errors.email}</div>
-                )}
-              </div>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <div style={{ flex: 1, marginRight: '10px' }}>
-                <label htmlFor="phone" style={{ display: 'block' ,fontFamily: 'Open Sans', fontSize: '12px'}}>Phone:</label>
-                <input
-                  id="phone"
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12} sm={6}>
+                <InputComponent
+                  label="Phone"
+                  name="phone"
                   type="text"
-                  {...formik.getFieldProps('phone')}
-                  className="p-inputtext p-component"
-                  style={{ width: '100%', borderRadius: '25px' }}
+                  formik={{ values, setFieldValue }}
                 />
-                {formik.touched.phone && formik.errors.phone && (
-                  <div style={{ color: 'red' }}>{formik.errors.phone}</div>
-                )}
-              </div>
-              <div style={{ flex: 1 }}>
-                <label htmlFor="role" style={{ fontSize: '12px' }}>Role:</label>
-                <Dropdown
-                  id="role"
-                  value={formik.values.role}
-                  options={rolesOptions}
-                  onChange={(e) => formik.setFieldValue('role', e.value)}
-                  optionLabel="label"
-                  placeholder="Select Role"
-                  style={{ borderRadius: '25px', fontSize: '12px' }}
-                />
-                {formik.touched.role && formik.errors.role && (
-                  <div style={{ color: 'red' }}>{formik.errors.role}</div>
-                )}
-              </div>
-            </div>
-
-            <div className="p-field" style={{ marginBottom: '10px' }}>
-              <label htmlFor="password">Password:</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  {...formik.getFieldProps('password')}
-                  className="p-inputtext p-component"
-                  // isPasword={true}
-                  style={{ width: '50%', borderRadius: '25px' }}
-                />
-                <IconButton
-                  style={{ position: 'absolute', right: '50%', top: '50%', transform: 'translateY(-50%)' }}
-                  onClick={() => setShowPassword(!showPassword)}
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Field
+                  as={Select}
+                  name="role"
+                  value={values.role} // Ensure the role is set correctly
+                  onChange={(e) => setFieldValue('role', e.target.value)}
+                  fullWidth
+                  style={{ borderRadius: '25px', fontSize: '12px', height: '42px' }}
                 >
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </div>
-              {formik.touched.password && formik.errors.password && (
-                <div style={{ color: 'red' }}>{formik.errors.password}</div>
-              )}
-            </div>
+                  {availableRoles.map((role) => (
+                    <MenuItem key={role.id} value={role.name} style={{ fontSize: '12px' }}>
+                      {role.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+            </Grid>
 
-            <div style={{ marginBottom: '10px' }}>
-              <label htmlFor="permissions" style={{ display: 'block',fontFamily: 'Open Sans', fontSize: '12px' }}>Permissions:</label>
-              <div role="group" aria-labelledby="checkbox-group">
-                {availablePermissions.map(permission => (
-                  <FormControlLabel
-                    key={permission.key}
-                    control={
-                      <Checkbox
-                      style={{fontFamily: 'Open Sans', fontSize: '12px'}}
-                        checked={formik.values.permissions.split(', ').includes(permission.label)}
-                        onChange={(e) => handlePermissionChange(permission.key, e.target.checked)}
-                      />
-                    }
-                    label={permission.label}
-                  />
-                ))}
-              </div>
-              {formik.touched.permissions && formik.errors.permissions && (
-                <div style={{ color: 'red' }}>{formik.errors.permissions}</div>
-              )}
-            </div>
-            <Button label="UPDATE" 
-            // icon="pi pi-check" 
-            style={{
-              backgroundColor: '#06163A',
-              borderRadius: '25px',
-              fontSize: '0.875rem',
-              width: '100px',
-            }}
-             onClick={formik.handleSubmit} />
-          </div> 
-          
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={6}>
+                <InputComponent
+                  label="Password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  isPassword
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                  formik={{ values, setFieldValue }}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12}>
+                <div role="group" aria-labelledby="checkbox-group">
+                  {availablePermissions.map((permission) => (
+                    <FormControlLabel
+                      key={permission.key}
+                      control={
+                        <Checkbox
+                          style={{ fontFamily: 'Open Sans', fontSize: '12px' }}
+                          checked={values.permissions.split(', ').includes(permission.label)}
+                          onChange={(e) =>
+                            handlePermissionChange(permission.key, e.target.checked, setFieldValue, values.permissions)
+                          }
+                        />
+                      }
+                      label={permission.label}
+                    />
+                  ))}
+                </div>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2} mt={2}>
+              <Grid item xs={12}>
+                <Button
+                  label="UPDATE"
+                  style={{
+                    backgroundColor: '#06163A',
+                    borderRadius: '25px',
+                    fontSize: '0.875rem',
+                    width: '100px',
+                  }}
+                  onClick={handleSubmit}
+                />
+              </Grid>
+            </Grid>
+          </div>
         )}
-       <ToastContainer
+      </Formik>
+
+      <ToastContainer
         position="top-right"
         autoClose={5000}
         rtl={false}
-        style={{ zIndex: 1300, paddingTop:'55px'}} 
+        style={{ zIndex: 1300, paddingTop: '55px' }}
       />
-      </Dialog>
-    </>
+    </Dialog>
   );
 };
 
