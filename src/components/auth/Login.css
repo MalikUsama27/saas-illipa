@@ -101,7 +101,7 @@ body {
   border: none;
   border-radius: 25px;
   cursor: pointer;
-  background-color: #434191;
+  /* background-color: #434191; */
   color: #fff;
   font-size: 16px;
   transition: all 0.3s ease;

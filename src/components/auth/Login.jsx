@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import loginImage from '../../assets/images/loginimg.PNG';
 import logo from '../../assets/logo2.png';
-import { Button } from 'primereact/button';
+// import { Button } from 'primereact/button';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';  // Importing eye icons
 import ForgotPassword from './ForgotPassword';
 
@@ -87,9 +87,9 @@ const Login = () => {
             
             <button type="submit" className="login-button">Login</button>
           </form>
-          <Button type="button" className="forgot-password" onClick={() => setForgotPasswordVisible(true)}>
+          <div type="button" className="forgot-password" onClick={() => setForgotPasswordVisible(true)}>
             Forgot Password?
-          </Button>
+          </div>
         </div>
         <ForgotPassword visible={forgotPasswordVisible} onHide={() => setForgotPasswordVisible(false)} />
         <div className="login-image">

@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CssBaseline, Box, Drawer, AppBar, Toolbar, Typography, IconButton, Container, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import logo from "../../assets/logo.svg";
 import { Outlet } from 'react-router-dom';
-import Dashboard from '../Home/Dashboard'; 
+import Dashboard from '../Home/Dashboard';
+import LogoutDialog from '../auth/LogoutDialoge'; 
 
 const drawerWidth = 190;
 
 const Layout = () => {
   const navigate = useNavigate();
+  const [logoutDialogVisible, setLogoutDialogVisible] = useState(false);
 
   const handleLogout = () => {
+    setLogoutDialogVisible(true);
+  };
+
+  const confirmLogout = () => {
     localStorage.clear();
     navigate('/');
-    window.location.reload(); 
+    window.location.reload();
+    setLogoutDialogVisible(false);
+  };
+
+  const cancelLogout = () => {
+    setLogoutDialogVisible(false);
   };
 
   const handleNavigation = (view) => {
@@ -39,18 +50,16 @@ const Layout = () => {
              borderRightColor: '#fff' },
         }}
       >
-       
-        <Box >
-         
+        <Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 3, minHeight: '25px' }}>
-        
             <img 
               src={logo} 
               alt="Logo" 
               style={{ 
                 width: '100%', 
-                height: '64px',marginTop: '-13%',
-                cursor: 'pointer' ,backgroundColor:'#fff'
+                height: '64px', marginTop: '-13%',
+                paddingLeft: '5px',
+                cursor: 'pointer', backgroundColor: '#fff'
               }} 
               onClick={handleLogoClick} 
             />
@@ -68,7 +77,7 @@ const Layout = () => {
         >
           <Toolbar>
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-              {/* {title} */}
+              {/* Title or additional elements here */}
             </Typography>
             <IconButton onClick={handleLogout}>
               <LogoutIcon />
@@ -83,6 +92,12 @@ const Layout = () => {
           </Grid>
         </Grid>
       </Box>
+
+      <LogoutDialog 
+        visible={logoutDialogVisible} 
+        onConfirm={confirmLogout} 
+        onCancel={cancelLogout} 
+      />
     </Box>
   );
 };
