@@ -23,7 +23,7 @@ const validationSchema = Yup.object({
 });
 
 const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technology', 'Education'];
-const companySizes = ['>10', '11-25', '26-50', '50-100', '100+'];
+const companySizes = ['1-10', '11-25', '26-50', '50-100', '100+'];
 
 const EditCustomer = ({ visible, onHide, customer, onSave }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,8 +42,8 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
   useEffect(() => {
     if (customer) {
       setInitialValues({
-        username: customer.username || '',
-        email: customer.email || '',
+        username: customer?.username || '',
+        email: customer?.email || '',
         mobile: customer.user_fields?.phone || '',
         companyName: customer.user_fields?.company_name || '',
         industry: customer.user_fields?.industry || '',
@@ -110,7 +110,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
           <Form id="edit-form"style={{ width: '46vw',paddingTop:'5px'}}>
            <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <InputComponent label="Email" name="email" />
+                <InputComponent label="Email" name="email"  disabled />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <InputComponent label="Mobile" name="mobile" />

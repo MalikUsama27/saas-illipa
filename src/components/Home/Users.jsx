@@ -22,12 +22,12 @@ const Users = () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users`);
       const formattedUsers = response.data.map(user => ({
-        name: user.name,
-        email: user.email,
-        phone: user.user_fields?.phone || 'N/A',
-        role: user.roles?.[0]?.name || 'N/A',
-        permissions: user.user_fields?.permissions || 'N/A',
-        id: user.id,
+        name: user?.name,
+        email: user?.email,
+        phone: user?.user_fields?.phone || 'N/A',
+        role: user?.roles?.[0]?.name || 'N/A',
+        permissions: user?.user_fields?.permissions || 'N/A',
+        id: user?.id,
         userData: user, 
       }));
       setUsers(formattedUsers);

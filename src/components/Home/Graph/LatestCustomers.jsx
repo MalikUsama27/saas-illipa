@@ -10,7 +10,7 @@ const LatestCustomers = () => {
         const fetchCustomers = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users?user=customers`);
-                const data = response.data;
+                const data = response?.data;
                 setCustomers(data.slice(-5).reverse());
             } catch (error) {
                 console.error("Error fetching customers", error);
@@ -37,7 +37,7 @@ const LatestCustomers = () => {
                     <div className="customer-info">
                         <div className="customer-name">{customer.username}</div>
                         <div className="customer-details">
-                            {customer.user_fields.industry} at {customer.user_fields.company_name}
+                            {customer.user_fields?.industry} at {customer.user_fields?.company_name}
                         </div>
                         <div className="customer-email">{customer.email}</div>
                     </div>

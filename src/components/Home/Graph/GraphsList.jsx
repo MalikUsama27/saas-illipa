@@ -17,7 +17,7 @@ const GraphsList = () => {
             try {
                 // Fetch data from the API
                 const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users?user=customers`);
-                setTotalUsers(response.data.length);
+                setTotalUsers(response?.data?.length);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -59,7 +59,7 @@ const GraphsList = () => {
     return (
         
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', padding: '1rem 0' }}>
-            {graphsData.map((data, index) => (
+            {graphsData?.map((data, index) => (
                 <Card key={index} 
                     style={{
                         flex: '1', 

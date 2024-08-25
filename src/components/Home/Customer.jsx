@@ -28,17 +28,17 @@ const Customer = () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/users?user=customers`);
       const userData = response.data.map(user => ({
-        id: user.id,
-        name: user.name,
-        username: user.username,
-        email: user.email,
-        phone: user.user_fields?.phone || 'N/A',
-        company_name: user.user_fields?.company_name || 'N/A',
-        company_address: user.user_fields?.company_address || 'N/A',
-        country: user.user_fields?.country || 'N/A',
-        company_size: user.user_fields?.company_size || 'N/A',
-        industry: user.user_fields?.industry || 'N/A',
-        userid: user.user_fields?.user_id,
+        id: user?.id,
+        name: user?.name,
+        username: user?.username,
+        email: user?.email,
+        phone: user?.user_fields?.phone || 'N/A',
+        company_name: user?.user_fields?.company_name || 'N/A',
+        company_address: user?.user_fields?.company_address || 'N/A',
+        country: user?.user_fields?.country || 'N/A',
+        company_size: user?.user_fields?.company_size || 'N/A',
+        industry: user?.user_fields?.industry || 'N/A',
+        userid: user?.user_fields?.user_id,
       }));
       setCustomers(userData);
     } catch (error) {

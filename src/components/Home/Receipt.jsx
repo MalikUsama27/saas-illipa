@@ -19,12 +19,12 @@ const Receipt = () => {
         try {
           const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/transactions/${customerId}`);
           const receiptData = response.data.map(receipt => ({
-            billingMonth: receipt.billing_month || 'N/A',
-            revenuePlan: receipt.revenue_plan_threshold|| 'N/A',
-            billedAmount: receipt.billed_amount || 'N/A',
-            date: receipt.date || 'N/A',
-            transactionId: receipt.transaction_id|| 'N/A',
-            nextBillingDate: receipt.next_billing_date || 'N/A',
+            billingMonth: receipt?.billing_month || 'N/A',
+            revenuePlan: receipt?.revenue_plan_threshold|| 'N/A',
+            billedAmount: receipt?.billed_amount || 'N/A',
+            date: receipt?.date || 'N/A',
+            transactionId: receipt?.transaction_id|| 'N/A',
+            nextBillingDate: receipt?.next_billing_date || 'N/A',
           }));
           setData(receiptData);
         } catch (error) {
