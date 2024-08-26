@@ -1,60 +1,107 @@
-import React, { useEffect } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import Modules from "./components/Home/Modules";
 import Customer from "./components/Home/Customer";
 import RevenuePlan from "./components/Home/RevenuePlan";
-// import AddRevenuePlan from './components/Home/AddRevenuePlan';
 import Users from "./components/Home/Users";
-// import AddUser from './components/Home/AddUser';
-// import AddCustomer from './components/Home/AddCustomer';
 import Receipt from "./components/Home/Receipt";
 import RevenueProjection from "./components/Home/RevenueProjection";
 import Graphs from "./components/Home/Graphs";
-// import 'dotenv/config'
-// require('dotenv').config()
+import { availablePermissions } from "./constants";
+
 function App() {
+  const [permissions, setPermissions] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
- 
+
+  // Handle authentication and redirection based on token and path
   useEffect(() => {
     const token = localStorage.getItem("token");
     const currentPath = location.pathname;
-  
-    console.log("Current Path:", currentPath);
-    console.log("Token:", token);
-  
-    if (token && currentPath === "/") {
-      navigate("/dashboard");
-    } else if (!token && currentPath !== "/") {
+
+    if (!token && currentPath !== "/") {
       navigate("/");
-    }else if (token && currentPath !== "/" && currentPath !== "/dashboard") {
-      navigate(currentPath);
+    } else if (token && (currentPath === "/" || currentPath === "/forgot-password")) {
+      navigate("/dashboard");
     }
   }, [navigate, location.pathname]);
 
+  // Retrieve permissions from localStorage
+  useEffect(() => {
+    const storedPermissions = localStorage.getItem('permissions');
+    if (storedPermissions) {
+      const permissionsArray = storedPermissions
+        .split(',')
+        .map(label => label.trim())
+        .map(label => availablePermissions.find(p => p.label === label)?.key)
+        .filter(Boolean);
+      setPermissions(permissionsArray);
+    }
+  }, []);
+
+  const ProtectedRoute = ({ children, requiredPermission }) => {
+    if (!permissions.includes(requiredPermission) && !permissions.includes('view_all')) {
+      return <Navigate to="/dashboard" replace />;
+    }
+    return children;
+  };
+
   return (
-
     <Routes>
-      <Route exact path="/" element={<Login />} />
-      <Route exact path="/forgot-password" element={<ForgotPassword />} />
-      <Route exact path="/" element={<Layout />}>
-      <Route exact path="dashboard" element={<Graphs/>} />
-
-        <Route exact path="modules" element={<Modules />} />
-        <Route exact path="customers" element={<Customer />} />
-        <Route exact path="revenue-plan" element={<RevenuePlan />} />
-        {/* <Route exact  path="add-revenue" element={<AddRevenuePlan />} /> */}
-        <Route exact path="users" element={<Users />} />
-        {/* <Route exact  path="add-user" element={<AddUser />} /> */}
-        {/* <Route exact  path="add-customer" element={<AddCustomer/>}/> */}
-        <Route exact path="receipt" element={<Receipt />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/" element={<Layout />}>
+        <Route path="dashboard" element={<Graphs />} />
         <Route
-          exact
+          path="modules"
+          element={
+            <ProtectedRoute requiredPermission="view_modules">
+              <Modules />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="customers"
+          element={
+            <ProtectedRoute requiredPermission="view_payments">
+              <Customer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="revenue-plan"
+          element={
+            <ProtectedRoute requiredPermission="view_plans">
+              <RevenuePlan />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="users"
+          element={
+            <ProtectedRoute requiredPermission="view_users">
+              <Users />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="receipt"
+          element={
+           // <ProtectedRoute requiredPermission="view_receipts">
+              <Receipt />
+           // </ProtectedRoute>
+          }
+        />
+        <Route
           path="revenue-projection"
-          element={<RevenueProjection />}
+          element={
+            // <ProtectedRoute requiredPermission="view_projections">
+              <RevenueProjection />
+          // </ProtectedRoute>
+          }
         />
       </Route>
     </Routes>
