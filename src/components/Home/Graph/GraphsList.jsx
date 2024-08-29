@@ -36,7 +36,7 @@ const GraphsList = () => {
         {
             icon: 'pi pi-dollar',
             value: '532',
-            title: 'Revenue',
+            title: 'Life Time Earning',
             bgImage: yellow,
             iconColor: '#FFA500'
         },

@@ -6,7 +6,7 @@ import { InputSwitch } from 'primereact/inputswitch';
 import 'primeicons/primeicons.css';
 import '../../css/DataTableComponent.css';
 
-const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumChange, onEdit, onReceipt, onDelete, showEdit, showReceipt, showDollar, showinfo, oninfo, showdelete, showActions }) => {
+const DataTableComponent = ({showinfo2, header, oninfo2,columns, data, onSwitchChange, onPremiumChange, onEdit, onReceipt, onDelete, showEdit, showReceipt, showDollar, showinfo, oninfo, showdelete, showActions }) => {
 
   const switchTemplate = (rowData, field, onChange) => (
     <div className="switch-container">
@@ -19,11 +19,11 @@ const DataTableComponent = ({ header, columns, data, onSwitchChange, onPremiumCh
 
   const actionTemplate = (rowData) => (
     <div className="action-buttons">
-      {showDollar && (
+      {showinfo2 && (
         <Button
-          icon="pi pi-dollar"
+          icon="pi pi-info-circle"
           className={`p-button-primary p-button-sm action-button button-dollars`}
-          onClick={() => onEdit(rowData)}
+          onClick={() => oninfo2(rowData)}
         />
       )}
       {showEdit && (

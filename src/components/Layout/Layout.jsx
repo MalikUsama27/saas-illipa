@@ -7,6 +7,7 @@ import { Outlet } from 'react-router-dom';
 import Dashboard from '../Home/Dashboard';
 import LogoutDialog from '../auth/LogoutDialoge';
 import UpdatePassword from '../auth/UpdatePassword'; 
+import Settings from '../Home/Settings'; 
 
 const drawerWidth = 190;
 
@@ -14,16 +15,21 @@ const Layout = () => {
   const navigate = useNavigate();
   const [logoutDialogVisible, setLogoutDialogVisible] = useState(false);
   const [updatePasswordDialogVisible, setUpdatePasswordDialogVisible] = useState(false);
+  const [settingsDialogVisible, setSettingsDialogVisible] = useState(false); // Add state for settings dialog
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleLogout = () => {
     setLogoutDialogVisible(true);
   };
 
+  const handleSettings = () => {
+    setSettingsDialogVisible(true); // Open settings dialog
+    handleMenuClose();
+  };
+
   const confirmLogout = () => {
     localStorage.clear();
     navigate('/');
-    window.location.reload();
     setLogoutDialogVisible(false);
   };
 
@@ -45,11 +51,13 @@ const Layout = () => {
   };
 
   const handleLogoClick = () => {
-    navigate('/dashboard'); // Ensure correct path here
+    navigate('/dashboard');
   };
+
   const handleNavigation = (view) => {
     navigate(`/${view.toLowerCase().replace(' ', '-')}`);
   };
+
   return (
     <Box sx={{ display: 'flex', height: '100vh' }}>
       <CssBaseline />
@@ -58,10 +66,7 @@ const Layout = () => {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box',
-             backgroundColor: '#06163A', 
-             color: '#fff',
-             borderRightColor: '#fff' },
+          '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', backgroundColor: '#06163A', color: '#fff', borderRightColor: '#fff' },
         }}
       >
         <Box>
@@ -69,12 +74,7 @@ const Layout = () => {
             <img 
               src={logo} 
               alt="Logo" 
-              style={{ 
-                width: '100%', 
-                height: '64px', marginTop: '-13%',
-                paddingLeft: '5px',
-                cursor: 'pointer', backgroundColor: '#fff'
-              }} 
+              style={{ width: '100%', height: '64px', marginTop: '-13%', paddingLeft: '5px', cursor: 'pointer', backgroundColor: '#fff' }} 
               onClick={handleLogoClick} 
             />
           </Box>
@@ -84,17 +84,14 @@ const Layout = () => {
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, height: '100vh', overflow: 'auto' }}>
         <AppBar
           position="sticky" 
-          sx={{
-            backgroundColor: '#fff', 
-            color: '#000',
-          }}
+          sx={{ backgroundColor: '#fff', color: '#000' }}
         >
           <Toolbar>
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
               {/* Title or additional elements here */}
             </Typography>
             <IconButton onClick={handleMenuClick}>
-              <PersonSharpIcon style={{width:'110%'}}/>
+              <PersonSharpIcon style={{ width: '110%' }} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -106,13 +103,16 @@ const Layout = () => {
                   width: '20ch',
                 },
               }}
-            ><MenuItem onClick={handleChangePassword} style={{fontSize:'12px'}}>
+            >
+              <MenuItem onClick={handleSettings} style={{ fontSize: '12px' }}>
+                Settings
+              </MenuItem>
+              <MenuItem onClick={handleChangePassword} style={{ fontSize: '12px' }}>
                 Change Password
               </MenuItem>
-              <MenuItem onClick={handleLogout} style={{fontSize:'12px'}}>
+              <MenuItem onClick={handleLogout} style={{ fontSize: '12px' }}>
                 Logout
               </MenuItem>
-              
             </Menu>
           </Toolbar>
         </AppBar>
@@ -133,6 +133,10 @@ const Layout = () => {
       <UpdatePassword
         visible={updatePasswordDialogVisible}
         onHide={() => setUpdatePasswordDialogVisible(false)}
+      />
+      <Settings
+        visible={settingsDialogVisible}
+        onHide={() => setSettingsDialogVisible(false)}
       />
     </Box>
   );

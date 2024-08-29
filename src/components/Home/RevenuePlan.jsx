@@ -126,15 +126,23 @@ const RevenuePlan = () => {
     { field: 'title', header: 'Title' },
     { 
       field: 'ranges', 
-      header: 'Ranges', 
+      header: 'Threshold Point', 
       body: rowData => (
         <div>
           {rowData.ranges.map((range, index) => (
-            <div key={index} style={{ padding: '5px' }}>
-              {range.max_value_status === 1
-                ? `$${range.min_value} + `
-                : `$${range.min_value} - $${range.max_value}`}
-            </div>
+             <div key={index} style={{ padding: '5px' }}>
+            
+              {range.min_value}
+              
+          
+           </div>
+            // <div key={index} style={{ padding: '5px' }}>
+            //   {range.max_value_status === 1
+            //     ? `$${range.min_value} + `
+            //     : `$${range.min_value} - 
+            //    $${range.max_value}
+            //     `}
+            // </div>
           ))}
         </div>
       )
@@ -244,7 +252,7 @@ const RevenuePlan = () => {
       )}
       <ToastContainer
         position="top-right"
-        autoClose={800}
+        autoClose={1500}
         rtl={false}
         style={{ zIndex: 1300, paddingTop: '55px' }}
       />

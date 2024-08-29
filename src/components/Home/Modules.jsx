@@ -33,7 +33,7 @@ const modulesData = [
   },
   {
     id: 548,
-    name: 'Inventory Mangement',
+    name: 'Inventory Management',
     description: 'Monitor stock levels, manage warehouse operations, and automate reordering to maintain optimal inventory.',
     premium: false,
     monthlyPrice: 0,
@@ -53,6 +53,7 @@ const modulesData = [
 
 const Modules = () => {
   const [modules, setModules] = useState(modulesData);
+  const [expandedRow, setExpandedRow] = useState(null);
 
   const handleActiveChange = (id, checked) => {
     const updatedModules = modules.map(module =>
@@ -61,10 +62,39 @@ const Modules = () => {
     setModules(updatedModules);
   };
 
+  const handleDescriptionClick = (id) => {
+    setExpandedRow(expandedRow === id ? null : id);
+  };
+
   const columns = [
     { field: 'id', header: 'ID' },
     { field: 'name', header: 'Name' },
-    { field: 'description', header: 'Description' },
+    {
+      field: 'description',
+      header: 'Description',
+      body: rowData => {
+        const isExpanded = expandedRow === rowData.id;
+        const description = isExpanded ? rowData.description : `${rowData.description.split(' ').slice(0, 5).join(' ')} `;
+        return (
+          <div>
+            {description}
+            {!isExpanded && (
+              <span
+                onClick={() => handleDescriptionClick(rowData.id)}
+                style={{ 
+                  color: 'blue', 
+                  textDecoration: 'underline', 
+                  fontStyle: 'italic',
+                  cursor: 'pointer'
+                }}
+              >
+                read more
+              </span>
+            )}
+          </div>
+        );
+      }
+    },
     { field: 'monthlyPrice', header: 'Monthly Price' },
     { field: 'yearlyPrice', header: 'Yearly Price' },
     {
@@ -80,16 +110,11 @@ const Modules = () => {
   ];
 
   return (
-    
-
-    <div >
+    <div>
       <DataTableComponent 
         header="Modules"
         columns={columns} 
         data={modules} 
-        // showActions={true} 
-        // showEdit={true}
-        // showdelete={true} 
       />
       <Outlet />
     </div>

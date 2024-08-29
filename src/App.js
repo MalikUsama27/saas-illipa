@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -11,6 +17,7 @@ import Receipt from "./components/Home/Receipt";
 import RevenueProjection from "./components/Home/RevenueProjection";
 import Graphs from "./components/Home/Graphs";
 import { availablePermissions } from "./constants";
+import CustomerInfo from "./components/Home/Customer/CustomerInfo";
 
 function App() {
   const [permissions, setPermissions] = useState([]);
@@ -22,28 +29,35 @@ function App() {
     const token = localStorage.getItem("token");
     const currentPath = location.pathname;
 
-    if (!token && currentPath !== "/") {
-      navigate("/");
-    } else if (token && (currentPath === "/" || currentPath === "/forgot-password")) {
+    if (token && currentPath === "/") {
       navigate("/dashboard");
+    } else if (!token && currentPath !== "/") {
+      navigate("/");
+    } else if (token && currentPath !== "/" && currentPath !== "/dashboard") {
+      navigate(currentPath);
     }
   }, [navigate, location.pathname]);
 
   // Retrieve permissions from localStorage
   useEffect(() => {
-    const storedPermissions = localStorage.getItem('permissions');
+    const storedPermissions = localStorage.getItem("permissions");
     if (storedPermissions) {
       const permissionsArray = storedPermissions
-        .split(',')
-        .map(label => label.trim())
-        .map(label => availablePermissions.find(p => p.label === label)?.key)
+        .split(",")
+        .map((label) => label.trim())
+        .map(
+          (label) => availablePermissions.find((p) => p.label === label)?.key
+        )
         .filter(Boolean);
       setPermissions(permissionsArray);
     }
   }, []);
 
   const ProtectedRoute = ({ children, requiredPermission }) => {
-    if (!permissions.includes(requiredPermission) && !permissions.includes('view_all')) {
+    if (
+      !permissions.includes(requiredPermission) &&
+      !permissions.includes("view_all")
+    ) {
       return <Navigate to="/dashboard" replace />;
     }
     return children;
@@ -54,9 +68,10 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/" element={<Layout />}>
-        <Route path="dashboard" element={<Graphs />} />
+        <Route exact path="dashboard" element={<Graphs />} />
         <Route
           path="modules"
+          exact
           element={
             <ProtectedRoute requiredPermission="view_modules">
               <Modules />
@@ -65,6 +80,7 @@ function App() {
         />
         <Route
           path="customers"
+          exact
           element={
             <ProtectedRoute requiredPermission="view_payments">
               <Customer />
@@ -73,6 +89,7 @@ function App() {
         />
         <Route
           path="revenue-plan"
+          exact
           element={
             <ProtectedRoute requiredPermission="view_plans">
               <RevenuePlan />
@@ -81,6 +98,7 @@ function App() {
         />
         <Route
           path="users"
+          exact
           element={
             <ProtectedRoute requiredPermission="view_users">
               <Users />
@@ -89,18 +107,29 @@ function App() {
         />
         <Route
           path="receipt"
+          exact
           element={
-           // <ProtectedRoute requiredPermission="view_receipts">
-              <Receipt />
-           // </ProtectedRoute>
+            // <ProtectedRoute requiredPermission="view_receipts">
+            <Receipt />
+            // </ProtectedRoute>
           }
         />
         <Route
           path="revenue-projection"
+          exact
           element={
             // <ProtectedRoute requiredPermission="view_projections">
-              <RevenueProjection />
-          // </ProtectedRoute>
+            <RevenueProjection />
+            // </ProtectedRoute>
+          }
+        />
+        <Route
+          path="customer/info"
+          exact
+          element={
+            // <ProtectedRoute requiredPermission="view_projections">
+            <CustomerInfo />
+            // </ProtectedRoute>
           }
         />
       </Route>

@@ -1,0 +1,20 @@
+/* Settings.css */
+.settings-dialog-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .p-field {
+    margin-bottom: 1rem;
+  }
+  
+  .settings-dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+  
+  .settings-dialog-buttons .p-button {
+    margin-left: 0.5rem;
+  }
+  

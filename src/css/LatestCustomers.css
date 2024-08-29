@@ -3,9 +3,12 @@
     background-color: #f3f2f2;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px; /* Adjust as needed */
+    /* width: 50%; */
+    max-height: 450px;
+    overflow: scroll;
     margin: auto;
+    min-width: 43%;
+    margin: 3%;
 }
 
 .latest-customers h3 {
