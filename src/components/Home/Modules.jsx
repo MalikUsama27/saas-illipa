@@ -74,11 +74,11 @@ const Modules = () => {
       header: 'Description',
       body: rowData => {
         const isExpanded = expandedRow === rowData.id;
-        const description = isExpanded ? rowData.description : `${rowData.description.split(' ').slice(0, 5).join(' ')} `;
+        const description = isExpanded ? rowData.description : `${rowData.description.split(' ').slice(0, 5).join(' ')}...`;
         return (
           <div>
             {description}
-            {!isExpanded && (
+            {rowData.description.length > 100 && (
               <span
                 onClick={() => handleDescriptionClick(rowData.id)}
                 style={{ 
@@ -88,7 +88,7 @@ const Modules = () => {
                   cursor: 'pointer'
                 }}
               >
-                read more
+                {isExpanded ? ' read less' : ' read more'}
               </span>
             )}
           </div>

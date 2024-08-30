@@ -19,7 +19,8 @@ const validationSchema = Yup.object({
   country: Yup.string().required('Country is required'),
   companyAddress: Yup.string().required('Company address is required'),
   companySize: Yup.string().required('Company size is required'),
-  password: Yup.string().required('Password is required'),
+  password: Yup.string().min(8, 'Password must be at least 8 characters long').required('Password must be at least'),
+  revenue_plan_id: Yup.string().required('Revenue plan is required'),
 });
 
 const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technology', 'Education'];
@@ -27,6 +28,8 @@ const companySizes = ['1-10', '11-25', '26-50', '50-100', '100+'];
 
 const EditCustomer = ({ visible, onHide, customer, onSave }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [revenuePlans, setRevenuePlans] = useState([]);
+
   const [initialValues, setInitialValues] = useState({
     username: '',
     email: '',
@@ -37,6 +40,8 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
     companyAddress: '',
     companySize: '',
     password: '',
+    revenue_plan_id: '',
+
   });
 
   useEffect(() => {
@@ -51,9 +56,23 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         companyAddress: customer.user_fields?.company_address || '',
         companySize: customer.user_fields?.company_size || '',
         password: '',
+        revenue_plan_id: customer.user_fields?.revenue_plan_id || '',
       });
     }
+
+    // Fetch revenue plans
+    const fetchRevenuePlans = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/revenue-plans`);
+        setRevenuePlans(response.data);
+      } catch (error) {
+        console.error('Error fetching revenue plans:', error);
+      }
+    };
+
+    fetchRevenuePlans();
   }, [customer]);
+
 
   const handleSubmit = async (values) => {
     try {
@@ -66,6 +85,8 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
         industry: values.industry,
         country: values.country,
         company_size: values.companySize,
+        revenue_plan_id: values.revenue_plan_id,
+        // ...(values.password && { password: values.password }),
       };
 
       // PUT request to update customer
@@ -122,8 +143,11 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                 <InputComponent label="Company Address" name="companyAddress" />
               </Grid>
               <Grid item xs={12} sm={6}>
+                <InputComponent label="Country" name="country" />
+              </Grid>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined">
-                  <InputLabel>Industry</InputLabel>
+                  <InputLabel style={{ fontSize: '12px' }}>Industry</InputLabel>
                   <Field
                     as={Select}
                     name="industry"
@@ -142,7 +166,7 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined">
-                  <InputLabel>Company Size</InputLabel>
+                  <InputLabel style={{ fontSize: '12px' }}>Company Size</InputLabel>
                   <Field
                     as={Select}
                     name="companySize"
@@ -160,7 +184,23 @@ const EditCustomer = ({ visible, onHide, customer, onSave }) => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <InputComponent label="Country" name="country" />
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel style={{ fontSize: '12px' }}>Revenue Plan</InputLabel>
+                  <Field
+                    as={Select}
+                    name="revenue_plan_id"
+                    label="Revenue Plan"
+                    value={values.revenue_plan_id}
+                    onChange={(e) => setFieldValue('revenue_plan_id', e.target.value)}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
+                  >
+                    {revenuePlans.map((plan) => (
+                      <MenuItem key={plan.id} value={plan.id} style={{ fontSize: '12px' }}>
+                        {plan.title}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <div style={{ position: 'relative' }}>

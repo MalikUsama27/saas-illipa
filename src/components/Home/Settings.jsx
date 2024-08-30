@@ -276,7 +276,7 @@ const Settings = ({ visible, onHide }) => {
     <Dialog header="Settings" visible={visible} onHide={onHide} style={{ width: '50vw', maxWidth: '600px' }}>
       <div className="settings-dialog-content" style={{ padding: '1rem' }}>
         <div className="p-field">
-          <label htmlFor="language">Select Language</label>
+          <label htmlFor="language">Current Language</label>
           <Dropdown
             id="language"
             value={selectedLanguage}
@@ -288,7 +288,7 @@ const Settings = ({ visible, onHide }) => {
           />
         </div>
         <div className="p-field">
-          <label htmlFor="currency">Select Currency</label>
+          <label htmlFor="currency">Current Currency</label>
           <Dropdown
             id="currency"
             value={selectedCurrency}

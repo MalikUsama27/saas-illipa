@@ -8,7 +8,7 @@ import DeleteCustomer from '../Home/Customer/DeleteCustomer';
 import AddCustomer from '../Home/Customer/AddCustomer';
 import { Dialog } from 'primereact/dialog';
 import { RingLoader } from 'react-spinners';
-import EasyEdit, { Types } from 'react-easy-edit';
+// import EasyEdit, { Types } from 'react-easy-edit';
 
 const Customer = () => {
   const navigate = useNavigate();
@@ -16,8 +16,9 @@ const Customer = () => {
   const [editDialogVisible, setEditDialogVisible] = useState(false);
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const [addDialogVisible, setAddDialogVisible] = useState(false);
+  // eslint-disable-next-line 
   const [planOptions, setPlanOptions] = useState([]);
-   // eslint-disable-next-line 
+  // eslint-disable-next-line 
   const [plans, setPlans] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [customerIdToDelete, setCustomerIdToDelete] = useState(null);
@@ -39,7 +40,7 @@ const Customer = () => {
         userid: user?.user_fields?.user_id,
         transactionId: '100',
         CurentRevenue: '50',
-        plan: 'Testing Plan',
+        plan: user?.user_fields?.revenue_plan?.title || 'N/A',
       }));
       setCustomers(userData);
     } catch (error) {
@@ -56,11 +57,9 @@ const Customer = () => {
       setPlans(planData);
       const options = planData.map(plan => ({
         label: plan.title,
-        value: plan.title,
+        value: plan.id, // Use plan ID as value
       }));
       setPlanOptions(options);
-      console.log('Fetched Plans:', planData);
-      console.log('Plan Options:', options);
     } catch (error) {
       console.error('Error fetching revenue plans:', error);
     }
@@ -101,7 +100,6 @@ const Customer = () => {
     }
 
     const { userid } = customer;
-    console.log('Selected User ID for Receipt:', userid);
     navigate('/receipt', { state: { customerId: userid } });
   };
 
@@ -109,16 +107,15 @@ const Customer = () => {
     navigate('/revenue-projection');
   };
 
-  // const handlePlanChange = async (customer, newPlan) => {
-  //   if (customer && newPlan) {
-  //     console.log('Updated Plan:', newPlan);
+  // const handlePlanChange = async (customer, newPlanId) => {
+  //   if (customer && newPlanId) {
+  //     console.log('Customer ID:', customer.id);
+  //     console.log('New Plan ID:', newPlanId);
+
   //     try {
-  //       await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/users/${customer.id}`, {
-  //         user_fields: {
-  //           plan: newPlan
-  //         }
+  //       await axios.put(`${process.env.REACT_APP_API_BASE_URL}/users/${customer.id}`, {
+  //         revenue_plan_id: newPlanId
   //       });
-  //       // After updating the backend, refresh the customer data
   //       fetchData();
   //     } catch (error) {
   //       console.error('Error updating plan:', error);
@@ -132,16 +129,14 @@ const Customer = () => {
     { 
       field: 'plan', 
       header: 'Plan',
-      body: (rowData) => (
-        <EasyEdit
-          type={Types.SELECT}
-          value={rowData.plan}
-          onChange={(newPlan) =>
-            //  handlePlanChange
-             ( newPlan)}
-          options={planOptions} 
-        />
-      )
+      // body: (rowData) => (
+      //   <EasyEdit
+      //     type="select"
+      //     value={rowData.plan}
+      //     onChange={(newPlan) => handlePlanChange(rowData, newPlan)}
+      //     options={planOptions} 
+      //   />
+      // )
     },
     { field: 'transactionId', header: 'Billed Amount Total' },
     { field: 'CurentRevenue', header: 'Current Revenue' },

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Button, Grid, Box, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import InputComponent from '../../reusable/InputComponent';
+import axios from 'axios';
 
 // Validation schema
 const validationSchema = Yup.object({
@@ -15,8 +16,8 @@ const validationSchema = Yup.object({
   company_address: Yup.string().required('Company Address is required'),
   company_size: Yup.string().required('Company Size is required'),
   password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters long'),
+  revenue_plan_id: Yup.string().required('Revenue Plan is required'), 
 });
-
 
 const initialValues = {
   company_name: '',
@@ -27,14 +28,29 @@ const initialValues = {
   company_address: '',
   company_size: '',
   password: '',
+  revenue_plan_id: '', 
 };
-
 
 const industries = ['Healthcare', 'Finance', 'Manufacturing', 'Retail', 'Technology', 'Education'];
 const company_sizes = ['1-10', '11-25', '26-50', '50-100', '100+'];
 
 const AddCustomer = ({ onSave }) => {
   const [showPassword, setShowPassword] = useState(false);
+  const [revenuePlans, setRevenuePlans] = useState([]);
+
+  useEffect(() => {
+    const fetchRevenuePlans = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/revenue-plans`);
+        setRevenuePlans(response.data);
+      } catch (error) {
+        console.error('Error fetching revenue plans:', error);
+        toast.error('Error fetching revenue plans');
+      }
+    };
+
+    fetchRevenuePlans();
+  }, []);
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
@@ -47,8 +63,7 @@ const AddCustomer = ({ onSave }) => {
       });
 
       if (response.ok && response.status === 201) {
-         await response.json();
-        // console.log('Customer added successfully:', data);
+        await response.json();
         toast.success('Customer added successfully');
         onSave(); // Close dialog and fetch data
       } else {
@@ -97,14 +112,21 @@ const AddCustomer = ({ onSave }) => {
                   required
                 />
               </Grid>
-             <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <InputComponent
                   label="Company Address"
                   name="company_address"
                   required
                 />
+              </Grid> 
+              <Grid item xs={12} sm={6}>
+                <InputComponent
+                  label="Country"
+                  name="country"
+                  required
+                />
               </Grid>
-               <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6}>
                 <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px', fontSize: '12px'  }}>
                   <InputLabel style={{ fontSize: '12px' }}>Industry</InputLabel>
                   <Field
@@ -116,7 +138,7 @@ const AddCustomer = ({ onSave }) => {
                     sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
                   >
                     {industries.map((industry) => (
-                      <MenuItem key={industry} value={industry}  style={{fontSize:'12px'}}>
+                      <MenuItem key={industry} value={industry} style={{fontSize:'12px'}}>
                         {industry}
                       </MenuItem>
                     ))}
@@ -143,12 +165,25 @@ const AddCustomer = ({ onSave }) => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <InputComponent
-                  label="Country"
-                  name="country"
-                  required
-                />
+                <FormControl fullWidth variant="outlined" sx={{ borderRadius: '25px' }}>
+                  <InputLabel style={{ fontSize: '12px' }}>Revenue Plan</InputLabel>
+                  <Field
+                    as={Select}
+                    name="revenue_plan_id"
+                    label="Revenue Plan"
+                    value={values.revenue_plan_id}
+                    onChange={(e) => setFieldValue('revenue_plan_id', e.target.value)}
+                    sx={{ borderRadius: '25px', fontSize: '12px', height: '40px' }}
+                  >
+                    {revenuePlans.map((plan) => (
+                      <MenuItem key={plan.id} value={plan.id} style={{fontSize:'12px'}}>
+                        {plan.title}
+                      </MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
               </Grid>
+             
               
               <Grid item xs={12} sm={6}>
                 <InputComponent
@@ -163,7 +198,6 @@ const AddCustomer = ({ onSave }) => {
 
               <Grid item xs={12}>
                 <Button
-                // label="Add Customer"
                   type="submit"
                   variant="contained"
                   disabled={isSubmitting}
