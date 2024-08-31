@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import DataTableComponent from '../reusable/DataTableComponent';
 import { Outlet } from 'react-router-dom';
 import { InputSwitch } from 'primereact/inputswitch';
+import PremiumDialog from '../Home/Modules/PremiumDialog';
+import { Dialog } from 'primereact/dialog';
 
 const modulesData = [
   {
@@ -54,12 +56,24 @@ const modulesData = [
 const Modules = () => {
   const [modules, setModules] = useState(modulesData);
   const [expandedRow, setExpandedRow] = useState(null);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
 
   const handleActiveChange = (id, checked) => {
+    setSelectedModule(modules.find(module => module.id === id));
+    setDialogVisible(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogVisible(false);
+  };
+
+  const handleDialogConfirm = () => {
     const updatedModules = modules.map(module =>
-      module.id === id ? { ...module, active: checked } : module
+      module.id === selectedModule.id ? { ...module, active: !selectedModule.active } : module
     );
     setModules(updatedModules);
+    setDialogVisible(false);
   };
 
   const handleDescriptionClick = (id) => {
@@ -74,7 +88,9 @@ const Modules = () => {
       header: 'Description',
       body: rowData => {
         const isExpanded = expandedRow === rowData.id;
-        const description = isExpanded ? rowData.description : `${rowData.description.split(' ').slice(0, 5).join(' ')}...`;
+        const description = isExpanded 
+          ? rowData.description 
+          : `${rowData.description.split(' ').slice(0, 5).join(' ')}...`;
         return (
           <div>
             {description}
@@ -95,8 +111,7 @@ const Modules = () => {
         );
       }
     },
-    { field: 'monthlyPrice', header: 'Monthly Price' },
-    { field: 'yearlyPrice', header: 'Yearly Price' },
+    { field: 'monthlyPrice', header: 'Fees' },
     {
       field: 'active',
       header: 'Make Premium',
@@ -116,6 +131,18 @@ const Modules = () => {
         columns={columns} 
         data={modules} 
       />
+      <Dialog 
+        header="Confirm Premium Activation" 
+        visible={dialogVisible} 
+        modal 
+        onHide={handleDialogClose}
+      >
+        <PremiumDialog 
+          onConfirm={handleDialogConfirm}
+          onCancel={handleDialogClose}
+          module={selectedModule}
+        />
+      </Dialog>
       <Outlet />
     </div>
   );
